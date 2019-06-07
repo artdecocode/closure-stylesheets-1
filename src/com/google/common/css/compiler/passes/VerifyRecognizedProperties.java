@@ -17,6 +17,7 @@
 package com.google.common.css.compiler.passes;
 
 import com.google.common.collect.ImmutableSet;
+import com.google.common.css.SourceCodeLocation;
 import com.google.common.css.compiler.ast.CssCompilerPass;
 import com.google.common.css.compiler.ast.CssDeclarationNode;
 import com.google.common.css.compiler.ast.CssNode;
@@ -98,7 +99,12 @@ public class VerifyRecognizedProperties extends DefaultTreeVisitor
   }
 
   private void reportError(String message, CssNode node) {
-    errorManager.report(new GssError(message, node.getSourceCodeLocation()));
+    SourceCodeLocation l = node.getSourceCodeLocation();
+    if (l == null) { // add some visibility to errors
+      System.err.print(message + '\n');
+      errorManager.report(new GssError(message, l));
+    }
+    else errorManager.report(new GssError(message, l));
   }
 
   @Override

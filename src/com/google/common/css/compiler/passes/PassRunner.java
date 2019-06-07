@@ -108,6 +108,8 @@ public class PassRunner {
     new ReplaceMixins(cssTree.getMutatingVisitController(), errorManager,
         collectMixinDefinitions.getDefinitions()).runPass();
 
+    new AutoExpandBrowserPrefix(cssTree.getMutatingVisitController()).runPass();
+
     new ProcessComponents<Object>(cssTree.getMutatingVisitController(),
         errorManager).runPass();
     // Collect constant definitions.
