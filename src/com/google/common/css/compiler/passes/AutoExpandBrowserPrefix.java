@@ -94,7 +94,7 @@ public class AutoExpandBrowserPrefix extends DefaultTreeVisitor implements CssCo
       if (rule.getMatchPropertyValue() == null) {
         for (CssDeclarationNode ruleExpansionNode : rule.getExpansionNodes()) {
           CssPropertyNode propName = ruleExpansionNode.getPropertyName();
-          if (AutoExpandBrowserPrefix.BlockContainsPropName(parent, propName)) {
+          if (AutoExpandBrowserPrefix.BlockContainsPropName(parent, propName, declaration)) {
             continue;
           }
           CssDeclarationNode expansionNode = ruleExpansionNode.deepCopy();
@@ -244,9 +244,11 @@ public class AutoExpandBrowserPrefix extends DefaultTreeVisitor implements CssCo
     visitController.startVisit(this);
   }
 
-  private static boolean BlockContainsPropName(CssDeclarationBlockNode node, CssPropertyNode propName) {
+  private static boolean BlockContainsPropName(CssDeclarationBlockNode node, CssPropertyNode propName,
+      CssDeclarationNode declaration) {
     for (CssNode decl : node.getChildren()) {
       CssDeclarationNode d = (CssDeclarationNode) decl;
+      if (d.equals(declaration)) continue;
       if (d.getPropertyName().getValue().equals(propName.getValue())) {
         return true;
       }

@@ -48,6 +48,18 @@ public class AutoExpandBrowserPrefixTest extends PassesTestBase {
   }
 
   @Test
+  public void testMatchOnPropertyNameNoDuplicate() {
+    testTreeConstruction(linesToString(
+        "p {",
+        "  flex-grow: 1;",
+        "  box-flex: 1;",
+        "}"),
+        "[[p]{[[/* @alternate */]-webkit-box-flex:[[1]];"
+        + "[/* @alternate */]-ms-flex-positive:[[1]];[/* @alternate */]-webkit-flex-grow:[[1]];"
+        + "[/* @alternate */]flex-grow:[[1]];box-flex:[[1]];]}]");
+  }
+
+  @Test
   public void testMatchFunction() {
     testTreeConstruction(linesToString(
         "@def GRADIENT top, #f8f8f8, #f1f1f1;",
