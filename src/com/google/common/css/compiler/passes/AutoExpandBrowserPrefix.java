@@ -19,9 +19,12 @@ package com.google.common.css.compiler.passes;
 import com.google.common.collect.ImmutableList;
 import com.google.common.css.compiler.ast.CssCommentNode;
 import com.google.common.css.compiler.ast.CssCompilerPass;
+import com.google.common.css.compiler.ast.CssDeclarationBlockNode;
 import com.google.common.css.compiler.ast.CssDeclarationNode;
 import com.google.common.css.compiler.ast.CssFunctionNode;
 import com.google.common.css.compiler.ast.CssMixinDefinitionNode;
+import com.google.common.css.compiler.ast.CssNode;
+import com.google.common.css.compiler.ast.CssPropertyNode;
 import com.google.common.css.compiler.ast.CssPropertyValueNode;
 import com.google.common.css.compiler.ast.CssValueNode;
 import com.google.common.css.compiler.ast.DefaultTreeVisitor;
@@ -78,6 +81,8 @@ public class AutoExpandBrowserPrefix extends DefaultTreeVisitor implements CssCo
     if (inDefMixinBlock) {
       return true;
     }
+    CssDeclarationBlockNode parent = (CssDeclarationBlockNode) declaration.getParent();
+
     ImmutableList.Builder<CssDeclarationNode> expansionNodes = ImmutableList.builder();
     for (BrowserPrefixRule rule : expansionRules) {
       // If the name is present in the rule then it must match the declaration.
@@ -88,6 +93,10 @@ public class AutoExpandBrowserPrefix extends DefaultTreeVisitor implements CssCo
       // Handle case #1 when no property value is available.
       if (rule.getMatchPropertyValue() == null) {
         for (CssDeclarationNode ruleExpansionNode : rule.getExpansionNodes()) {
+          CssPropertyNode propName = ruleExpansionNode.getPropertyName();
+          if (AutoExpandBrowserPrefix.BlockContainsPropName(parent, propName)) {
+            continue;
+          }
           CssDeclarationNode expansionNode = ruleExpansionNode.deepCopy();
           expansionNode.setPropertyValue(declaration.getPropertyValue().deepCopy());
           expansionNode.setSourceCodeLocation(declaration.getSourceCodeLocation());
@@ -233,5 +242,15 @@ public class AutoExpandBrowserPrefix extends DefaultTreeVisitor implements CssCo
   @Override
   public void runPass() {
     visitController.startVisit(this);
+  }
+
+  private static boolean BlockContainsPropName(CssDeclarationBlockNode node, CssPropertyNode propName) {
+    for (CssNode decl : node.getChildren()) {
+      CssDeclarationNode d = (CssDeclarationNode) decl;
+      if (d.getPropertyName().getValue().equals(propName.getValue())) {
+        return true;
+      }
+    }
+    return false;
   }
 }
