@@ -7,6 +7,15 @@ CSS. The tool also supports **[minification](#minification)**,
 **[linting](#linting)**, **[RTL flipping](#rtl-flipping)**, and CSS class
 **[renaming](#renaming)**.
 
+## Fork Diversion
+
+These are the fixes and improvements to the [original version](https://github.com/google/closure-stylesheets/compare/master...artdecocode:master):
+
+- [Switch on autoprefixer](https://github.com/google/closure-stylesheets/commit/ec28d2ab6bea4f8d5788b23c91ff285c6652cf54);
+- [Do not apply auto-prefixing if the rule already exists](https://github.com/google/closure-stylesheets/commit/8a49266fb85ab9bb39b6a9ffdf50ca3b84704ef4);
+- Print errors to the console.
+- Build for Java 1.8.
+
 ## Get Closure Stylesheets!
 
 Closure Stylesheets is available as a Java jar named `closure-stylesheets.jar`.
