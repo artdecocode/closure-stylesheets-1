@@ -16,7 +16,7 @@
       "request": "launch",
       "mainClass": "com.google.common.css.compiler.commandline.ClosureCommandLineCompiler",
       "projectName": "closure-stylesheets",
-      "args": ["style.css"]
+      "args": ["styles/supports.css"]
     }
   ]
 }

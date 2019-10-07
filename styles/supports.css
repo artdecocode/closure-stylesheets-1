@@ -1,0 +1,13 @@
+@media (min-width: 500px) and (min-height:500px) {
+  .test {
+    top: 0;
+  }
+}
+@supports ((position: -webkit-sticky) or (position: sticky)) {
+  .sticky-top {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    z-index: 1020;
+  }
+}
