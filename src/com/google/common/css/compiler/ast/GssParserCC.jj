@@ -607,6 +607,9 @@ PARSER_END(GssParserCC)
   | < PIPE_EQUALS: <PIPE> <EQUALS> >
   | < CDO: "<!--" >
   | < CDC: "-->" >
+  // | < NOT_SYM: "not" >
+  // | < AND_SYM: "and" >
+  // | < OR_SYM: "or" >
 
   // CSS2 grammar allows up to 6-digit hex strings for unicode
   // hex        [0-9a-f]
@@ -732,6 +735,8 @@ PARSER_END(GssParserCC)
   | < FUNCTION: <IDENTIFIER> <LEFTROUND> >
 
   | < ATLIST: <AT> "list" >
+
+  | < ATSUPPORTS: <AT> "supports" >
 
   // "@-webkit-keyframes"
   // Special handling needed because of the keys instead of the selectors
@@ -1442,6 +1447,75 @@ CssValueNode slash_term() :
   }
 }
 
+// Supports rule
+// https://developer.mozilla.org/en-US/docs/Web/CSS/@supports#supports-condition
+CssValueNode supportsInParens() : {
+  CssNode v;
+  SourceCodeLocation beginLocation;
+  Token t;
+  String value = "";
+  List<Token> tokens = Lists.newArrayList();
+  List<Token> mediaTokens = null;
+}
+{
+  { beginLocation = this.getLocation(token.next); }
+  t = <LEFTROUND> { tokens.add(t); value += "("; }
+  ( <S> )*
+  ( LOOKAHEAD(2) ( v = supportsCondition() { value += v.toString(); })
+  | (mediaTokens = parseMediaTokens() {
+    StringBuilder sb = new StringBuilder();
+    for (Token token : mediaTokens) {
+      sb.append(token.image);
+    }
+    value += sb.toString();
+    tokens.addAll(mediaTokens);
+  }) )
+  t = <RIGHTROUND> { tokens.add(t); value += ")"; }
+  {
+    return nodeBuilder.buildLiteralNode(value,
+      this.mergeLocations(beginLocation, this.getLocation()), tokens);
+  }
+/* | general_enclosed */
+}
+
+CssValueNode supportsCondition() : {
+  CssValueNode value;
+  List<CssValueNode> lst = Lists.newArrayList();
+  SourceCodeLocation beginLocation;
+  Token t;
+  List<Token> tokens = Lists.newArrayList();
+}
+{
+  { beginLocation = this.getLocation(token.next); }
+  (
+    ( // not
+      t = <IDENTIFIER> {
+        lst.add(new CssLiteralNode(t.image, this.getLocation(t)));
+      } ( <S> )+
+      value = supportsInParens() { lst.add(value); }
+    )
+  | value = supportsInParens() { lst.add(value); }
+    ( LOOKAHEAD(2)
+      ( <S> )+
+      // and/or
+      t = <IDENTIFIER> {
+        lst.add(new CssLiteralNode(t.image, this.getLocation(t)));
+      }
+      ( <S> )+
+      value = supportsInParens() { lst.add(value); }
+    )*
+  )
+  ( <S> )*
+  {
+    if (lst.size() == 1) {
+      return lst.get(0);
+    } else {
+      return nodeBuilder.buildCompositeValueNode(lst, CssCompositeValueNode.Operator.SPACE,
+        this.mergeLocations(beginLocation, this.getLocation()), tokens);
+    }
+  }
+}
+
 // term
 //   : unary_operator?
 //     [ [ NUMBER [ PERCENT | IDENTIFIER ] ] | STRING | IDENT | FOR_VARIABLE
@@ -1458,6 +1532,7 @@ CssValueNode term() :
   CssFunctionNode function = null;
   CssStringNode stringNode = null;
   List<Token> tokens = Lists.newArrayList();
+  List<Token> mediaTokens = Lists.newArrayList();
   boolean hexcolor = false;
   boolean loopVariable = false;
   boolean unicodeRange = false;
@@ -1487,23 +1562,9 @@ CssValueNode term() :
             && (getToken(3).kind == COLON || getToken(4).kind == COLON)})
         t = <LEFTROUND>  { tokens.add(t); }
         try {
+          // could use declaration?
           ( <S> )?
-          t = <IDENTIFIER> { tokens.add(t); }
-          t = <COLON>      { tokens.add(t); }
-          ( <S> )*
-          (  ( t = <NUMBER> { tokens.add(t); }
-               (
-                 ( <S> )*
-                 (t = <SLASH> ) { tokens.add(t); }
-                 ( <S> )*
-                 (t = <NUMBER> ) {tokens.add(t); }
-               )?
-               ( (dim = <IDENTIFIER> ) { tokens.add(dim); } )?
-             )
-            |
-             ( t = <IDENTIFIER> { tokens.add(t); } )
-          )
-          ( <S> )*
+          mediaTokens = parseMediaTokens() { tokens.addAll(mediaTokens); }
           t = <RIGHTROUND> { tokens.add(t); }
         } catch (ParseException e) {
           if (!enableErrorRecovery || e.currentToken == null) throw e;
@@ -1545,6 +1606,35 @@ CssValueNode term() :
         return nodeBuilder.buildLiteralNode(sb.toString(), this.getLocation(t), tokens);
       }
     }
+  }
+}
+
+// tokens stream suitable for media and support queries
+List<Token> parseMediaTokens() :
+{
+  Token dim = null;
+  Token t = null;
+  List<Token> tokens = Lists.newArrayList();
+}
+{
+  t = <IDENTIFIER> { tokens.add(t); }
+  t = <COLON>      { tokens.add(t); }
+  ( <S> )*
+  (  ( t = <NUMBER> { tokens.add(t); }
+        (
+          ( <S> )*
+          (t = <SLASH> ) { tokens.add(t); }
+          ( <S> )*
+          (t = <NUMBER> ) {tokens.add(t); }
+        )?
+        ( (dim = <IDENTIFIER> ) { tokens.add(dim); } )?
+      )
+    |
+      ( t = <IDENTIFIER> { tokens.add(t); } )
+  )
+  ( <S> )*
+  {
+    return tokens;
   }
 }
 
@@ -2101,6 +2191,70 @@ CssAtRuleNode at_rule() :
 }
 
 // (non-standard GSS extension)
+// at_supports
+//   : ATSUPPORTS S* [ [ composite_term | extended_term ] S* ]*
+//     [ [ '{' S* block  '}'  ] | ';' ] S*
+//   ;
+CssAtRuleNode at_supports() :
+{
+  Token t;
+  SourceCodeLocation beginLocation = null;
+  CssLiteralNode name;
+  CssValueNode v;
+  CssBlockNode block = null;
+  List<CssValueNode> parameters = Lists.newArrayList();
+  List<Token> tokens = Lists.newArrayList();
+}
+{
+  try {
+    t = <ATSUPPORTS>
+    {
+      beginLocation = this.getLocation(t);
+      name = new CssLiteralNode("supports", beginLocation);
+      tokens.add(t);
+    }
+    ( <S> )*
+    v = supportsCondition() { parameters.add(v); }
+  } catch (ParseException e) {
+    if (!enableErrorRecovery || e.currentToken == null) throw e;
+    if (skipComponentValuesToAfter(SEMICOLON, LEFTBRACE) == LEFTBRACE) {
+      skipComponentValuesToAfter(RIGHTBRACE);
+    }
+    throw e;
+  }
+  ( ( t = <LEFTBRACE> { tokens.add(t); }
+      try {
+        ( <S> )*
+        block = block(true)
+        t = <RIGHTBRACE> { tokens.add(t); }
+      } catch (ParseException e) {
+        if (!enableErrorRecovery || e.currentToken == null) throw e;
+        skipComponentValuesToAfter(RIGHTBRACE);
+        throw e;
+      }
+    )
+    |
+    t = <SEMICOLON> { tokens.add(t); }
+    |
+    {
+      ParseException e = generateParseException();
+      if (enableErrorRecovery && e.currentToken != null) {
+        if (skipComponentValuesToAfter(SEMICOLON, LEFTBRACE) == LEFTBRACE) {
+          skipComponentValuesToAfter(RIGHTBRACE);
+        }
+      }
+      throw e;
+    }
+  )
+  {
+    SourceCodeLocation endLocation = getLocation(t);
+    CssAtRuleNode at = nodeBuilder.buildUnknownAtRuleNode(name, block,
+        this.mergeLocations(beginLocation, endLocation), parameters, tokens);
+    return at;
+  }
+}
+
+// (non-standard GSS extension)
 // at_rule_with_decl_block
 //   : ATRULESWITHDECLBLOCK S*
 //     [  at_function
@@ -2472,6 +2626,7 @@ CssBlockNode block(boolean isEnclosedWithBraces) :
   ( try {
       ( n = ruleSet()
       | LOOKAHEAD( <ATLIST> ) n = atRuleWithCrazySyntax()
+      | LOOKAHEAD( <ATSUPPORTS> ) n = at_supports()
       | n = at_rule()
       | n = webkit_keyframes_rule()
       | n = atRuleWithDeclBlock()

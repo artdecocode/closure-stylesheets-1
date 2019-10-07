@@ -59,8 +59,9 @@ import com.google.common.css.compiler.ast.VisitController;
 import java.util.logging.Logger;
 
 /**
- * A compact-printer for {@link CssTree} instances. TODO(oana): Change this pass to stop visiting
- * when definitions are encountered. The same goes for its test.
+ * A compact-printer for {@link CssTree} instances. TODO(oana): Change this pass
+ * to stop visiting when definitions are encountered. The same goes for its
+ * test.
  *
  * @author oana@google.com (Oana Florescu)
  * @author fbenz@google.com (Florian Benz)
@@ -116,8 +117,9 @@ public class CompactPrintingVisitor extends DefaultTreeVisitor {
   }
 
   /**
-   * This is necessary because the parser transform '(' ident ')' into a boolean expression node and
-   * only stores the identifier itself. For example: {@code @media all and (color)}
+   * This is necessary because the parser transform '(' ident ')' into a boolean
+   * expression node and only stores the identifier itself. For example:
+   * {@code @media all and (color)}
    */
   private void appendMediaParameterWithParentheses(CssValueNode node) {
     // TODO(fbenz): Try to avoid the special handling of this case.
@@ -228,7 +230,10 @@ public class CompactPrintingVisitor extends DefaultTreeVisitor {
     return true;
   }
 
-  /** Appends the representation of a class selector, an id selector, or a pseudo-element. */
+  /**
+   * Appends the representation of a class selector, an id selector, or a
+   * pseudo-element.
+   */
   private void appendRefiner(CssRefinerNode node) {
     buffer.append(node.getPrefix());
     buffer.append(node.getRefinerName());

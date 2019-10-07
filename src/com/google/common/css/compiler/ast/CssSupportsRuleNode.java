@@ -19,51 +19,50 @@ package com.google.common.css.compiler.ast;
 import java.util.List;
 
 /**
- * A node representing a ＠media rule.
- * This is not used in the compiler as GssParserCC will always build an unknown at rule.
+ * A node representing an @supports rule.
  *
  * @author oana@google.com (Oana Florescu)
  *
  */
-public class CssMediaRuleNode extends CssAtRuleNode implements ChunkAware {
+public class CssSupportsRuleNode extends CssAtRuleNode implements ChunkAware {
 
   /** The chunk this selector belongs to. */
   private Object chunk;
 
   /**
-   * Constructor of a media rule.
+   * Constructor of a supports rule.
    */
-  public CssMediaRuleNode() {
-    super(CssAtRuleNode.Type.MEDIA, new CssLiteralNode("media"));
+  public CssSupportsRuleNode() {
+    super(CssAtRuleNode.Type.SUPPORTS, new CssLiteralNode("supports"));
   }
 
   /**
-   * Constructor of a media rule.
+   * Constructor of a supports rule.
    */
-  public CssMediaRuleNode(List<CssCommentNode> comments) {
-    super(CssAtRuleNode.Type.MEDIA, new CssLiteralNode("media"), comments);
+  public CssSupportsRuleNode(List<CssCommentNode> comments) {
+    super(CssAtRuleNode.Type.SUPPORTS, new CssLiteralNode("supports"), comments);
   }
 
   /**
-   * Constructor of a media rule.
+   * Constructor of a supports rule.
    */
-  public CssMediaRuleNode(List<CssCommentNode> comments, CssBlockNode block) {
-    super(CssAtRuleNode.Type.MEDIA, new CssLiteralNode("media"), block,
+  public CssSupportsRuleNode(List<CssCommentNode> comments, CssBlockNode block) {
+    super(CssAtRuleNode.Type.SUPPORTS, new CssLiteralNode("supports"), block,
         comments);
   }
 
   /**
    * Copy constructor.
    */
-  public CssMediaRuleNode(CssMediaRuleNode node) {
+  public CssSupportsRuleNode(CssSupportsRuleNode node) {
     super(node);
 
     this.chunk = node.getChunk();
   }
 
   @Override
-  public CssMediaRuleNode deepCopy() {
-    return new CssMediaRuleNode(this);
+  public CssSupportsRuleNode deepCopy() {
+    return new CssSupportsRuleNode(this);
   }
 
   @Override

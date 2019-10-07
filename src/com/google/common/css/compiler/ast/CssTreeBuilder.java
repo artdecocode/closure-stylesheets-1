@@ -36,6 +36,7 @@ public class CssTreeBuilder implements
     CssParserEventHandler,
     CssParserEventHandler.ImportHandler,
     CssParserEventHandler.MediaHandler,
+    CssParserEventHandler.SupportsHandler,
     CssParserEventHandler.ExpressionHandler,
     CssParserEventHandler.BooleanExpressionHandler {
 
@@ -45,6 +46,7 @@ public class CssTreeBuilder implements
     INSIDE_IMPORT_RULE,
     INSIDE_MAIN_BODY,
     INSIDE_MEDIA_RULE,
+    INSIDE_SUPPORTS_RULE,
     INSIDE_BLOCK,
     INSIDE_DECLARATION_BLOCK,
     INSIDE_PROPERTY_EXPRESSION,
@@ -70,6 +72,7 @@ public class CssTreeBuilder implements
   private CssRulesetNode ruleset = null;
   private CssImportRuleNode importRule = null;
   private CssMediaRuleNode mediaRule = null;
+  private CssSupportsRuleNode supportsRule = null;
   private StateStack stateStack = new StateStack(State.BEFORE_DOCUMENT_START);
 
   public CssTreeBuilder() {
@@ -308,6 +311,46 @@ public class CssTreeBuilder implements
 
     Preconditions.checkState(mediaRule != null);
     mediaRule = null;
+  }
+
+  @Override
+  public SupportsHandler onSupportsRuleStart() {
+    startMainBody();
+    endConditionalRuleChain();
+
+    Preconditions.checkState(stateStack.isIn(State.INSIDE_MAIN_BODY));
+    Preconditions.checkState(supportsRule == null);
+
+    stateStack.push(State.INSIDE_SUPPORTS_RULE);
+
+    supportsRule = new CssSupportsRuleNode(comments);
+    comments.clear();
+
+    pushEnclosingBlock(supportsRule.getBlock());
+
+    return this;
+  }
+
+  @Override
+  public void appendSupportsParameter(ParserToken parameter) {
+    Preconditions.checkState(stateStack.isIn(State.INSIDE_MEDIA_RULE));
+
+    CssValueNode supportsParameter = new CssLiteralNode(
+        parameter.getToken(), parameter.getSourceCodeLocation());
+    supportsRule.addChildToBack(supportsParameter);
+  }
+
+  @Override
+  public void onSupportsRuleEnd() {
+    Preconditions.checkState(stateStack.isIn(State.INSIDE_SUPPORTS_RULE));
+    stateStack.pop();
+
+    supportsRule.setBlock(getEnclosingBlock());
+    popEnclosingBlock();
+    getEnclosingBlock().addChildToBack(supportsRule);
+
+    Preconditions.checkState(supportsRule != null);
+    supportsRule = null;
   }
 
   @Override

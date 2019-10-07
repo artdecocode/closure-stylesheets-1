@@ -97,5 +97,14 @@ public interface CssParserEventHandler {
   MediaHandler onMediaRuleStart();
   void onMediaRuleEnd();
 
+  /**
+   * Builds a supports rule.
+   */
+  public interface SupportsHandler {
+    void appendSupportsParameter(ParserToken parameter);
+  }
+  SupportsHandler onSupportsRuleStart();
+  void onSupportsRuleEnd();
+
   // TODO(user): Add events for unrecognized/unknown at rules.
 }

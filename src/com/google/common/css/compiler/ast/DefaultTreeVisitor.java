@@ -176,6 +176,14 @@ public class DefaultTreeVisitor implements CssTreeVisitor {
   public void leaveMediaRule(CssMediaRuleNode node) {}
 
   @Override
+  public boolean enterSupportsRule(CssSupportsRuleNode node) {
+    return true;
+  }
+
+  @Override
+  public void leaveSupportsRule(CssSupportsRuleNode node) {}
+
+  @Override
   public boolean enterDefinition(CssDefinitionNode node) {
     return true;
   }

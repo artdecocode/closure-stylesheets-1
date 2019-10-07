@@ -259,6 +259,16 @@ public class CompactPrinterTest extends AbstractCompactPrinterTest {
   }
 
   @Test
+  public void testSupportsQuery() {
+    assertNewCompactPrintedResult(
+        "@supports ((position:-webkit-sticky) or (position:sticky)){}",
+        "@supports ((position: -webkit-sticky) or (position: sticky)){}");
+    assertNewCompactPrintedResult(
+        "@supports not (position:-webkit-sticky){}",
+        "@supports not (position: -webkit-sticky){}");
+  }
+
+  @Test
   public void testMediaQueryPage() {
     assertNewCompactPrintedResult(
         "@media print{.CLASS{width:50%}@page{size:8.5in 11in}}",

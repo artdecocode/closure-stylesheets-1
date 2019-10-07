@@ -34,7 +34,7 @@ public class CssUnknownAtRuleNode extends CssAtRuleNode {
    * as unknown for convenience.
    */
   private static final ImmutableSet<String> OK_WITHOUT_PROCESSING =
-      ImmutableSet.of("media", "page");
+      ImmutableSet.of("media", "page", "supports");
 
   public CssUnknownAtRuleNode(CssLiteralNode name, boolean hasBlock) {
     super(hasBlock ? Type.UNKNOWN_BLOCK : Type.UNKNOWN, name,

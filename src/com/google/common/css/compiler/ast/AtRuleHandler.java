@@ -43,6 +43,12 @@ public interface AtRuleHandler {
   /** Called after visiting a {@code CssMediaRuleNode}'s sub trees */
   void leaveMediaRule(CssMediaRuleNode node);
 
+  /** Called before visiting a {@code CssSupportsRuleNode}'s sub trees */
+  boolean enterSupportsRule(CssSupportsRuleNode node);
+
+  /** Called after visiting a {@code CssSupportsRuleNode}'s sub trees */
+  void leaveSupportsRule(CssSupportsRuleNode node);
+
   /** Called before visiting a {@code CssPageRuleNode}'s sub trees */
   boolean enterPageRule(CssPageRuleNode node);
 

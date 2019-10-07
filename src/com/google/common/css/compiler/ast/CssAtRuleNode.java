@@ -45,6 +45,7 @@ public abstract class CssAtRuleNode extends CssNodesListNode<CssValueNode> {
     NAMESPACE("namespace", false /* hasBlock */),
 
     MEDIA("media"),
+    SUPPORTS("supports"),
     PAGE("page"),
     FONT_FACE("font-face"),
 
