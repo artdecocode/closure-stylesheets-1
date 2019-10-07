@@ -1,0 +1,16 @@
+{
+  "name": "closure-stylesheets",
+  "version": "1.0.0",
+  "description": "A CSS+ transpiler that lints, optimizes, and I18n-izes",
+  "main": "index.js",
+  "scripts": {
+    "doc": "doc -o README.md"
+  },
+  "repository": "git@github.com:artdecocode/closure-stylesheets-1.git",
+  "author": "Anton <anton@adc.sh>",
+  "license": "Apache-2.0",
+  "private": true,
+  "devDependencies": {
+    "documentary": "^1.33.3"
+  }
+}

@@ -1,0 +1,437 @@
+## Additional Features
+
+The Closure Stylesheets tool also offers some features that are not extensions
+to CSS.
+
+### Minification
+
+You can concatenate and minify a list of stylesheets with the following command:
+
+```
+java -jar closure-stylesheets.jar input1.css input2.css input3.css
+```
+
+This will print the minified output to standard out. You can also specify a file
+to write the output to using the **`--output-file`** option:
+
+```
+java -jar closure-stylesheets.jar --output-file output.css input1.css input2.css input3.css
+```
+
+Of course, the **`>`** operator also works just as well:
+
+```
+java -jar closure-stylesheets.jar input1.css input2.css input3.css > output.css
+```
+
+If you would like to create a vendor-specific stylesheet, you can use the
+**`--vendor`** flag. Current recognized vendors are: **`WEBKIT`**,
+**`MOZILLA`**, **`OPERA`**, **`MICROSOFT`**, and **`KONQUEROR`**. When this flag
+is present, all vendor-specific properties for other vendors will be removed.
+
+### Linting
+
+Closure Stylesheets performs some static checks on your CSS. For example, its
+most basic function is to ensure that your CSS parses: if there are any parse
+errors, Closure Stylesheets will print the errors to standard error and return
+with an exit code of 1.
+
+#### `--allowed-non-standard-function`, `--allow-unrecognized-functions`
+
+It will also error out when there are unrecognized function names or duplicate
+style declarations. For example, if you ran Closure Stylesheets on
+**`linting-example.gss`**:
+
+```css
+.logo {
+  width: 150px;
+  height: 55px;
+  background-image: urel('http://www.google.com/images/logo_sm.gif');
+  border-color: #DCDCDC;
+  border-color: rgba(0, 0, 0, 0.1);
+}
+```
+
+Then you would get the following output:
+
+```
+Unknown function \"urel\" in linting-example.gss at line 4 column 21:
+  background-image: urel('http://www.google.com/images/logo_sm.gif');
+                    ^
+
+Detected multiple identical, non-alternate declarations in the same ruleset.
+If this is intentional please use the /* @alternate */ annotation.
+border-color:[rgba(0,0,0,0.1)] in linting-example.gss at line 7 column 1:
+}
+^
+
+2 error(s)
+```
+
+In this particular case, the function `urel()` should have been `url()`, though
+if you are using a function that is not on the whitelist (see
+[CssFunctionNode](https://github.com/google/closure-stylesheets/blob/master/src/com/google/common/css/compiler/ast/CssFunctionNode.java)
+for the list of recognized functions, which is admittedly incomplete), then you
+can specify **`--allowed-non-standard-function`** to identify additional
+functions that should be whitelisted:
+
+```
+java -jar closure-stylesheets.jar --allowed-non-standard-function urel linting-example.gss
+```
+
+The `--allowed-non-standard-function` flag may be specified multiple times.
+
+It is also possible to disable the check for unknown functions altogether using
+the **`--allow-unrecognized-functions`** flag.
+
+Further, in this example, the multiple declarations of `border-color` are
+intentional. They are arranged so that user agents that recognize `rgba()` will
+use the second declaration whereas those that do not will fall back on the first
+declaration. In order to suppress this error, use the `/* @alternate */`
+annotation that the error message suggests as follows:
+
+```css
+.logo {
+  width: 150px;
+  height: 55px;
+  background-image: url('http://www.google.com/images/logo_sm.gif');
+  border-color: #DCDCDC;
+  /* @alternate */ border-color: rgba(0, 0, 0, 0.1);
+}
+```
+
+This signals that the re-declaration is intentional, which silences the
+error. It is also common to use this technique with multiple `background`
+declarations that use `-webkit-linear-gradient`, `-moz-linear-gradient`, etc. In
+general, using [conditionals](#Conditionals.md) to select the appropriate
+declaration based on user agent is preferred; however, that requires the
+additional overhead of doing user agent detection and serving the appropriate
+stylesheet, so using the `@alternate` annotation is a simpler solution.
+
+#### `--allow-unrecognized-properties`, `--allowed-unrecognized-property`
+
+By default, Closure Stylesheets validates the names of CSS properties used in a
+stylesheet. We have attempted to capture all legal properties in the
+[hardcoded list of recognized properties](https://github.com/google/closure-stylesheets/blob/master/src/com/google/common/css/compiler/ast/Property.java)
+that is bundled with Closure Stylesheets. However, you can allow properties that
+aren't in the list with the **`--allowed-unrecognized-property`** flag. Consider
+the file **`bleeding-edge.gss`**:
+
+```css
+.amplifier {
+  /* A hypothetical CSS property recognized by the latest version of WebKit. */
+  -webkit-amp-volume: 11;
+}
+```
+
+Then running the following:
+
+```
+java -jar closure-stylesheets.jar bleeding-edge.gss
+```
+
+would yield the following error:
+
+```
+-webkit-amp-volume is an unrecognized property in bleeding-edge.gss at line 3 column 3:
+  -webkit-amp-volume: 11;
+  ^
+
+1 error(s)
+```
+
+You can whitelist `-webkit-amp-volume` with the
+**`--allowed-unrecognized-property`** flag as follows:
+
+```
+java -jar closure-stylesheets.jar \\
+    --allowed-unrecognized-property -webkit-amp-volume bleeding-edge.gss
+```
+
+Like `--allowed-non-standard-function`, `--allowed-unrecognized-property` may be
+specified multiple times, once for each property to whitelist. We discourage
+using the blanket `--allow-unrecognized-properties` because it lets through
+everything, including simple spelling mistakes.
+
+Note that some recognized properties will emit warnings. These warnings will not
+be silenced with the `--allowed-unrecognized-property` flag.
+
+### RTL Flipping
+
+Closure Stylesheets has support for generating left-to-right (LTR) as well as
+right-to-left (RTL) stylesheets. By default, LTR is the assumed directionality
+for both the input and output, though those settings can be overridden by
+**`--input-orientation`** and **`--output-orientation`**, respectively.
+
+For example, consider the following stylesheet, **`rtl-example.gss`**, which is
+designed for an LTR page:
+
+```css
+.logo {
+  margin-left: 10px;
+}
+
+.shortcut_accelerator {
+  /* Keyboard shortcuts are untranslated; always left-to-right. */
+  /* @noflip */ direction: ltr;
+  border-right:\t2px solid #ccc;
+  padding: 0 2px 0 4px;
+}
+```
+
+Generating the equivalent stylesheet to use on an RTL version of the page can be
+achieved by running **`java -jar closure-stylesheets.jar --pretty-print
+--output-orientation RTL rtl-example.gss`**, which prints:
+
+```css
+.logo {
+  margin-right: 10px;
+}
+.shortcut_accelerator {
+  direction: ltr;
+  border-left: 2px solid #ccc;
+  padding: 0 4px 0 2px;
+}
+```
+
+Note how the following properties were changed:
+  * **`margin-left`** became **`margin-right`**
+  * **`border-right`** became **`border-left`**
+  * The right and left values of **`padding`** were flipped.
+
+However, the **`direction`** property was unchanged because of the special
+**`@noflip`** annotation. The annotation may also appear on the line before the
+property instead of alongside it:
+
+```css
+  /* @noflip */
+  direction: ltr;
+```
+
+### Renaming
+
+Closure Stylesheets makes it possible to rename CSS class names in the generated
+stylesheet, which helps reduce the size of the CSS that is sent down to your
+users. Of course, this is not particularly useful unless the class names are
+renamed consistently in the HTML and JavaScript files that use the
+CSS. Fortunately, you can use the
+[Closure Compiler](https://developers.google.com/closure/compiler/) to update the class
+names in your JavaScript and
+[Closure Templates](https://developers.google.com/closure/templates/) to update the
+class names in your HTML.
+
+To get the benefits of CSS renaming in Closure, instead of referencing a CSS
+class name as a string literal, you must use that string literal as an argument
+to `goog.getCssName()`:
+
+```javascript
+// Do the following instead of goog.dom.getElementByClass('dialog-content'):
+var element = goog.dom.getElementByClass(goog.getCssName('dialog-content'));
+```
+
+Similarly, in a Closure Template, you must wrap references to CSS classes with
+the
+[css command](https://developers.google.com/closure/templates/docs/commands#css):
+
+```html
+{namespace example}
+
+/**
+ * @param title
+ */
+{template .dialog}
+<div class=\"{css('dialog-content')}\">
+  <div class=\"{css('dialog-title')}\">{$title}</title>
+  {call .content data=\"all\" /}
+</div>
+{/template}
+```
+
+When you generate the JavaScript for the template, be sure to use the
+`--cssHandlingScheme GOOG` option with `SoyToJsSrcCompiler`. This ensures that
+the generated JavaScript code will also use `goog.getCssName()`. For example, if
+the above were named **`dialog.soy`**, then the following command would be used
+to create **`dialog.soy.js`**:
+
+```
+java -jar SoyToJsSrcCompiler.jar \\
+    --shouldProvideRequireSoyNamespaces \\
+    --codeStyle concat \\
+    --cssHandlingScheme GOOG \\
+    --outputPathFormat '{INPUT_FILE_NAME_NO_EXT}.soy.js' \\
+    dialog.soy
+```
+
+The contents of the generated **`dialog.soy.js`** file are:
+
+```javascript
+// This file was automatically generated from dialog.soy.
+// Please don't edit this file by hand.
+
+goog.provide('example');
+
+goog.require('soy');
+goog.require('example');
+
+
+example.dialog = function(opt_data) {
+  return '<div class=\"' + goog.getCssName('dialog-content') + '\"><div class=\"' +
+      goog.getCssName('dialog-title') + '\">' + soy.$$escapeHtml(opt_data.title) +
+      '</title>' + example.content(opt_data) + '</div>';
+};
+```
+
+Note the uses of `goog.getCssName()` in the generated JavaScript file.
+
+Now that all references to CSS class names are wrapped in `goog.getCssName()`,
+it is possible to leverage renaming. By default, `goog.getCssName()` simply
+returns the argument that was passed to it, so no renaming is done unless a
+_renaming map_ has been set.
+
+When running Closure Library code without processing it with the Closure
+Compiler, it is possible to set a renaming map by defining a global variable
+named `CLOSURE_CSS_NAME_MAPPING` in JavaScript code that is loaded before the
+Closure Library's `base.js` file. For example, if you defined your CSS in a file
+named **`dialog.gss`**:
+
+```css
+.dialog-content {
+  padding: 10px;
+}
+
+.dialog-title {
+  font-weight: bold;
+}
+```
+
+Then you would run the following command to generate a stylesheet
+(**`dialog.css`**) with renamed classes, as well as the mapping data as a
+JavaScript file (**`renaming_map.js`**):
+
+```
+java -jar closure-stylesheets.jar \\
+    --pretty-print \\
+    --output-file dialog.css \\
+    --output-renaming-map-format CLOSURE_UNCOMPILED \\
+    --rename CLOSURE \\
+    --output-renaming-map renaming_map.js \\
+    dialog.gss
+```
+
+The generated **`dialog.css`** would be as follows:
+
+```css
+.a-b {
+  padding: 10px;
+}
+.a-c {
+  font-weight: bold;
+}
+```
+
+while the generated **`renaming_map.js`** would be:
+
+```javascript
+CLOSURE_CSS_NAME_MAPPING = {
+  \"dialog\": \"a\",
+  \"content\": \"b\",
+  \"title\": \"c\"
+};
+```
+
+An HTML file that uses the renaming map must be sure to include both the
+generated stylesheet with renamed class names as well as the renaming map:
+
+```html
+<!doctype html>
+<html>
+<head>
+  <link rel=\"stylesheet\" href=\"dialog.css\" type=\"text/css\">
+</head>
+<body>
+
+  <script src=\"renaming_map.js\"></script>
+  <script src=\"path/to/base.js\"></script>
+  <script>
+    goog.require('example');
+  </script>
+  <script>
+    // Your application logic that uses example.dialog() and other code.
+  </script>
+
+</body>
+</html>
+```
+
+This ensures that when **`goog.getCssName('dialog-content')`** is called, it
+returns **`'a-b'`**. In this way, the abbreviated name is used in place of the
+original name throughout the code.
+
+An astute reader will note that so far, we have reduced only the size of the
+stylesheet, but not the JavaScript. To reduce the size of the JavaScript code,
+we must use the [Closure Compiler](https://developers.google.com/closure/compiler/) in
+either
+[SIMPLE or ADVANCED](https://developers.google.com/closure/compiler/docs/compilation_levels)
+mode with the **`--process_closure_primitives`** flag enabled (it is enabled by
+default). When enabled, if it finds a call to **`goog.setCssNameMapping()`** in
+any of its inputs, it will use the argument to `goog.setCssNameMapping()` as the
+basis of a renaming map that is applied at compile time. To create the
+appropriate renaming map with Closure Stylesheets, use **`CLOSURE_COMPILED`** as
+the argument to **`--output-renaming-map-format`**:
+
+```
+java -jar closure-stylesheets.jar \\
+    --pretty-print \\
+    --output-file dialog.css \\
+    --output-renaming-map-format CLOSURE_COMPILED \\
+    --rename CLOSURE \\
+    --output-renaming-map renaming_map.js \\
+    dialog.gss
+```
+
+This yields the following content for **`renaming_map.js`**:
+
+```javascript
+goog.setCssNameMapping({
+  \"dialog\": \"a\",
+  \"content\": \"b\",
+  \"title\": \"c\"
+});
+```
+
+Now **`renaming_map.js`** is a suitable input for the Closure Compiler. Recall
+our original snippet of JavaScript code:
+
+```javascript
+var element = goog.dom.getElementByClass(goog.getCssName('dialog-content'));
+```
+
+If passed to the Closure Compiler in SIMPLE mode along with
+**`renaming_map.js`**, it will be transformed to the following after
+compilation:
+
+```javascript
+var element = goog.dom.getElementByClass(\"a-b\");
+```
+
+This achieves the goal of reducing both CSS and JS file sizes without changing
+the behavior of the application.
+
+Admittedly, using CSS renaming is a fairly advanced option that requires a
+well-organized build system to ensure that the appropriate CSS and JS assets are
+produced for both development and production. See MoreOnCssRenaming for more
+details on this topic.
+
+**Note:** it is also possible to exclude certain class names from being renamed
+by using the **`--excluded_classes_from_renaming`** flag. This may be necessary
+if some of your HTML is generated by a process that does not take CSS renaming
+into account. For example, if you are using a Python Django server and are using
+its template system, then any CSS classes used in those templates will not be
+renamed (unless you introduce a process to do so). In order to ensure that the
+JS and CSS that use the HTML reference CSS classes consistently, each CSS class
+in the Django template should be passed as an argument to Closure Stylesheets
+with the **`--excluded_classes_from_renaming`** flag when generating the CSS.
+
+References to CSS class names that are excluded from renaming should _never_ be
+wrapped in `goog.getCssName()`, or else they run the risk of being partially
+renamed.

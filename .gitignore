@@ -2,3 +2,4 @@
 srcmvn
 target/
 bin
+node_modules
