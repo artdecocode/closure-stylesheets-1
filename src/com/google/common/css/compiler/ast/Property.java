@@ -319,6 +319,7 @@ public final class Property {
         builder("-moz-column-width"),
         builder("-moz-columns"),
         builder("-moz-flex"),
+        builder("-moz-flex-wrap"),
         builder("-moz-flex-direction"),
         builder("-moz-float-edge"),
         builder("-moz-font-feature-settings"),

@@ -18,6 +18,8 @@ CSS. The tool also supports **[minification](#minification)**,
   * [Mixins](#mixins)
   * [Conditionals](#conditionals)
 - [Additional Features](#additional-features)
+  * [Auto Expansion](#auto-expansion)
+    * [`@gen-webkit-keyframes`](#gen-webkit-keyframes)
   * [Minification](#minification)
   * [Linting](#linting)
     * [`--allowed-non-standard-function`, `--allow-unrecognized-functions`](#--allowed-non-standard-function---allow-unrecognized-functions)
@@ -36,10 +38,10 @@ These are the fixes and improvements to the [original version](https://github.co
 
 - [Switch on autoprefixer](https://github.com/google/closure-stylesheets/commit/ec28d2ab6bea4f8d5788b23c91ff285c6652cf54);
 - [Do not apply auto-prefixing if the rule already exists](https://github.com/google/closure-stylesheets/commit/8a49266fb85ab9bb39b6a9ffdf50ca3b84704ef4);
-- Support [`@supports`](https://github.com/google/closure-stylesheets/commit/b530d2d0aae57d164bac2a6ae8da97344919ffcd)
+- Proper [`@supports`](https://github.com/google/closure-stylesheets/commit/b530d2d0aae57d164bac2a6ae8da97344919ffcd) parsing and compiling.
 - Print errors to the console.
 - Build for _Java 1.8_.
-- Merge in [`--allow-duplicate-declarations` work](https://github.com/google/closure-stylesheets/commit/802338e1de297a62f32241f33f8fc9f4e60e530b).
+- Merge in [`--allow-duplicate-declarations`](https://github.com/google/closure-stylesheets/commit/802338e1de297a62f32241f33f8fc9f4e60e530b) work.
 
 <p align="center"><a href="#table-of-contents">
   <img src="/.documentary/section-breaks/1.svg?sanitize=true">
@@ -351,6 +353,100 @@ serve it appropriately.
 
 The Closure Stylesheets tool also offers some features that are not extensions
 to CSS.
+
+### Auto Expansion
+
+There is an auto-expansion pass that adds vendor-specific directives, however it was switched off in the _Google's version_. The reason remains unknown, however it might be because it lead to unexpected changes in code.
+
+```css
+.row {
+  margin-right: -15px;
+  margin-left: -15px;
+  display: flex;
+  flex-wrap: wrap;
+  flex-basis: 0;
+  flex-grow: 1;
+}
+```
+
+This fork allows to switch it on with the `--expand-browser-prefix` flag:
+
+```console
+$ java -jar closure-stylesheets.jar --expand-browser-prefix --pretty-print example/prefix.css
+```
+
+```css
+.row {
+  margin-right: -15px;
+  margin-left: -15px;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -moz-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  -webkit-flex-wrap: wrap;
+  flex-wrap: wrap;
+  -webkit-flex-basis: 0;
+  -ms-flex-preferred-size: 0;
+  flex-basis: 0;
+  -webkit-box-flex: 1;
+  box-flex: 1;
+  -ms-flex-positive: 1;
+  -webkit-flex-grow: 1;
+  flex-grow: 1;
+}
+```
+
+There is no control over which rules to expand by supplied desired browser coverage right now. All known rules will be expanded which can increase the size of the stylesheets by a lot.
+
+Additionally, keyframe rules can be generated for webkit, by using the <a name="gen-webkit-keyframes">`@gen-webkit-keyframes`</a> comment before the rule. This was part of the compiler however not documented.
+
+```css
+/* @gen-webkit-keyframes */
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+.RunFadeIn {
+  opacity: 0;
+  animation: fadeIn 0.5s;
+  animation-fill-mode: forwards;
+}
+```
+
+```css
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@-webkit-keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.RunFadeIn {
+  opacity: 0;
+  animation: fadeIn .5s;
+  animation-fill-mode: forwards;
+}
+```
+
+<p align="center"><a href="#table-of-contents">
+  <img src="/.documentary/section-breaks/4.svg?sanitize=true">
+</a></p>
 
 ### Minification
 

@@ -12,11 +12,12 @@
     },
     {
       "type": "java",
-      "name": "Debug (Launch)-ClosureCommandLineCompiler<closure-stylesheets>",
+      "name": "Launch Stylesheets",
       "request": "launch",
       "mainClass": "com.google.common.css.compiler.commandline.ClosureCommandLineCompiler",
       "projectName": "closure-stylesheets",
-      "args": ["styles/supports.css"]
+      // "args": ["styles/supports.css"]
+      "args": ["--expand-browser-prefix", "example/prefix.css"]
     }
   ]
 }

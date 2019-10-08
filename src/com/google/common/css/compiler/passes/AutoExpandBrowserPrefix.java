@@ -102,6 +102,8 @@ public class AutoExpandBrowserPrefix extends DefaultTreeVisitor implements CssCo
           expansionNode.setSourceCodeLocation(declaration.getSourceCodeLocation());
           expansionNode.setComments(declaration.getComments());
           expansionNode.appendComment(new CssCommentNode("/* @alternate */", null));
+          expansionNode.getPropertyName().setSourceCodeLocation(declaration.getSourceCodeLocation());
+          expansionNode.autoExpanded = true;
           expansionNodes.add(expansionNode);
         }
       } else if (!rule.isFunction()) {
@@ -145,11 +147,13 @@ public class AutoExpandBrowserPrefix extends DefaultTreeVisitor implements CssCo
               ruleValueNode.deepCopy(),
               declaration.getSourceCodeLocation());
       expansionNode.appendComment(new CssCommentNode("/* @alternate */", null));
+      expansionNode.autoExpanded = true;
       replacements.add(expansionNode);
     }
     for (CssDeclarationNode ruleExpansionNode : rule.getExpansionNodes()) {
       CssDeclarationNode expansionNode = ruleExpansionNode.deepCopy();
       expansionNode.setSourceCodeLocation(declaration.getSourceCodeLocation());
+      expansionNode.autoExpanded = true;
       replacements.add(expansionNode);
     }
     return replacements.build();

@@ -86,10 +86,11 @@ public class VerifyRecognizedProperties extends DefaultTreeVisitor
       if (!property.isRecognizedProperty()) {
         reportError(String.format("%s is an unrecognized property",
                 property.getName()), propertyNode);
-      } else if (property.hasWarning()) {
+      } else if (property.hasWarning() && !declarationNode.autoExpanded) {
         errorManager.reportWarning(new GssError(
             String.format(
                 "WARNING for use of CSS property %s: %s\n",
+                // declarationNode.autoExpanded ? "auto-expanded " : "",
                 property.getName(), property.getWarning()),
             propertyNode.getSourceCodeLocation()));
       }
