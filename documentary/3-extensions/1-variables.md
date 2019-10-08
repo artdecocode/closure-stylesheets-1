@@ -9,6 +9,6 @@ variables. Consider the following file, **`variable-example.gss`**:
 Running **`java -jar closure-stylesheets.jar --pretty-print
 variable-example.gss`** will print:
 
-<shell language="css">
+<shell noconsole language="css">
 java -jar closure-stylesheets.jar --pretty-print example/variable.gss
 </shell>

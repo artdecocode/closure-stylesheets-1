@@ -8,33 +8,15 @@ for both the input and output, though those settings can be overridden by
 For example, consider the following stylesheet, **`rtl-example.gss`**, which is
 designed for an LTR page:
 
-```css
-.logo {
-  margin-left: 10px;
-}
-
-.shortcut_accelerator {
-  /* Keyboard shortcuts are untranslated; always left-to-right. */
-  /* @noflip */ direction: ltr;
-  border-right:\t2px solid #ccc;
-  padding: 0 2px 0 4px;
-}
-```
+%EXAMPLE: example/rtl.gss, css%
 
 Generating the equivalent stylesheet to use on an RTL version of the page can be
 achieved by running **`java -jar closure-stylesheets.jar --pretty-print
---output-orientation RTL rtl-example.gss`**, which prints:
+--output-orientation RTL rtl.gss`**, which prints:
 
-```css
-.logo {
-  margin-right: 10px;
-}
-.shortcut_accelerator {
-  direction: ltr;
-  border-left: 2px solid #ccc;
-  padding: 0 4px 0 2px;
-}
-```
+<shell noconsole language="css">
+java -jar closure-stylesheets.jar --pretty-print --output-orientation RTL example/rtl.gss
+</shell>
 
 Note how the following properties were changed:
   * **`margin-left`** became **`margin-right`**

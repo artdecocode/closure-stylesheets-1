@@ -1,0 +1,10 @@
+.logo {
+  margin-left: 10px;
+}
+
+.shortcut_accelerator {
+  /* Keyboard shortcuts are untranslated; always left-to-right. */
+  /* @noflip */ direction: ltr;
+  border-right: 2px solid #ccc;
+  padding: 0 2px 0 4px;
+}

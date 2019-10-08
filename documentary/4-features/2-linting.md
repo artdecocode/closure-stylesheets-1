@@ -12,7 +12,7 @@ style declarations. For example, if you ran Closure Stylesheets on
 
 Then you would get the following output:
 
-<shell err>
+<shell noconsole err>
 java -jar closure-stylesheets.jar --pretty-print example/linting.gss
 </shell>
 
@@ -55,6 +55,21 @@ declaration based on user agent is preferred; however, that requires the
 additional overhead of doing user agent detection and serving the appropriate
 stylesheet, so using the `@alternate` annotation is a simpler solution.
 
+On the other hand, the check for duplicates can be disabled altogether with [`--allow-duplicate-declarations`](####) flag. This can be useful when compiling some vendor CSS, for example, Bootstrap, which will on purpose write multiple declarations within the same block:
+
+```css
+abbr[title],
+abbr[data-original-title] {
+  text-decoration: underline;
+  -webkit-text-decoration: underline dotted;
+  text-decoration: underline dotted; /* duplicate */
+}
+button:focus {
+  outline: 1px dotted;
+  outline: 5px auto -webkit-focus-ring-color; /* duplicate */
+}
+```
+
 #### `--allow-unrecognized-properties`, `--allowed-unrecognized-property`
 
 By default, Closure Stylesheets validates the names of CSS properties used in a
@@ -64,35 +79,20 @@ that is bundled with Closure Stylesheets. However, you can allow properties that
 aren't in the list with the **`--allowed-unrecognized-property`** flag. Consider
 the file **`bleeding-edge.gss`**:
 
-```css
-.amplifier {
-  /* A hypothetical CSS property recognized by the latest version of WebKit. */
-  -webkit-amp-volume: 11;
-}
-```
+%EXAMPLE: example/bleeding-edge.gss, css%
 
-Then running the following:
+Then running the compiler would yield the following error:
 
-```
-java -jar closure-stylesheets.jar bleeding-edge.gss
-```
-
-would yield the following error:
-
-```
--webkit-amp-volume is an unrecognized property in bleeding-edge.gss at line 3 column 3:
-  -webkit-amp-volume: 11;
-  ^
-
-1 error(s)
-```
+<shell noconsole err>
+java -jar closure-stylesheets.jar example/bleeding-edge.gss
+</shell>
 
 You can whitelist `-webkit-amp-volume` with the
 **`--allowed-unrecognized-property`** flag as follows:
 
 ```
-java -jar closure-stylesheets.jar \\
-    --allowed-unrecognized-property -webkit-amp-volume bleeding-edge.gss
+java -jar closure-stylesheets.jar \
+    --allowed-unrecognized-property -webkit-amp-volume example/bleeding-edge.gss
 ```
 
 Like `--allowed-non-standard-function`, `--allowed-unrecognized-property` may be

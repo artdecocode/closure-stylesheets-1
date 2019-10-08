@@ -16,28 +16,14 @@ argument when using a mixin.
 For example, consider defining a mixin in **`mixin-simple-example.gss`** that
 could be used to create a shorthand for declaring the dimensions of an element:
 
-```css
-@defmixin size(WIDTH, HEIGHT) {
-  width: WIDTH;
-  height: HEIGHT;
-}
-
-.logo {
-  @mixin size(150px, 55px);
-  background-image: url('http://www.google.com/images/logo_sm.gif');
-}
-```
+%EXAMPLE: example/mixin-simple.gss, css%
 
 Running **`java -jar closure-stylesheets.jar --pretty-print
 mixin-simple-example.gss`** prints:
 
-```css
-.logo {
-  width: 150px;
-  height: 55px;
-  background-image: url('http://www.google.com/images/logo_sm.gif');
-}
-```
+<shell noconsole language="css">
+java -jar closure-stylesheets.jar --pretty-print example/mixin-simple.gss
+</shell>
 
 Mixins are even more compelling when you consider using them to abstract away
 cross-browser behavior for styles such as gradients:
@@ -46,7 +32,7 @@ cross-browser behavior for styles such as gradients:
 
 The above is compiled to:
 
-<shell language="css">
+<shell noconsole language="css">
 java -jar closure-stylesheets.jar --pretty-print example/mixin.gss
 </shell>
 

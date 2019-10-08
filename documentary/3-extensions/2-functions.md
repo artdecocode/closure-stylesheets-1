@@ -21,7 +21,7 @@ unit. That is, you may do `add(3px, 5px)` or `add(3ex, 5ex)`, but you cannot do
 Running **`java -jar closure-stylesheets.jar --pretty-print
 functions-example.gss`** will print:
 
-<shell language="css">
+<shell noconsole language="css">
 java -jar closure-stylesheets.jar --pretty-print example/functions.gss
 </shell>
 

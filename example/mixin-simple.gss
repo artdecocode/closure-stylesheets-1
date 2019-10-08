@@ -1,0 +1,9 @@
+@defmixin size(WIDTH, HEIGHT) {
+  width: WIDTH;
+  height: HEIGHT;
+}
+
+.logo {
+  @mixin size(150px, 55px);
+  background-image: url('http://www.google.com/images/logo_sm.gif');
+}

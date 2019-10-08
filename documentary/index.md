@@ -7,6 +7,8 @@ CSS. The tool also supports **[minification](#minification)**,
 **[linting](#linting)**, **[RTL flipping](#rtl-flipping)**, and CSS class
 **[renaming](#renaming)**.
 
+## Table Of Contents
+
 %TOC%
 
 %~%

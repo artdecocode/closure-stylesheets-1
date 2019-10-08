@@ -1,0 +1,4 @@
+.amplifier {
+  /* A hypothetical CSS property recognized by the latest version of WebKit. */
+  -webkit-amp-volume: 11;
+}

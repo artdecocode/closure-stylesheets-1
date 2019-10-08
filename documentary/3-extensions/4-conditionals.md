@@ -14,14 +14,14 @@ Values for the conditionals can be set via a **`--define`** flag. By default,
 all conditional variables are assumed to be false, so running **`java -jar
 closure-stylesheets.jar --pretty-print conditionals.gss`** will print:
 
-<shell language="css">
+<shell noconsole language="css">
 java -jar closure-stylesheets.jar --pretty-print example/conditionals.gss
 </shell>
 
 whereas **`java -jar closure-stylesheets.jar --define BROWSER_FF2 --pretty-print
 conditionals.gss`** will print:
 
-<shell language="css">
+<shell noconsole language="css">
 java -jar closure-stylesheets.jar --define BROWSER_FF2 --pretty-print example/conditionals.gss
 </shell>
 
@@ -29,7 +29,7 @@ It is also possible to specify the `--define` flag multiple times, so **`java
 -jar closure-stylesheets.jar --define BROWSER_IE --define BROWSER_IE6
 --pretty-print conditionals.gss`** will print:
 
-<shell language="css">
+<shell noconsole language="css">
 java -jar closure-stylesheets.jar --define BROWSER_IE --define BROWSER_IE6 --pretty-print example/conditionals.gss
 </shell>
 

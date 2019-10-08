@@ -7,8 +7,9 @@ CSS. The tool also supports **[minification](#minification)**,
 **[linting](#linting)**, **[RTL flipping](#rtl-flipping)**, and CSS class
 **[renaming](#renaming)**.
 
-<a name="table-of-contents"></a>
+## Table Of Contents
 
+- [Table Of Contents](#table-of-contents)
 - [Fork Diversion](#fork-diversion)
 - [Get Closure Stylesheets!](#get-closure-stylesheets)
 - [CSS Extensions](#css-extensions)
@@ -20,6 +21,7 @@ CSS. The tool also supports **[minification](#minification)**,
   * [Minification](#minification)
   * [Linting](#linting)
     * [`--allowed-non-standard-function`, `--allow-unrecognized-functions`](#--allowed-non-standard-function---allow-unrecognized-functions)
+    * [`--allow-duplicate-declarations`](#--allow-duplicate-declarations)
     * [`--allow-unrecognized-properties`, `--allowed-unrecognized-property`](#--allow-unrecognized-properties---allowed-unrecognized-property)
   * [RTL Flipping](#rtl-flipping)
   * [Renaming](#renaming)
@@ -71,7 +73,6 @@ Stylesheets" or "GSS", so you will see references to GSS in the
 developers prefer to be explicit about which files use the Closure Stylesheets
 extensions to CSS by using a **`.gss`** file extension.
 
-
 ### Variables
 
 Variables can be defined in Closure Stylesheets using **`@def`** followed by a
@@ -96,10 +97,6 @@ body {
 
 Running **`java -jar closure-stylesheets.jar --pretty-print
 variable-example.gss`** will print:
-
-```console
-$ java -jar closure-stylesheets.jar --pretty-print example/variable.gss
-```
 
 ```css
 body {
@@ -150,10 +147,6 @@ unit. That is, you may do `add(3px, 5px)` or `add(3ex, 5ex)`, but you cannot do
 
 Running **`java -jar closure-stylesheets.jar --pretty-print
 functions-example.gss`** will print:
-
-```console
-$ java -jar closure-stylesheets.jar --pretty-print example/functions.gss
-```
 
 ```css
 .left_hand_nav {
@@ -270,10 +263,6 @@ cross-browser behavior for styles such as gradients:
 
 The above is compiled to:
 
-```console
-$ java -jar closure-stylesheets.jar --pretty-print example/mixin.gss
-```
-
 ```css
 .header {
   background-color: #f07575;
@@ -322,10 +311,6 @@ Values for the conditionals can be set via a **`--define`** flag. By default,
 all conditional variables are assumed to be false, so running **`java -jar
 closure-stylesheets.jar --pretty-print conditionals.gss`** will print:
 
-```console
-$ java -jar closure-stylesheets.jar --pretty-print example/conditionals.gss
-```
-
 ```css
 .goog-inline-block {
   position: relative;
@@ -335,10 +320,6 @@ $ java -jar closure-stylesheets.jar --pretty-print example/conditionals.gss
 
 whereas **`java -jar closure-stylesheets.jar --define BROWSER_FF2 --pretty-print
 conditionals.gss`** will print:
-
-```console
-$ java -jar closure-stylesheets.jar --define BROWSER_FF2 --pretty-print example/conditionals.gss
-```
 
 ```css
 .goog-inline-block {
@@ -350,10 +331,6 @@ $ java -jar closure-stylesheets.jar --define BROWSER_FF2 --pretty-print example/
 It is also possible to specify the `--define` flag multiple times, so **`java
 -jar closure-stylesheets.jar --define BROWSER_IE --define BROWSER_IE6
 --pretty-print conditionals.gss`** will print:
-
-```console
-$ java -jar closure-stylesheets.jar --define BROWSER_IE --define BROWSER_IE6 --pretty-print example/conditionals.gss
-```
 
 ```css
 .goog-inline-block {
@@ -423,10 +400,6 @@ style declarations. For example, if you ran Closure Stylesheets on
 
 Then you would get the following output:
 
-```console
-$ java -jar closure-stylesheets.jar --pretty-print example/linting.gss
-```
-
 ```sh
 Detected multiple identical, non-alternate declarations in the same ruleset. If this is intentional please use the /* @alternate */ annotation. border-color:[rgba(0,0,0,0.1)] in example/linting.gss at line 1 column 1:
 .logo {
@@ -478,6 +451,21 @@ declaration based on user agent is preferred; however, that requires the
 additional overhead of doing user agent detection and serving the appropriate
 stylesheet, so using the `@alternate` annotation is a simpler solution.
 
+On the other hand, the check for duplicates can be disabled altogether with <a name="--allow-duplicate-declarations">`--allow-duplicate-declarations`</a> flag. This can be useful when compiling some vendor CSS, for example, Bootstrap, which will on purpose write multiple declarations within the same block:
+
+```css
+abbr[title],
+abbr[data-original-title] {
+  text-decoration: underline;
+  -webkit-text-decoration: underline dotted;
+  text-decoration: underline dotted; /* duplicate */
+}
+button:focus {
+  outline: 1px dotted;
+  outline: 5px auto -webkit-focus-ring-color; /* duplicate */
+}
+```
+
 #### `--allow-unrecognized-properties`, `--allowed-unrecognized-property`
 
 By default, Closure Stylesheets validates the names of CSS properties used in a
@@ -494,28 +482,22 @@ the file **`bleeding-edge.gss`**:
 }
 ```
 
-Then running the following:
+Then running the compiler would yield the following error:
 
-```
-java -jar closure-stylesheets.jar bleeding-edge.gss
-```
-
-would yield the following error:
-
-```
--webkit-amp-volume is an unrecognized property in bleeding-edge.gss at line 3 column 3:
+```sh
+-webkit-amp-volume is an unrecognized property in example/bleeding-edge.gss at line 3 column 3:
   -webkit-amp-volume: 11;
   ^
 
-1 error(s)
+1 error(s), 0 warning(s)
 ```
 
 You can whitelist `-webkit-amp-volume` with the
 **`--allowed-unrecognized-property`** flag as follows:
 
 ```
-java -jar closure-stylesheets.jar \\
-    --allowed-unrecognized-property -webkit-amp-volume bleeding-edge.gss
+java -jar closure-stylesheets.jar \
+    --allowed-unrecognized-property -webkit-amp-volume example/bleeding-edge.gss
 ```
 
 Like `--allowed-non-standard-function`, `--allowed-unrecognized-property` may be
@@ -544,14 +526,14 @@ designed for an LTR page:
 .shortcut_accelerator {
   /* Keyboard shortcuts are untranslated; always left-to-right. */
   /* @noflip */ direction: ltr;
-  border-right:\t2px solid #ccc;
+  border-right: 2px solid #ccc;
   padding: 0 2px 0 4px;
 }
 ```
 
 Generating the equivalent stylesheet to use on an RTL version of the page can be
 achieved by running **`java -jar closure-stylesheets.jar --pretty-print
---output-orientation RTL rtl-example.gss`**, which prints:
+--output-orientation RTL rtl.gss`**, which prints:
 
 ```css
 .logo {
