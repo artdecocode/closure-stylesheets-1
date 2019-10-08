@@ -57,6 +57,14 @@ public class EliminateUnitsFromZeroNumericValues extends DefaultTreeVisitor
   }
 
   @Override
+  public boolean enterArgumentNode(CssValueNode node) {
+    if (!(node instanceof CssNumericNode) || isPlusOrMinusOperand(node)) {
+      return true;
+    }
+    return this.enterValueNode(node);
+  }
+
+  @Override
   public boolean enterValueNode(CssValueNode node) {
     if (!(node instanceof CssNumericNode) // Don't process non-numeric nodes
         // Don't strip units from operands of + and - inside calc() expressions; they are invalid.
