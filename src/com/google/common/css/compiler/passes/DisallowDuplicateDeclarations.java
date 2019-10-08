@@ -19,6 +19,7 @@ package com.google.common.css.compiler.passes;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Sets;
 import com.google.common.css.SourceCodeLocation;
+import com.google.common.css.compiler.ast.CssCommentNode;
 import com.google.common.css.compiler.ast.CssCompilerPass;
 import com.google.common.css.compiler.ast.CssDeclarationNode;
 import com.google.common.css.compiler.ast.CssNode;
@@ -47,6 +48,7 @@ public class DisallowDuplicateDeclarations extends DefaultTreeVisitor
 
   private final VisitController visitController;
   private final ErrorManager errorManager;
+  private boolean allowDuplicateDeclarations;
 
   private final Set<String> propertyNames = Sets.newHashSet();
 
@@ -54,6 +56,12 @@ public class DisallowDuplicateDeclarations extends DefaultTreeVisitor
       ErrorManager errorManager) {
     this.visitController = visitController;
     this.errorManager = errorManager;
+  }
+  public DisallowDuplicateDeclarations(VisitController visitController,
+      ErrorManager errorManager, boolean allowDuplicateDeclarations) {
+    this.visitController = visitController;
+    this.errorManager = errorManager;
+    this.allowDuplicateDeclarations = allowDuplicateDeclarations;
   }
 
   @Override
@@ -113,7 +121,11 @@ public class DisallowDuplicateDeclarations extends DefaultTreeVisitor
     }
 
     if (propertyNames.contains(propertyName)) {
-      errorManager.report(new GssError(ERROR_STR + declaration, location));
+      if (this.allowDuplicateDeclarations) {
+        declaration.appendComment(new CssCommentNode("/* @alternate */", null));
+      } else {
+        errorManager.report(new GssError(ERROR_STR + declaration, location));
+      }
     } else {
       propertyNames.add(propertyName);
     }

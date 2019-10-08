@@ -146,12 +146,10 @@ public class PassRunner {
       new AbbreviatePositionalValues(
           cssTree.getMutatingVisitController()).runPass();
     }
-    // Report errors for duplicate declarations
-    if (!job.allowDuplicateDeclarations) {
-      new DisallowDuplicateDeclarations(
-          cssTree.getVisitController(), errorManager).runPass();
-    }
     if (job.eliminateDeadStyles) {
+      // Report errors for duplicate declarations
+      new DisallowDuplicateDeclarations(
+          cssTree.getVisitController(), errorManager, job.allowDuplicateDeclarations).runPass();
       // Split rules by selector and declaration.
       new SplitRulesetNodes(cssTree.getMutatingVisitController()).runPass();
       // Dead code elimination.
