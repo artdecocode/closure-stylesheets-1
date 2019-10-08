@@ -4,7 +4,9 @@
   "description": "A CSS+ transpiler that lints, optimizes, and I18n-izes",
   "main": "index.js",
   "scripts": {
-    "doc": "doc -o README.md"
+    "doc": "doc -o README.md",
+    "bootstrap-pretty": "java -jar closure-stylesheets.jar --preserve-important-comments --pretty-print styles/bootstrap.css --allow-unrecognized-properties --allow-duplicate-declarations --output-file styles/bootstrap.pretty.css",
+    "bootstrap-min": "java -jar closure-stylesheets.jar styles/bootstrap.css --preserve-important-comments --allow-unrecognized-properties --allow-duplicate-declarations --output-file styles/bootstrap.min.css"
   },
   "repository": "git@github.com:artdecocode/closure-stylesheets-1.git",
   "author": "Anton <anton@adc.sh>",

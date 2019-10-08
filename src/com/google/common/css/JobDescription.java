@@ -49,6 +49,7 @@ public class JobDescription {
   public final boolean allowDefPropagation;
   public final boolean allowUnrecognizedFunctions;
   public final boolean allowDuplicateDeclarations;
+  public final boolean expandBrowserPrefix;
   public final Set<String> allowedNonStandardFunctions;
   public final boolean allowUnrecognizedProperties;
   public final Set<String> allowedUnrecognizedProperties;
@@ -129,6 +130,7 @@ public class JobDescription {
       boolean eliminateDeadStyles, boolean allowDefPropagation,
       boolean allowUnrecognizedFunctions,
       boolean allowDuplicateDeclarations,
+      boolean expandBrowserPrefix,
       Set<String> allowedNonStandardFunctions,
       boolean allowUnrecognizedProperties,
       Set<String> allowedUnrecognizedProperties, boolean allowUndefinedConstants,
@@ -170,6 +172,7 @@ public class JobDescription {
     this.allowDefPropagation = allowDefPropagation;
     this.allowUnrecognizedFunctions = allowUnrecognizedFunctions;
     this.allowDuplicateDeclarations = allowDuplicateDeclarations;
+    this.expandBrowserPrefix = expandBrowserPrefix;
     this.allowedNonStandardFunctions = ImmutableSet.copyOf(
         allowedNonStandardFunctions);
     this.allowUnrecognizedProperties = allowUnrecognizedProperties;

@@ -166,6 +166,10 @@ public class ClosureCommandLineCompiler extends DefaultCommandLineCompiler {
         "Allow duplicate declarations.")
     private boolean allowDuplicateDeclarations = false;
 
+    @Option(name = "--expand-browser-prefix", usage =
+        "Expand CSS rules to include vendor-prefixed declarations.")
+    private boolean expandBrowserPrefix = false;
+
     @Option(name = "--allowed-non-standard-function", usage =
         "Specify a non-standard function to whitelist, like alpha()")
     private List<String> allowedNonStandardFunctions = Lists.newArrayList();
@@ -242,6 +246,7 @@ public class ClosureCommandLineCompiler extends DefaultCommandLineCompiler {
       builder.setAllowDefPropagation(allowDefPropagation);
       builder.setAllowUnrecognizedFunctions(allowUnrecognizedFunctions);
       builder.setAllowDuplicateDeclarations(allowDuplicateDeclarations);
+      builder.setExpandBrowserPrefix(expandBrowserPrefix);
       builder.setAllowedNonStandardFunctions(allowedNonStandardFunctions);
       builder.setAllowedUnrecognizedProperties(allowedUnrecognizedProperties);
       builder.setAllowUnrecognizedProperties(allowUnrecognizedProperties);
