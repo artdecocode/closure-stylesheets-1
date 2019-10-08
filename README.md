@@ -7,6 +7,27 @@ CSS. The tool also supports **[minification](#minification)**,
 **[linting](#linting)**, **[RTL flipping](#rtl-flipping)**, and CSS class
 **[renaming](#renaming)**.
 
+<a name="table-of-contents"></a>
+
+- [Fork Diversion](#fork-diversion)
+- [Get Closure Stylesheets!](#get-closure-stylesheets)
+- [CSS Extensions](#css-extensions)
+  * [Variables](#variables)
+  * [Functions](#functions)
+  * [Mixins](#mixins)
+  * [Conditionals](#conditionals)
+- [Additional Features](#additional-features)
+  * [Minification](#minification)
+  * [Linting](#linting)
+    * [`--allowed-non-standard-function`, `--allow-unrecognized-functions`](#--allowed-non-standard-function---allow-unrecognized-functions)
+    * [`--allow-unrecognized-properties`, `--allowed-unrecognized-property`](#--allow-unrecognized-properties---allowed-unrecognized-property)
+  * [RTL Flipping](#rtl-flipping)
+  * [Renaming](#renaming)
+
+<p align="center"><a href="#table-of-contents">
+  <img src="/.documentary/section-breaks/0.svg?sanitize=true">
+</a></p>
+
 ## Fork Diversion
 
 These are the fixes and improvements to the [original version](https://github.com/google/closure-stylesheets/compare/master...artdecocode:master):
@@ -15,7 +36,12 @@ These are the fixes and improvements to the [original version](https://github.co
 - [Do not apply auto-prefixing if the rule already exists](https://github.com/google/closure-stylesheets/commit/8a49266fb85ab9bb39b6a9ffdf50ca3b84704ef4);
 - Support [`@supports`](https://github.com/google/closure-stylesheets/commit/b530d2d0aae57d164bac2a6ae8da97344919ffcd)
 - Print errors to the console.
-- Build for Java 1.8.
+- Build for _Java 1.8_.
+- Merge in [`--allow-duplicate-declarations` work](https://github.com/google/closure-stylesheets/commit/802338e1de297a62f32241f33f8fc9f4e60e530b).
+
+<p align="center"><a href="#table-of-contents">
+  <img src="/.documentary/section-breaks/1.svg?sanitize=true">
+</a></p>
 
 ## Get Closure Stylesheets!
 
@@ -33,6 +59,9 @@ java -jar closure-stylesheets.jar --help
 [download]: https://github.com/google/closure-stylesheets/releases
 [build it from source]: https://github.com/google/closure-stylesheets/wiki/Building-From-Source.md
 
+<p align="center"><a href="#table-of-contents">
+  <img src="/.documentary/section-breaks/2.svg?sanitize=true">
+</a></p>
 
 ## CSS Extensions
 
@@ -41,6 +70,7 @@ Stylesheets" or "GSS", so you will see references to GSS in the
 [source code](https://github.com/google/closure-stylesheets). Some
 developers prefer to be explicit about which files use the Closure Stylesheets
 extensions to CSS by using a **`.gss`** file extension.
+
 
 ### Variables
 
@@ -66,6 +96,10 @@ body {
 
 Running **`java -jar closure-stylesheets.jar --pretty-print
 variable-example.gss`** will print:
+
+```console
+$ java -jar closure-stylesheets.jar --pretty-print example/variable.gss
+```
 
 ```css
 body {
@@ -116,6 +150,10 @@ unit. That is, you may do `add(3px, 5px)` or `add(3ex, 5ex)`, but you cannot do
 
 Running **`java -jar closure-stylesheets.jar --pretty-print
 functions-example.gss`** will print:
+
+```console
+$ java -jar closure-stylesheets.jar --pretty-print example/functions.gss
+```
 
 ```css
 .left_hand_nav {
@@ -232,6 +270,10 @@ cross-browser behavior for styles such as gradients:
 
 The above is compiled to:
 
+```console
+$ java -jar closure-stylesheets.jar --pretty-print example/mixin.gss
+```
+
 ```css
 .header {
   background-color: #f07575;
@@ -253,7 +295,7 @@ Variables can be defined using conditionals with **`@if`**, **`@elseif`**, and
 which defines a cross-browser CSS class to apply the style **`display:
 inline-block`**. The Closure Library example uses browser hacks to define
 `.goog-inline-block`, but it can be done explicitly in Closure Stylesheets by
-using conditionals as shown in **`conditionals-example.gss`**:
+using conditionals as shown in **`conditionals.gss`**:
 
 ```css
 @if (BROWSER_IE) {
@@ -278,7 +320,11 @@ using conditionals as shown in **`conditionals-example.gss`**:
 
 Values for the conditionals can be set via a **`--define`** flag. By default,
 all conditional variables are assumed to be false, so running **`java -jar
-closure-stylesheets.jar --pretty-print conditionals-example.gss`** will print:
+closure-stylesheets.jar --pretty-print conditionals.gss`** will print:
+
+```console
+$ java -jar closure-stylesheets.jar --pretty-print example/conditionals.gss
+```
 
 ```css
 .goog-inline-block {
@@ -288,7 +334,11 @@ closure-stylesheets.jar --pretty-print conditionals-example.gss`** will print:
 ```
 
 whereas **`java -jar closure-stylesheets.jar --define BROWSER_FF2 --pretty-print
-conditionals-example.gss`** will print:
+conditionals.gss`** will print:
+
+```console
+$ java -jar closure-stylesheets.jar --define BROWSER_FF2 --pretty-print example/conditionals.gss
+```
 
 ```css
 .goog-inline-block {
@@ -299,7 +349,11 @@ conditionals-example.gss`** will print:
 
 It is also possible to specify the `--define` flag multiple times, so **`java
 -jar closure-stylesheets.jar --define BROWSER_IE --define BROWSER_IE6
---pretty-print conditionals-example.gss`** will print:
+--pretty-print conditionals.gss`** will print:
+
+```console
+$ java -jar closure-stylesheets.jar --define BROWSER_IE --define BROWSER_IE6 --pretty-print example/conditionals.gss
+```
 
 ```css
 .goog-inline-block {
@@ -312,6 +366,10 @@ Admittedly, to get the benefit of serving the CSS specific to a particular user
 agent, one must generate a separate stylesheet for each user agent and then
 serve it appropriately.
 
+<p align="center"><a href="#table-of-contents">
+  <img src="/.documentary/section-breaks/3.svg?sanitize=true">
+</a></p>
+
 ## Additional Features
 
 The Closure Stylesheets tool also offers some features that are not extensions
@@ -321,21 +379,21 @@ to CSS.
 
 You can concatenate and minify a list of stylesheets with the following command:
 
-```
-java -jar closure-stylesheets.jar input1.css input2.css input3.css
+```console
+$ java -jar closure-stylesheets.jar input1.css input2.css input3.css
 ```
 
 This will print the minified output to standard out. You can also specify a file
 to write the output to using the **`--output-file`** option:
 
-```
-java -jar closure-stylesheets.jar --output-file output.css input1.css input2.css input3.css
+```console
+$ java -jar closure-stylesheets.jar --output-file output.css input1.css input2.css input3.css
 ```
 
 Of course, the **`>`** operator also works just as well:
 
-```
-java -jar closure-stylesheets.jar input1.css input2.css input3.css > output.css
+```console
+$ java -jar closure-stylesheets.jar input1.css input2.css input3.css > output.css
 ```
 
 If you would like to create a vendor-specific stylesheet, you can use the
@@ -345,16 +403,13 @@ is present, all vendor-specific properties for other vendors will be removed.
 
 ### Linting
 
-Closure Stylesheets performs some static checks on your CSS. For example, its
-most basic function is to ensure that your CSS parses: if there are any parse
-errors, Closure Stylesheets will print the errors to standard error and return
-with an exit code of 1.
+_Closure Stylesheets_ performs some static checks on your CSS. For example, its most basic function is to ensure that your CSS parses: if there are any parse errors, _Closure Stylesheets_ will print the errors to standard error and return with an exit code of 1.
 
 #### `--allowed-non-standard-function`, `--allow-unrecognized-functions`
 
 It will also error out when there are unrecognized function names or duplicate
 style declarations. For example, if you ran Closure Stylesheets on
-**`linting-example.gss`**:
+**`linting.gss`**:
 
 ```css
 .logo {
@@ -368,29 +423,30 @@ style declarations. For example, if you ran Closure Stylesheets on
 
 Then you would get the following output:
 
+```console
+$ java -jar closure-stylesheets.jar --pretty-print example/linting.gss
 ```
-Unknown function \"urel\" in linting-example.gss at line 4 column 21:
+
+```sh
+Detected multiple identical, non-alternate declarations in the same ruleset. If this is intentional please use the /* @alternate */ annotation. border-color:[rgba(0,0,0,0.1)] in example/linting.gss at line 1 column 1:
+.logo {
+^
+
+Unknown function "urel" in example/linting.gss at line 4 column 21:
   background-image: urel('http://www.google.com/images/logo_sm.gif');
                     ^
 
-Detected multiple identical, non-alternate declarations in the same ruleset.
-If this is intentional please use the /* @alternate */ annotation.
-border-color:[rgba(0,0,0,0.1)] in linting-example.gss at line 7 column 1:
-}
-^
-
-2 error(s)
+2 error(s), 0 warning(s)
 ```
 
-In this particular case, the function `urel()` should have been `url()`, though
-if you are using a function that is not on the whitelist (see
+In this particular case, the function `urel()` should have been `url()`, though if you are using a function that is not on the whitelist (see
 [CssFunctionNode](https://github.com/google/closure-stylesheets/blob/master/src/com/google/common/css/compiler/ast/CssFunctionNode.java)
 for the list of recognized functions, which is admittedly incomplete), then you
 can specify **`--allowed-non-standard-function`** to identify additional
 functions that should be whitelisted:
 
 ```
-java -jar closure-stylesheets.jar --allowed-non-standard-function urel linting-example.gss
+java -jar closure-stylesheets.jar --allowed-non-standard-function urel example/linting.gss
 ```
 
 The `--allowed-non-standard-function` flag may be specified multiple times.
@@ -749,3 +805,8 @@ with the **`--excluded_classes_from_renaming`** flag when generating the CSS.
 References to CSS class names that are excluded from renaming should _never_ be
 wrapped in `goog.getCssName()`, or else they run the risk of being partially
 renamed.
+
+
+<p align="center"><a href="#table-of-contents">
+  <img src="/.documentary/section-breaks/-1.svg?sanitize=true">
+</a></p>

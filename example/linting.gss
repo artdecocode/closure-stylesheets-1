@@ -1,0 +1,7 @@
+.logo {
+  width: 150px;
+  height: 55px;
+  background-image: urel('http://www.google.com/images/logo_sm.gif');
+  border-color: #DCDCDC;
+  border-color: rgba(0, 0, 0, 0.1);
+}

@@ -3,3 +3,4 @@ srcmvn
 target/
 bin
 node_modules
+closure-stylesheets.jar

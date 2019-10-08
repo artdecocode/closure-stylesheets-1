@@ -1,0 +1,18 @@
+@if (BROWSER_IE) {
+  @if (BROWSER_IE6) {
+    @def GOOG_INLINE_BLOCK_DISPLAY  inline;
+  } @elseif (BROWSER_IE7) {
+    @def GOOG_INLINE_BLOCK_DISPLAY  inline;
+  } @else {
+    @def GOOG_INLINE_BLOCK_DISPLAY  inline-block;
+  }
+} @elseif (BROWSER_FF2) {
+  @def GOOG_INLINE_BLOCK_DISPLAY    -moz-inline-box;
+} @else {
+  @def GOOG_INLINE_BLOCK_DISPLAY    inline-block;
+}
+
+.goog-inline-block {
+  position: relative;
+  display: GOOG_INLINE_BLOCK_DISPLAY;
+}
