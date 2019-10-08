@@ -67,22 +67,22 @@ public class EliminateUnitsFromZeroNumericValues extends DefaultTreeVisitor
   @Override
   public boolean enterValueNode(CssValueNode node) {
     if (!(node instanceof CssNumericNode) // Don't process non-numeric nodes
-        // Don't strip units from operands of + and - inside calc() expressions; they are invalid.
-        // See https://www.w3.org/TR/css3-values/#calc-type-checking, and clarification by
-        // spec author: https://bugs.chromium.org/p/chromium/issues/detail?id=641556#c5.
-        || isPlusOrMinusOperand(node)) {
+    ) {
       return true;
     }
     CssNumericNode numericNode = (CssNumericNode) node;
     String numericValue = numericNode.getNumericPart();
     try {
       float value = Float.parseFloat(numericValue);
-      if (value == 0.0) {
+        // Don't strip units from operands of + and - inside calc() expressions; they are invalid.
+        // See https://www.w3.org/TR/css3-values/#calc-type-checking, and clarification by
+        // spec author: https://bugs.chromium.org/p/chromium/issues/detail?id=641556#c5.
+      if (value == 0.0 && !isPlusOrMinusOperand(node)) {
         if (REMOVABLE_LENGTH_UNITS.contains(numericNode.getUnit())) {
           numericNode.setUnit("");
         }
         numericNode.setNumericPart("0");
-      } else {
+      } else if (numericValue.contains(".")) {
         // Removes the 0s at the left of the dot.
         int stripFront = 0;
         while (numericValue.charAt(stripFront) == '0') {
