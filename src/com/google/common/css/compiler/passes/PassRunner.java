@@ -145,7 +145,7 @@ public class PassRunner {
           cssTree.getMutatingVisitController()).runPass();
     }
     // Report errors for duplicate declarations
-    if (job.allowDuplicateDeclarations) { 
+    if (!job.allowDuplicateDeclarations) {
       new DisallowDuplicateDeclarations(
           cssTree.getVisitController(), errorManager).runPass();
     }
