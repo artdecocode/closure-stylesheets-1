@@ -85,6 +85,7 @@ public class CssPseudoClassNode extends CssRefinerNode {
   public CssPseudoClassNode(CssPseudoClassNode node) {
     this(node.functionType, node.refinerName, node.argument, node.notSelector,
         node.getSourceCodeLocation());
+    this.setComments(node.getComments());
   }
 
   private CssPseudoClassNode(FunctionType functionType, String name,

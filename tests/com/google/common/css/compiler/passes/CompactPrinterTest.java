@@ -489,4 +489,16 @@ public class CompactPrinterTest extends AbstractCompactPrinterTest {
             "  color: red;",
             "}"));
   }
+
+  @Test
+  public void testPreservesImportantCommentsAtStart() throws Exception {
+    preserveMarkedComments = true;
+    assertNewCompactPrintedResult(
+        "\n/*!\n * Bootstrap v4.3.1 (https://getbootstrap.com/)\n */\n:root{}",
+        lines(
+          "/*!",
+          " * Bootstrap v4.3.1 (https://getbootstrap.com/)",
+          " */",
+          " :root {}"));
+  }
 }

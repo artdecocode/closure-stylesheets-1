@@ -17,7 +17,7 @@
       "mainClass": "com.google.common.css.compiler.commandline.ClosureCommandLineCompiler",
       "projectName": "closure-stylesheets",
       // "args": ["styles/supports.css"]
-      "args": ["--expand-browser-prefix", "example/prefix.css"]
+      "args": ["--preserve-important-comments", "styles/important.css"]
     }
   ]
 }
