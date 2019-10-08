@@ -6,7 +6,9 @@
   "scripts": {
     "doc": "doc -o README.md",
     "bootstrap-pretty": "java -jar closure-stylesheets.jar --preserve-important-comments --pretty-print styles/bootstrap.css --allow-unrecognized-properties --allow-duplicate-declarations --output-file styles/bootstrap.pretty.css",
-    "bootstrap-min": "java -jar closure-stylesheets.jar styles/bootstrap.css --preserve-important-comments --allow-unrecognized-properties --allow-duplicate-declarations --output-file styles/bootstrap.min.css"
+    "compile": "mvn compile assembly:single",
+    "important": "java -jar closure-stylesheets.jar --pretty-print --allow-duplicate-declarations styles/important.css",
+    "bootstrap-min": "java -jar closure-stylesheets.jar styles/bootstrap.css --preserve-important-comments --skip-html-escaping --allow-unrecognized-properties --allow-duplicate-declarations --output-file styles/bootstrap.min.css"
   },
   "repository": "git@github.com:artdecocode/closure-stylesheets-1.git",
   "author": "Anton <anton@adc.sh>",
