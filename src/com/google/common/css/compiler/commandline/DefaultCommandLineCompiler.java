@@ -129,7 +129,7 @@ public class DefaultCommandLineCompiler extends AbstractCommandLineCompiler<JobD
     }
 
     if (job.outputFormat == OutputFormat.COMPRESSED) {
-      CompactPrinter compactPrinterPass = new CompactPrinter(cssTree, gssSourceMapGenerator);
+      CompactPrinter compactPrinterPass = new CompactPrinter(cssTree, gssSourceMapGenerator, job.skipHtmlEscaping);
       compactPrinterPass.setPreserveMarkedComments(job.preserveImportantComments);
       compactPrinterPass.runPass();
       result.append(compactPrinterPass.getCompactPrintedString());

@@ -189,8 +189,14 @@ public class ClosureCommandLineCompiler extends DefaultCommandLineCompiler {
     private Vendor vendor = null;
 
     @Option(name = "--excluded-classes-from-renaming", usage =
-        "Pass the compiler a list of CSS class names that shoudn't be renamed.")
+        "Pass the compiler a list of CSS class names that shouldn't be renamed.")
     private List<String> excludedClassesFromRenaming = Lists.newArrayList();
+
+    @Option(name = "--skip-html-escaping", usage =
+        "By default, the compiler will escape [<>\"&'] from output " +
+        "to make it suitable for safe embedding in HTML tags and attributes. " +
+        "When standalone CSS is generated, this is not necessary and can be skipped.")
+    private boolean skipHtmlEscaping = false;
 
     // For enum values, args4j automatically lists all possible values when it
     // prints the usage information for the flag, so including them in the usage
@@ -255,6 +261,7 @@ public class ClosureCommandLineCompiler extends DefaultCommandLineCompiler {
       builder.setAllowWebkitKeyframes(true);
       builder.setProcessDependencies(true);
       builder.setExcludedClassesFromRenaming(excludedClassesFromRenaming);
+      builder.setskipHtmlEscaping(skipHtmlEscaping);
       builder.setSimplifyCss(true);
       builder.setEliminateDeadStyles(true);
       builder.setCssSubstitutionMapProvider(renamingType

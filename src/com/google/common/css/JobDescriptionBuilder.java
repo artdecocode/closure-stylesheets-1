@@ -73,6 +73,7 @@ public class JobDescriptionBuilder {
   boolean suppressDependencyCheck;
   Map<String, Integer> compileConstants;
   boolean preserveImportantComments;
+  boolean skipHtmlEscaping;
 
   JobDescription job = null;
   boolean createSourceMap;
@@ -116,6 +117,7 @@ public class JobDescriptionBuilder {
     this.createSourceMap = false;
     this.sourceMapLevel = SourceMapDetailLevel.DEFAULT;
     this.preserveImportantComments = false;
+    this.skipHtmlEscaping = false;
   }
 
   public JobDescriptionBuilder copyFrom(JobDescription jobToCopy) {
@@ -134,6 +136,7 @@ public class JobDescriptionBuilder {
     this.allowDefPropagation = jobToCopy.allowDefPropagation;
     this.allowUnrecognizedFunctions = jobToCopy.allowUnrecognizedFunctions;
     this.allowDuplicateDeclarations = jobToCopy.allowDuplicateDeclarations;
+    this.skipHtmlEscaping = jobToCopy.skipHtmlEscaping;
     this.expandBrowserPrefix = jobToCopy.expandBrowserPrefix;
     this.allowedNonStandardFunctions =
         ImmutableSet.copyOf(jobToCopy.allowedNonStandardFunctions);
@@ -223,6 +226,12 @@ public class JobDescriptionBuilder {
     Preconditions.checkArgument(!excludedClassesFromRenaming.contains(null));
     this.excludedClassesFromRenaming =
         Lists.newArrayList(excludedClassesFromRenaming);
+    return this;
+  }
+
+  public JobDescriptionBuilder setskipHtmlEscaping(boolean skip) {
+    checkJobIsNotAlreadyCreated();
+    this.skipHtmlEscaping = skip;
     return this;
   }
 
@@ -523,7 +532,7 @@ public class JobDescriptionBuilder {
         gssFunctionMapProvider, cssSubstitutionMapProvider,
         outputRenamingMapFormat, inputRenamingMap, preserveComments,
         suppressDependencyCheck, compileConstants,
-        createSourceMap, sourceMapLevel, preserveImportantComments);
+        createSourceMap, sourceMapLevel, preserveImportantComments, skipHtmlEscaping);
     return job;
   }
 

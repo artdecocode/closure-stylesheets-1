@@ -24,6 +24,7 @@ import javax.annotation.Nullable;
 
 /** A compact-printer for {@link CssTree} instances. */
 public class CompactPrinter extends CodePrinter {
+  private boolean skipHtmlEscaping = false;
 
   private String compactedPrintedString = null;
 
@@ -53,13 +54,18 @@ public class CompactPrinter extends CodePrinter {
     this(tree, null /* buffer */, generator);
   }
 
+  public CompactPrinter(CssTree tree, GssSourceMapGenerator generator, boolean skipHtmlEscaping) {
+    this(tree, null /* buffer */, generator);
+    this.skipHtmlEscaping = skipHtmlEscaping;
+  }
+
   public CompactPrinter(CssTree tree) {
     this(tree, null /* buffer */, null /* generator */);
   }
 
   @Override
   protected CssTreeVisitor createVisitor(VisitController visitController, CodeBuffer buffer) {
-    return new CompactPrintingVisitor(visitController, buffer);
+    return new CompactPrintingVisitor(visitController, buffer, this.skipHtmlEscaping);
   }
 
   /** Returns the CSS compacted printed output. */
