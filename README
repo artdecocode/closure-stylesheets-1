@@ -1,0 +1,60 @@
+# closure-stylesheets-java
+
+[![npm version](https://badge.fury.io/js/closure-stylesheets-java.svg)](https://www.npmjs.com/package/closure-stylesheets-java)
+
+`closure-stylesheets-java` publishes the JAR file of the fork of [Closure Stylesheets](https://github.com/google/closure-stylesheets), which is part of _Closure Tools_. The fork has a number of improvements over the original version, which has not been updated in a while. The list of changes is found on the [GitHub project](https://github.com/artdecocode/closure-stylesheets-1) page.
+
+<p align="center"><a href="#table-of-contents">
+  <img src="/.documentary/section-breaks/0.svg?sanitize=true">
+</a></p>
+
+## Table Of Contents
+
+- [Table Of Contents](#table-of-contents)
+- [Usage](#usage)
+- [License And Copyright](#license-and-copyright)
+
+<p align="center"><a href="#table-of-contents">
+  <img src="/.documentary/section-breaks/1.svg?sanitize=true">
+</a></p>
+
+
+## Usage
+
+The package exports the string variable which points to the resolved path to the JAR file. The usage of the JAR is found on the [GitHub documentation](https://github.com/artdecocode/closure-stylesheets-1) page.
+
+```js
+import closureStylesheets from 'closure-stylesheets'
+console.log(closureStylesheets)
+```
+
+```
+/Volumes/backup/closure-stylesheets/target/closure-stylesheets-1.6.0-SNAPSHOT-jar-with-dependencies.jar
+```
+
+<p align="center"><a href="#table-of-contents">
+  <img src="/.documentary/section-breaks/2.svg?sanitize=true">
+</a></p>
+
+## License And Copyright
+
+_Closure Stylesheets_ are published under Apache 2.0 license.
+
+<table>
+  <tr>
+    <th>
+      <a href="https://artd.eco">
+        <img width="100" src="https://raw.githubusercontent.com/wrote/wrote/master/images/artdeco.png"
+          alt="Art Deco">
+      </a>
+    </th>
+    <th>© <a href="https://artd.eco">Art Deco</a>   2019</th>
+    <th>
+      <a href="https://www.technation.sucks" title="Tech Nation Visa">
+        <img width="100" src="https://raw.githubusercontent.com/idiocc/cookies/master/wiki/arch4.jpg"
+          alt="Tech Nation Visa">
+      </a>
+    </th>
+    <th><a href="https://www.technation.sucks">Tech Nation Visa Sucks</a></th>
+  </tr>
+</table>

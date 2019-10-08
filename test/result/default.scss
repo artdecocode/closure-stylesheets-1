@@ -1,0 +1,10 @@
+// compiles stylesheets
+.container {
+  outline: 5px rgba(10, 10, 10, 0.1);
+}
+
+/* stdout */
+.container {
+  outline: 5px rgba(10,10,10,.1);
+}
+/**/
