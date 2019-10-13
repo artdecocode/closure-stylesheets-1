@@ -10,5 +10,8 @@ These are the fixes and improvements to the [original version](https://github.co
 - Fix [important comment preservation](https://github.com/google/closure-stylesheets/commit/0b7294d68b2c154479ee1d10f6264d0cd08ccbea) for pseudo-selectors, e.g., for _Bootstrap_ CSS.
 - Eliminate 0s from [function arguments](https://github.com/google/closure-stylesheets/commit/dbefdc7641dfb18ba09d3194f29420ece2c54119), e.g., `rgba(10,10,10,.5)`.
 - Allow to [skip html escaping](https://github.com/google/closure-stylesheets/commit/11f7ff5ee0c7ac02f4e15f7d8f629486738f42e3) of strings in values with `--skip-html-escaping`.
+- Upgrade to [latest dependencies](https://github.com/google/closure-stylesheets/commit/58f0394180fa829f7812611b6f70cc8d0c025b10) and refactor tests for _Truth 1_.
+- Remove unused dependencies, vendor `com.google.debugging` only with relevant code, and cut the JAR filesize in half (9MB -> 4MB).
+- Support `--source_map_include_content` option.
 
 %~%
