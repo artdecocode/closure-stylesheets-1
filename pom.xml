@@ -143,10 +143,51 @@
           </descriptorRefs>
         </configuration>
       </plugin>
+      <!-- <obfuscate>true</obfuscate> -->
+
+      <!-- <plugin>
+        <groupId>com.github.wvengen</groupId>
+        <artifactId>proguard-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals><goal>proguard</goal></goals>
+          </execution>
+        </executions>
+        <configuration>
+          <option>-allowaccessmodification</option>
+          <options>
+            <option>-keep public class **.DefaultGssFunctionMapProvider { *; }</option>
+          </options>
+          <injar>${project.build.finalName}-jar-with-dependencies.jar</injar>
+          <outjar>${project.build.finalName}-small.jar</outjar>
+          <outputDirectory>${project.build.directory}</outputDirectory>
+
+          <libs>
+            <lib>${java.home}/lib/rt.jar</lib>
+          </libs>
+        </configuration>
+      </plugin> -->
     </plugins>
   </build>
 
   <dependencies>
+    <dependency>
+      <groupId>com.google.jsinterop</groupId>
+      <artifactId>jsinterop-annotations</artifactId>
+      <version>1.0.2</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.google.jsinterop</groupId>
+      <artifactId>base</artifactId>
+      <version>1.0.0</version>
+    </dependency>
+    <dependency>
+      <groupId>com.google.protobuf</groupId>
+      <artifactId>protobuf-java</artifactId>
+      <version>3.10.0</version>
+    </dependency>
     <dependency>
       <groupId>args4j</groupId>
       <artifactId>args4j</artifactId>
@@ -166,22 +207,17 @@
     </dependency>
 
     <dependency>
-      <groupId>javacc</groupId>
-      <artifactId>javacc</artifactId>
-      <version>4.1</version>
-    </dependency>
-
-    <dependency>
       <groupId>com.google.code.findbugs</groupId>
       <artifactId>jsr305</artifactId>
       <version>3.0.2</version>
     </dependency>
 
-    <dependency>  <!-- For com.google.debugging.sourcemap -->
+    <!-- For com.google.debugging.sourcemap -->
+    <!-- <dependency>
       <groupId>com.google.javascript</groupId>
       <artifactId>closure-compiler-unshaded</artifactId>
       <version>v20190929</version>
-    </dependency>
+    </dependency> -->
 
     <dependency>
       <groupId>junit</groupId>
