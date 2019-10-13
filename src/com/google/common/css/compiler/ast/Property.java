@@ -139,7 +139,7 @@ public final class Property {
         builder("caret-color"),
         builder("clear"),
         builder("clip"),
-        builder("clip-path").isSvgOnly(),
+        builder("clip-path"),
         builder("clip-rule").isSvgOnly(),
         builder("color"),
         builder("color-adjust"),

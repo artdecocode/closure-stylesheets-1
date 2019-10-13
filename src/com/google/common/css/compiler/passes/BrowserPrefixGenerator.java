@@ -504,6 +504,13 @@ public final class BrowserPrefixGenerator {
         .addExpandPropertyName("justify-self")
         .build());
 
+    builder.add(new BrowserPrefixRule.Builder()
+        .matchPropertyName("clip-path")
+        .isFunction(false)
+        .addExpandPropertyName("-webkit-clip-path")
+        .addExpandPropertyName("clip-path")
+        .build());
+
     return builder.build();
   }
 }
