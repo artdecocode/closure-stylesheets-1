@@ -848,13 +848,13 @@ public class DefaultVisitControllerTest {
     assertThat(composite.toString()).isEqualTo("foo,baz,quux");
 
     CssValueNode fooValue = composite.getValues().get(0);
-    assertThat(fooValue.getParent()).isSameAs(composite);
+    assertThat(fooValue.getParent()).isSameInstanceAs(composite);
 
     CssValueNode bazValue = composite.getValues().get(1);
-    assertThat(bazValue.getParent()).isSameAs(composite);
+    assertThat(bazValue.getParent()).isSameInstanceAs(composite);
 
     CssValueNode quuxValue = composite.getValues().get(1);
-    assertThat(quuxValue.getParent()).isSameAs(composite);
+    assertThat(quuxValue.getParent()).isSameInstanceAs(composite);
   }
 
   private static class ValueDetector extends DefaultTreeVisitor {

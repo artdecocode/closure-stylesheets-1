@@ -39,19 +39,19 @@ public class CssCompositeValueNodeTest {
         CssCompositeValueNode.Operator.SPACE, null);
 
     CssCompositeValueNode clone = node.deepCopy();
-    assertThat(clone).isNotSameAs(node);
-    assertThat(clone.getValues()).isNotSameAs(node.getValues());
+    assertThat(clone).isNotSameInstanceAs(node);
+    assertThat(clone.getValues()).isNotSameInstanceAs(node.getValues());
     // Operator is enum.
-    assertThat(clone.getOperator()).isSameAs(node.getOperator());
+    assertThat(clone.getOperator()).isSameInstanceAs(node.getOperator());
     assertThat(clone.getValues()).hasSize(2);
 
     CssValueNode clonedChild1 = clone.getValues().get(0);
-    assertThat(clonedChild1).isNotSameAs(node.getValues().get(0));
+    assertThat(clonedChild1).isNotSameInstanceAs(node.getValues().get(0));
     assertThat(clonedChild1.getClass()).isEqualTo(node.getValues().get(0).getClass());
     assertThat(clonedChild1.getValue()).isEqualTo("foo");
 
     CssValueNode clonedChild2 = clone.getValues().get(1);
-    assertThat(clonedChild2).isNotSameAs(node.getValues().get(1));
+    assertThat(clonedChild2).isNotSameInstanceAs(node.getValues().get(1));
     assertThat(clonedChild2.getClass()).isEqualTo(node.getValues().get(1).getClass());
     assertThat(clonedChild2.getValue()).isEqualTo("bar");
   }

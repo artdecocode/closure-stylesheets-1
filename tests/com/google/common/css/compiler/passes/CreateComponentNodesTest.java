@@ -81,7 +81,7 @@ public class CreateComponentNodesTest extends NewFunctionalTestBase {
     parseAndRun("@component { @def X Y; }");
     assertThat(getFirstActualNode()).isInstanceOf(CssComponentNode.class);
     CssComponentNode comp = (CssComponentNode) getFirstActualNode();
-    assertThat(comp.getName().getValue()).isSameAs(CssComponentNode.IMPLICIT_NODE_NAME);
+    assertThat(comp.getName().getValue()).isSameInstanceAs(CssComponentNode.IMPLICIT_NODE_NAME);
     assertThat(comp.getParentName()).isNull();
     assertThat(comp.isAbstract()).isFalse();
     assertThat(comp.getBlock().toString()).isEqualTo("[@def[X, Y]]");

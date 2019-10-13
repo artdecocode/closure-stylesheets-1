@@ -48,7 +48,7 @@ public class SplittingSubstitutionMapTest {
     String input = new String("abc");
     SubstitutionMap map = new SplittingSubstitutionMap(
         new PassThroughSubstitutionMap());
-    assertThat(map.get(input)).isSameAs(input);
+    assertThat(map.get(input)).isSameInstanceAs(input);
   }
 
   private static class PassThroughSubstitutionMap implements SubstitutionMap {

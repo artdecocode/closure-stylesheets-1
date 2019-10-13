@@ -48,8 +48,8 @@ public class CssTreeTest {
     CssTree tree1 = new CssTree(new SourceCode("testfile", ""));
     CssTree tree2 = new CssTree(tree1);
 
-    assertThat(tree2.getRoot()).isNotSameAs(tree1.getRoot());
-    assertThat(tree2.getRoot().getBody()).isNotSameAs(tree1.getRoot().getBody());
+    assertThat(tree2.getRoot()).isNotSameInstanceAs(tree1.getRoot());
+    assertThat(tree2.getRoot().getBody()).isNotSameInstanceAs(tree1.getRoot().getBody());
     assertThat(tree1.getRoot().getBody().isEmpty()).isTrue();
     assertThat(tree2.getRoot().getBody().isEmpty()).isTrue();
     assertThat(tree2.getSourceCode()).isEqualTo(tree1.getSourceCode());

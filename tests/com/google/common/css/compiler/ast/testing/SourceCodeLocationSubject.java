@@ -16,7 +16,10 @@
 
 package com.google.common.css.compiler.ast.testing;
 
+import static com.google.common.base.Strings.lenientFormat;
 import static com.google.common.truth.Truth.assertAbout;
+import static com.google.common.truth.Fact.simpleFact;
+import static com.google.common.truth.Truth.assertWithMessage;
 
 import com.google.common.css.SourceCodeLocation;
 import com.google.common.truth.FailureMetadata;
@@ -26,8 +29,9 @@ import javax.annotation.CheckReturnValue;
 /**
  * Truth subject for {@link SourceCodeLocation}.
  */
-public class SourceCodeLocationSubject
-    extends Subject<SourceCodeLocationSubject, SourceCodeLocation> {
+public class SourceCodeLocationSubject extends Subject {
+
+  private final SourceCodeLocation actual;
 
   static final Subject.Factory<SourceCodeLocationSubject, SourceCodeLocation> LOCATION =
       new Subject.Factory<SourceCodeLocationSubject, SourceCodeLocation>() {
@@ -45,40 +49,43 @@ public class SourceCodeLocationSubject
 
   public SourceCodeLocationSubject(FailureMetadata failureMetadata, SourceCodeLocation subject) {
     super(failureMetadata, subject);
+    this.actual = subject;
   }
 
   public void hasSpan(int beginLine, int beginIndex, int endLine, int endIndex) {
-    check().that(actual()).isNotNull();
-    if (!(beginLine == actual().getBeginLineNumber()
-        && beginIndex == actual().getBeginIndexInLine()
-        && endLine == actual().getEndLineNumber()
-        && endIndex == actual().getEndIndexInLine())) {
-      failWithRawMessage(
-          "Location did not match <%s,%s -> %s,%s>, was <%s,%s -> %s,%s>",
-          String.valueOf(beginLine),
-          String.valueOf(beginIndex),
-          String.valueOf(endLine),
-          String.valueOf(endIndex),
-          String.valueOf(actual().getBeginLineNumber()),
-          String.valueOf(actual().getBeginIndexInLine()),
-          String.valueOf(actual().getEndLineNumber()),
-          String.valueOf(actual().getEndIndexInLine()));
+    check("not null").that(this.actual).isNotNull();
+    if (!(beginLine == this.actual.getBeginLineNumber()
+        && beginIndex == this.actual.getBeginIndexInLine()
+        && endLine == this.actual.getEndLineNumber()
+        && endIndex == this.actual.getEndIndexInLine())) {
+      failWithoutActual(simpleFact(lenientFormat(
+        "Location did not match <%s,%s -> %s,%s>, was <%s,%s -> %s,%s>",
+        String.valueOf(beginLine),
+        String.valueOf(beginIndex),
+        String.valueOf(endLine),
+        String.valueOf(endIndex),
+        String.valueOf(this.actual.getBeginLineNumber()),
+        String.valueOf(this.actual.getBeginIndexInLine()),
+        String.valueOf(this.actual.getEndLineNumber()),
+        String.valueOf(this.actual.getEndIndexInLine()))
+      ));
     }
   }
 
   public void matches(String text) {
-    check().that(actual()).isNotNull();
+    check("not null").that(this.actual).isNotNull();
     String source =
-        actual()
+        this.actual
             .getSourceCode()
             .getFileContents()
             .substring(
-                actual().getBeginCharacterIndex(), actual().getEndCharacterIndex());
-    check().that(source).isEqualTo(text);
+                this.actual.getBeginCharacterIndex(), this.actual.getEndCharacterIndex());
+    check("isEqualTo()").that(source).isEqualTo(text);
   }
 
+  // this is not even used anywhere
   public void isUnknown() {
-    check().that(actual()).isNotNull();
-    check().that(actual().isUnknown()).named("isUnknown").isTrue();
+    check("isNotNull()").that(this.actual).isNotNull();
+    check("isUnknown()").that(this.actual.isUnknown());
   }
 }

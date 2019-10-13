@@ -16,7 +16,7 @@
 
 package com.google.common.css.compiler.ast.testing;
 
-import static com.google.common.truth.Truth.assertThat;
+import static com.google.common.truth.Truth.assertWithMessage;
 
 import com.google.common.css.JobDescription.SourceMapDetailLevel;
 import com.google.common.css.SourceCode;
@@ -124,6 +124,6 @@ public class TestParser {
                 "sourcemap") */
             .start();
     process.waitFor();
-    assertThat(process.exitValue()).named("visualization exit code").isEqualTo(0);
+    assertWithMessage("visualization exit code").that(process.exitValue()).isEqualTo(0);
   }
 }

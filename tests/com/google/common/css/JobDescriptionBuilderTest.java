@@ -52,7 +52,7 @@ public class JobDescriptionBuilderTest {
   public void testSimpleCreation() {
     job = builder.getJobDescription();
     assertThat(job).isNotNull();
-    assertThat(builder.getJobDescription()).isSameAs(job);
+    assertThat(builder.getJobDescription()).isSameInstanceAs(job);
   }
 
   @Test
@@ -61,7 +61,7 @@ public class JobDescriptionBuilderTest {
     builder.addInput(sourceCode);
     job = builder.getJobDescription();
     assertThat(job.inputs).hasSize(1);
-    assertThat(job.inputs.get(0)).isSameAs(sourceCode);
+    assertThat(job.inputs.get(0)).isSameInstanceAs(sourceCode);
   }
 
   @Test
@@ -71,7 +71,7 @@ public class JobDescriptionBuilderTest {
     builder.addInput(sourceCode);
     job = builder.getJobDescription();
     assertThat(job.inputs).hasSize(1);
-    assertThat(job.inputs.get(0)).isSameAs(sourceCode);
+    assertThat(job.inputs.get(0)).isSameInstanceAs(sourceCode);
   }
 
   @Test
@@ -80,7 +80,7 @@ public class JobDescriptionBuilderTest {
     builder.setInputs(ImmutableList.of(sourceCode));
     job = builder.getJobDescription();
     assertThat(job.inputs).hasSize(1);
-    assertThat(job.inputs.get(0)).isSameAs(sourceCode);
+    assertThat(job.inputs.get(0)).isSameInstanceAs(sourceCode);
   }
 
   @Test
@@ -89,7 +89,7 @@ public class JobDescriptionBuilderTest {
     builder.addTrueConditionName(conditionName);
     job = builder.getJobDescription();
     assertThat(job.trueConditionNames).hasSize(1);
-    assertThat(job.trueConditionNames.get(0)).isSameAs(conditionName);
+    assertThat(job.trueConditionNames.get(0)).isSameInstanceAs(conditionName);
   }
 
   @Test
@@ -99,7 +99,7 @@ public class JobDescriptionBuilderTest {
     builder.addTrueConditionName(conditionName);
     job = builder.getJobDescription();
     assertThat(job.trueConditionNames).hasSize(1);
-    assertThat(job.trueConditionNames.get(0)).isSameAs(conditionName);
+    assertThat(job.trueConditionNames.get(0)).isSameInstanceAs(conditionName);
   }
 
   @Test
@@ -108,7 +108,7 @@ public class JobDescriptionBuilderTest {
     builder.setTrueConditionNames(ImmutableList.of(conditionName));
     job = builder.getJobDescription();
     assertThat(job.trueConditionNames).hasSize(1);
-    assertThat(job.trueConditionNames.get(0)).isSameAs(conditionName);
+    assertThat(job.trueConditionNames.get(0)).isSameInstanceAs(conditionName);
   }
 
   @Test
