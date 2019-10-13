@@ -158,6 +158,9 @@
           <option>-allowaccessmodification</option>
           <options>
             <option>-keep public class **.DefaultGssFunctionMapProvider { *; }</option>
+            <option>-keepattributes *Annotation*</option>
+            <option>-keepattributes Signature</option>
+            <option>-keepattributes InnerClasses,EnclosingMethod</option>
           </options>
           <injar>${project.build.finalName}-jar-with-dependencies.jar</injar>
           <outjar>${project.build.finalName}-small.jar</outjar>
@@ -174,20 +177,23 @@
   <dependencies>
     <dependency>
       <groupId>com.google.jsinterop</groupId>
-      <artifactId>jsinterop-annotations</artifactId>
-      <version>1.0.2</version>
-    </dependency>
-
-    <dependency>
-      <groupId>com.google.jsinterop</groupId>
       <artifactId>base</artifactId>
       <version>1.0.0</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.google.jsinterop</groupId>
+      <artifactId>jsinterop-annotations</artifactId>
+      <version>1.0.2</version>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>com.google.protobuf</groupId>
       <artifactId>protobuf-java</artifactId>
       <version>3.10.0</version>
+      <scope>test</scope>
     </dependency>
+
     <dependency>
       <groupId>args4j</groupId>
       <artifactId>args4j</artifactId>
@@ -206,11 +212,11 @@
       <version>2.8.6</version>
     </dependency>
 
-    <dependency>
+    <!-- <dependency>
       <groupId>com.google.code.findbugs</groupId>
       <artifactId>jsr305</artifactId>
       <version>3.0.2</version>
-    </dependency>
+    </dependency> -->
 
     <!-- For com.google.debugging.sourcemap -->
     <!-- <dependency>

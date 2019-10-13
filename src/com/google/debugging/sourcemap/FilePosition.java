@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 The Closure Compiler Authors.
+ * Copyright 2015 Google Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,12 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.google.debugging.sourcemap;
-
-import static com.google.common.base.MoreObjects.toStringHelper;
-
-import com.google.errorprone.annotations.DoNotCall;
 
 /**
  * Represents a position in a source file.
@@ -51,11 +46,11 @@ public final class FilePosition {
     return column;
   }
 
-  @Override
-  @DoNotCall // Only for debugging.
-  public String toString() {
-    // TODO(nickreid): Make this class an @AutoValue and delete this. Too many places were using the
-    // public constructor to do so when this method was added.
-    return toStringHelper(this).add("line", line).add("column", column).toString();
-  }
+  // @Override
+  // @DoNotCall // Only for debugging.
+  // public String toString() {
+  //   // TODO(nickreid): Make this class an @AutoValue and delete this. Too many places were using the
+  //   // public constructor to do so when this method was added.
+  //   return toStringHelper(this).add("line", line).add("column", column).toString();
+  // }
 }

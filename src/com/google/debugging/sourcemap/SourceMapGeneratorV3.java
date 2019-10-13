@@ -20,7 +20,7 @@ import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.base.Strings.nullToEmpty;
 
 import com.google.common.base.Preconditions;
-import com.google.debugging.sourcemap.SourceMapConsumerV3.EntryVisitor;
+import com.google.debugging.sourcemap.SourceMapGenerator;
 import java.io.IOException;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -42,8 +42,7 @@ import javax.annotation.Nullable;
  *
  * @author johnlenz@google.com (John Lenz)
  */
-public final class SourceMapGeneratorV3 implements SourceMapGenerator {
-
+public class SourceMapGeneratorV3 implements SourceMapGenerator {
   /**
    * This interface provides the merging strategy when an extension conflict
    * appears because of merging two source maps on method
@@ -123,7 +122,7 @@ public final class SourceMapGeneratorV3 implements SourceMapGenerator {
    * to permit single values, like strings or numbers, and JsonObject or
    * JsonArray objects.
    */
-  private final LinkedHashMap<String, Object> extensions = new LinkedHashMap<>();
+  protected LinkedHashMap<String, Object> extensions = new LinkedHashMap<>();
 
   /**
    * The source root path for relocating source fails or avoid duplicate values
@@ -295,13 +294,13 @@ public final class SourceMapGeneratorV3 implements SourceMapGenerator {
    * @param mapSectionContents The map section to be appended
    * @throws SourceMapParseException
    */
-  public void mergeMapSection(int line, int column, String mapSectionContents)
-      throws SourceMapParseException {
-    setStartingPosition(line, column);
-    SourceMapConsumerV3 section = new SourceMapConsumerV3();
-    section.parse(mapSectionContents);
-    section.visitMappings(new ConsumerEntryVisitor());
-  }
+  // public void mergeMapSection(int line, int column, String mapSectionContents)
+  //     throws SourceMapParseException {
+  //   setStartingPosition(line, column);
+  //   SourceMapConsumerV3 section = new SourceMapConsumerV3();
+  //   section.parse(mapSectionContents);
+  //   section.visitMappings(new ConsumerEntryVisitor());
+  // }
 
   /**
    * Works like {@link #mergeMapSection(int, int, String)}, except that
@@ -314,25 +313,25 @@ public final class SourceMapGeneratorV3 implements SourceMapGenerator {
    * @param mergeAction The merge action for conflicting extensions
    * @throws SourceMapParseException
    */
-  public void mergeMapSection(int line, int column, String mapSectionContents,
-      ExtensionMergeAction mergeAction)
-      throws SourceMapParseException {
-    setStartingPosition(line, column);
-    SourceMapConsumerV3 section = new SourceMapConsumerV3();
-    section.parse(mapSectionContents);
-    section.visitMappings(new ConsumerEntryVisitor());
-    for (Entry<String, Object> entry : section.getExtensions().entrySet()) {
-       String extensionKey = entry.getKey();
-       if (extensions.containsKey(extensionKey)) {
-         extensions.put(extensionKey,
-             mergeAction.merge(extensionKey,
-                               extensions.get(extensionKey),
-                               entry.getValue()));
-       } else {
-         extensions.put(extensionKey, entry.getValue());
-       }
-     }
-  }
+  // public void mergeMapSection(int line, int column, String mapSectionContents,
+  //     ExtensionMergeAction mergeAction)
+  //     throws SourceMapParseException {
+  //   setStartingPosition(line, column);
+  //   SourceMapConsumerV3 section = new SourceMapConsumerV3();
+  //   section.parse(mapSectionContents);
+  //   section.visitMappings(new ConsumerEntryVisitor());
+  //   for (Entry<String, Object> entry : section.getExtensions().entrySet()) {
+  //      String extensionKey = entry.getKey();
+  //      if (extensions.containsKey(extensionKey)) {
+  //        extensions.put(extensionKey,
+  //            mergeAction.merge(extensionKey,
+  //                              extensions.get(extensionKey),
+  //                              entry.getValue()));
+  //      } else {
+  //        extensions.put(extensionKey, entry.getValue());
+  //      }
+  //    }
+  // }
 
   /**
    * Writes out the source map in the following format (line numbers are for reference only and are

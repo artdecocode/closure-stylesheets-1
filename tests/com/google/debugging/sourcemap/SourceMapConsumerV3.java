@@ -127,7 +127,7 @@ public final class SourceMapConsumerV3 implements SourceMapConsumer,
 
       // Build up a new source map in a new generator using the mappings of this metamap. The new
       // map will be rendered to JSON and then parsed using this consumer.
-      SourceMapGeneratorV3 generator = new SourceMapGeneratorV3();
+      SourceMapGeneratorV3Merge generator = new SourceMapGeneratorV3Merge();
       for (SourceMapSection section : sourceMapObject.getSections()) {
         String mapSectionContents = section.getSectionValue();
         if (section.getSectionType() == SourceMapSection.SectionType.URL) {
@@ -631,14 +631,6 @@ public final class SourceMapConsumerV3 implements SourceMapConsumer,
     public int getNameId() {
       return name;
     }
-  }
-
-  public static interface EntryVisitor {
-    void visit(String sourceName,
-               String symbolName,
-               FilePosition sourceStartPosition,
-               FilePosition startPosition,
-               FilePosition endPosition);
   }
 
   public void visitMappings(EntryVisitor visitor) {
