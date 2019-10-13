@@ -91,6 +91,8 @@ public final class DefaultGssSourceMapGenerator implements GssSourceMapGenerator
 
   private SourceMapDetailLevel sourceMapDetailLevel;
 
+  private boolean sourceMapIncludeContent;
+
   /** Predicate to determine whether to include current node under visit into {@code mappings}. **/
   private Predicate<CssNode> detailLevelPredicate;
 
@@ -98,14 +100,16 @@ public final class DefaultGssSourceMapGenerator implements GssSourceMapGenerator
    * Constructor to get source map class to use.
    *
    * @param sourceMapDetailLevel used to control the output details of source map
+   * @param sourceMapIncludeContent used to include content in source map
    */
-  public DefaultGssSourceMapGenerator(SourceMapDetailLevel sourceMapDetailLevel) {
+  public DefaultGssSourceMapGenerator(SourceMapDetailLevel sourceMapDetailLevel, boolean sourceMapIncludeContent) {
     Preconditions.checkState(sourceMapDetailLevel != null);
     this.mappings = new ArrayDeque<>();
     this.generator = new SourceMapGeneratorV3();
     this.allMappings = new ArrayList<>();
     this.sourceMapDetailLevel = sourceMapDetailLevel;
     this.detailLevelPredicate = DETAIL_LEVEL_PREDICATES.get(this.sourceMapDetailLevel);
+    this.sourceMapIncludeContent = sourceMapIncludeContent;
   }
 
   /**
@@ -205,8 +209,10 @@ public final class DefaultGssSourceMapGenerator implements GssSourceMapGenerator
           completeMapping.inputStart,
           completeMapping.outputStart, completeMapping.outputEnd);
 
-      generator.addSourcesContent(
-        completeMapping.sourceFile, completeMapping.sourceContents);
+      if (sourceMapIncludeContent) {
+        generator.addSourcesContent(
+          completeMapping.sourceFile, completeMapping.sourceContents);
+      }
     }
   }
 

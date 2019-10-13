@@ -7,10 +7,11 @@
     "doc": "doc -o README.md",
     "d": "NODE_DEBUG=doc doc doc -o README",
     "test": "zoroaster test/mask -a",
-    "bootstrap-pretty": "java -jar closure-stylesheets.jar --preserve-important-comments --pretty-print styles/bootstrap.css --allow-unrecognized-properties --allow-duplicate-declarations --output-file styles/bootstrap.pretty.css",
+    "bootstrap-pretty": "java -jar closure-stylesheets.jar --preserve-important-comments --pretty-print styles/bootstrap.css --allow-unrecognized-properties --allow-duplicate-declarations --output-file styles/bootstrap.pretty.css --source_map_include_content --output-source-map styles/bootstrap.pretty.css.map",
     "compile": "mvn compile assembly:single",
     "important": "java -jar closure-stylesheets.jar --pretty-print --allow-duplicate-declarations styles/important.css",
-    "bootstrap-min": "java -jar closure-stylesheets.jar styles/bootstrap.css --preserve-important-comments --skip-html-escaping --allow-unrecognized-properties --allow-duplicate-declarations --output-file styles/bootstrap.min.css"
+    "bootstrap-min": "java -jar closure-stylesheets.jar styles/bootstrap.css --preserve-important-comments --skip-html-escaping --allow-unrecognized-properties --allow-duplicate-declarations --output-file styles/bootstrap.min.css",
+    "build": "mvn install -DskipTests"
   },
   "homepage": "https://www.artd.eco",
   "repository": {

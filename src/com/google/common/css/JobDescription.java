@@ -73,6 +73,7 @@ public class JobDescription {
   public final SourceMapDetailLevel sourceMapLevel;
   public final boolean preserveImportantComments;
   public final boolean skipHtmlEscaping;
+  public final boolean sourceMapIncludeContent;
 
   static final String CONDITION_FOR_LTR = "GSS_LTR";
   static final String CONDITION_FOR_RTL = "GSS_RTL";
@@ -147,7 +148,7 @@ public class JobDescription {
       boolean suppressDependencyCheck, Map<String, Integer> compileConstants,
       boolean createSourceMap,
       SourceMapDetailLevel sourceMapLevel,
-      boolean preserveImportantComments, boolean skipHtmlEscaping) {
+      boolean preserveImportantComments, boolean skipHtmlEscaping,       boolean sourceMapIncludeContent) {
     this.allowUndefinedConstants = allowUndefinedConstants;
     Preconditions.checkArgument(!inputs.contains(null));
     Preconditions.checkNotNull(outputFormat);
@@ -199,6 +200,7 @@ public class JobDescription {
     this.sourceMapLevel = sourceMapLevel;
     this.preserveImportantComments = preserveImportantComments;
     this.skipHtmlEscaping = skipHtmlEscaping;
+    this.sourceMapIncludeContent = sourceMapIncludeContent;
   }
 
   /**

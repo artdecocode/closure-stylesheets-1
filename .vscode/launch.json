@@ -19,7 +19,9 @@
       // "args": ["styles/supports.css"]
       "args": [
         "--allow-duplicate-declarations",
-        "--preserve-important-comments", "styles/important.css"
+        "--preserve-important-comments", "styles/important.css",
+        "--output-source-map", "styles/important.css.map",
+        "--source_map_include_content"
       ]
     },
     {
