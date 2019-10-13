@@ -17,8 +17,16 @@
     "type": "git",
     "url": "git://github.com/artdecocode/closure-stylesheets-1.git"
   },
+  "keywords": [
+    "css",
+    "closure",
+    "stylesheets",
+    "minify",
+    "vendor",
+    "prefix"
+  ],
   "files": [
-    "target/closure-stylesheets-1.6.0-SNAPSHOT-jar-with-dependencies.jar"
+    "target/closure-stylesheets-1.7.1-SNAPSHOT-jar-with-dependencies.jar"
   ],
   "author": "Anton <anton@adc.sh>",
   "license": "Apache-2.0",
