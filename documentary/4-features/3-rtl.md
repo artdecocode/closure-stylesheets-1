@@ -14,9 +14,9 @@ Generating the equivalent stylesheet to use on an RTL version of the page can be
 achieved by running **`java -jar closure-stylesheets.jar --pretty-print
 --output-orientation RTL rtl.gss`**, which prints:
 
-<shell noconsole language="css">
-java -jar closure-stylesheets.jar --pretty-print --output-orientation RTL example/rtl.gss
-</shell>
+<java jar="closure-stylesheets.jar" lang="css">
+  --pretty-print --output-orientation RTL example/rtl.gss
+</java>
 
 Note how the following properties were changed:
   * **`margin-left`** became **`margin-right`**

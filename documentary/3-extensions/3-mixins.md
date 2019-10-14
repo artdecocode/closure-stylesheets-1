@@ -21,9 +21,9 @@ could be used to create a shorthand for declaring the dimensions of an element:
 Running **`java -jar closure-stylesheets.jar --pretty-print
 mixin-simple-example.gss`** prints:
 
-<shell noconsole language="css">
-java -jar closure-stylesheets.jar --pretty-print example/mixin-simple.gss
-</shell>
+<java jar="closure-stylesheets.jar" lang="css">
+  --pretty-print example/mixin-simple.gss
+</java>
 
 Mixins are even more compelling when you consider using them to abstract away
 cross-browser behavior for styles such as gradients:
@@ -32,9 +32,9 @@ cross-browser behavior for styles such as gradients:
 
 The above is compiled to:
 
-<shell noconsole language="css">
-java -jar closure-stylesheets.jar --pretty-print example/mixin.gss
-</shell>
+<java jar="closure-stylesheets.jar" lang="css">
+  --pretty-print example/mixin.gss
+</java>
 
 See the section on [linting](#linting) for more details on the
 **`@alternate`** annotation.

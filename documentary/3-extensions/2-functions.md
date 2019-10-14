@@ -21,9 +21,9 @@ unit. That is, you may do `add(3px, 5px)` or `add(3ex, 5ex)`, but you cannot do
 Running **`java -jar closure-stylesheets.jar --pretty-print
 functions-example.gss`** will print:
 
-<shell noconsole language="css">
-java -jar closure-stylesheets.jar --pretty-print example/functions.gss
-</shell>
+<java jar="closure-stylesheets.jar" lang="css">
+  --pretty-print example/functions.gss
+</java>
 
 Although these functions are not as full-featured as
 [CSS3 calc()](http://www.w3.org/TR/css3-values/#calc) because they do not allow

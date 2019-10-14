@@ -5,3 +5,4 @@ bin
 node_modules
 closure-stylesheets.jar
 yarn-error.log
+.documentary

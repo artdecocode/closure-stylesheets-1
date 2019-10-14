@@ -377,7 +377,7 @@ There is an auto-expansion pass that adds vendor-specific directives, however it
 This fork allows to switch it on with the `--expand-browser-prefix` flag:
 
 ```console
-$ java -jar closure-stylesheets.jar --expand-browser-prefix --pretty-print example/prefix.css
+closure-stylesheets:~$ java -jar closure-stylesheets.jar --expand-browser-prefix --pretty-print example/prefix.css
 ```
 
 ```css

@@ -12,9 +12,9 @@ style declarations. For example, if you ran Closure Stylesheets on
 
 Then you would get the following output:
 
-<shell noconsole err>
-java -jar closure-stylesheets.jar --pretty-print example/linting.gss
-</shell>
+<java jar="closure-stylesheets.jar" stderr>
+  --pretty-print example/linting.gss
+</java>
 
 In this particular case, the function `urel()` should have been `url()`, though if you are using a function that is not on the whitelist (see
 [CssFunctionNode](https://github.com/google/closure-stylesheets/blob/master/src/com/google/common/css/compiler/ast/CssFunctionNode.java)
@@ -83,9 +83,9 @@ the file **`bleeding-edge.gss`**:
 
 Then running the compiler would yield the following error:
 
-<shell noconsole err>
-java -jar closure-stylesheets.jar example/bleeding-edge.gss
-</shell>
+<java jar="closure-stylesheets.jar" stderr>
+  example/bleeding-edge.gss
+</java>
 
 You can whitelist `-webkit-amp-volume` with the
 **`--allowed-unrecognized-property`** flag as follows:

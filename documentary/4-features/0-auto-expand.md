@@ -6,9 +6,9 @@ There is an auto-expansion pass that adds vendor-specific directives, however it
 
 This fork allows to switch it on with the `--expand-browser-prefix` flag:
 
-<shell language="css">
-java -jar closure-stylesheets.jar --expand-browser-prefix --pretty-print example/prefix.css
-</shell>
+<java jar="closure-stylesheets.jar" lang="css" console="closure-stylesheets">
+  --expand-browser-prefix --pretty-print example/prefix.css
+</java>
 
 There is no control over which rules to expand by supplied desired browser coverage right now. All known rules will be expanded which can increase the size of the stylesheets by a lot.
 
@@ -16,8 +16,8 @@ Additionally, keyframe rules can be generated for webkit, by using the [`@gen-we
 
 %EXAMPLE: example/keyframes.css%
 
-<shell noconsole language="css">
-java -jar closure-stylesheets.jar --pretty-print example/keyframes.css
-</shell>
+<java jar="closure-stylesheets.jar" lang="css">
+  --pretty-print example/keyframes.css
+</java>
 
 %~%
