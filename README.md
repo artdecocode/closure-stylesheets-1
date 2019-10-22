@@ -27,6 +27,7 @@ CSS. The tool also supports **[minification](#minification)**,
     * [`--allow-unrecognized-properties`, `--allowed-unrecognized-property`](#--allow-unrecognized-properties---allowed-unrecognized-property)
   * [RTL Flipping](#rtl-flipping)
   * [Renaming](#renaming)
+  * [Root Selector](#root-selector)
 
 <p align="center"><a href="#table-of-contents">
   <img src="/.documentary/section-breaks/0.svg?sanitize=true">
@@ -47,6 +48,7 @@ These are the fixes and improvements to the [original version](https://github.co
 - Upgrade to [latest dependencies](https://github.com/google/closure-stylesheets/commit/58f0394180fa829f7812611b6f70cc8d0c025b10) and refactor tests for _Truth 1_.
 - Remove unused dependencies, vendor `com.google.debugging` only with relevant code, and cut the JAR filesize in half (9MB -> 4MB).
 - Support `--source_map_include_content` option.
+- Implement [root selector](https://github.com/google/closure-stylesheets/commit/ef3f026d5fb09e7ec36835df096543deeb083da6) for global prefixing.
 
 <p align="center"><a href="#table-of-contents">
   <img src="/.documentary/section-breaks/1.svg?sanitize=true">
@@ -889,6 +891,40 @@ References to CSS class names that are excluded from renaming should _never_ be
 wrapped in `goog.getCssName()`, or else they run the risk of being partially
 renamed.
 
+
+### Root Selector
+
+When generating CSS that must work only inside of specific element, the `--root-selector` option may be passed to prepend all selectors with a global selector.
+
+```css
+.EXAMPLE {
+  display: inline;
+}
+span {
+  text-align: right;
+}
+.test {
+  color: green;
+}
+```
+
+In case when the root selector is already part of the selector, it will just be skipped.
+
+```console
+closure-stylesheets:~$ java -jar closure-stylesheets.jar --root-selector .EXAMPLE --rename CLOSURE --pretty-print example/root-selector.css
+```
+
+```css
+.EXAMPLE {
+  display: inline;
+}
+.EXAMPLE span {
+  text-align: right;
+}
+.EXAMPLE .a {
+  color: green;
+}
+```
 
 <p align="center"><a href="#table-of-contents">
   <img src="/.documentary/section-breaks/-1.svg?sanitize=true">

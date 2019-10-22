@@ -13,5 +13,6 @@ These are the fixes and improvements to the [original version](https://github.co
 - Upgrade to [latest dependencies](https://github.com/google/closure-stylesheets/commit/58f0394180fa829f7812611b6f70cc8d0c025b10) and refactor tests for _Truth 1_.
 - Remove unused dependencies, vendor `com.google.debugging` only with relevant code, and cut the JAR filesize in half (9MB -> 4MB).
 - Support `--source_map_include_content` option.
+- Implement [root selector](https://github.com/google/closure-stylesheets/commit/ef3f026d5fb09e7ec36835df096543deeb083da6) for global prefixing.
 
 %~%

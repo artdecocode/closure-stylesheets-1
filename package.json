@@ -27,12 +27,12 @@
     "prefix"
   ],
   "files": [
-    "target/closure-stylesheets-1.8.0-SNAPSHOT-jar-with-dependencies.jar"
+    "target/closure-stylesheets-1.9.0-SNAPSHOT-jar-with-dependencies.jar"
   ],
   "author": "Anton <anton@adc.sh>",
   "license": "Apache-2.0",
   "devDependencies": {
-    "documentary": "^1.33.3",
+    "documentary": "^1.34.0",
     "temp-context": "^2.1.3",
     "zoroaster": "^4.1.2"
   }

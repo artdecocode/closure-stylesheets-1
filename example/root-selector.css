@@ -1,0 +1,9 @@
+.EXAMPLE {
+  display: inline;
+}
+span {
+  text-align: right;
+}
+.test {
+  color: green;
+}
