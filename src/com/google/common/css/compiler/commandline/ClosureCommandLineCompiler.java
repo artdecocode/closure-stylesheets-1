@@ -18,6 +18,18 @@ package com.google.common.css.compiler.commandline;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.io.Reader;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Nullable;
+
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Joiner;
 import com.google.common.base.Strings;
@@ -37,16 +49,7 @@ import com.google.common.css.SourceCode;
 import com.google.common.css.Vendor;
 import com.google.common.css.compiler.ast.ErrorManager;
 import com.google.common.io.Files;
-import java.io.File;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.io.Reader;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import javax.annotation.Nullable;
+
 import org.kohsuke.args4j.Argument;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
@@ -236,6 +239,9 @@ public class ClosureCommandLineCompiler extends DefaultCommandLineCompiler {
         + "/*! */, @license, or @preserve.")
     private boolean preserveImportantComments = false;
 
+    @Option(name = "--root-selector", usage = "The string to prepend to selectors of each ruleset.")
+    private String rootSelector = null;
+
     /**
      * All remaining arguments are considered input CSS files.
      */
@@ -278,6 +284,7 @@ public class ClosureCommandLineCompiler extends DefaultCommandLineCompiler {
       builder.setCompileConstants(parseCompileConstants(compileConstants));
       builder.setPreserveImportantComments(preserveImportantComments);
       builder.setSourceMapIncludeContent(sourceMapIncludeContent);
+      builder.setRootSelector(rootSelector);
 
       GssFunctionMapProvider gssFunctionMapProvider =
           getGssFunctionMapProviderForName(gssFunctionMapProviderClassName);

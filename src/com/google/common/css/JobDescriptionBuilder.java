@@ -16,6 +16,11 @@
 
 package com.google.common.css;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
@@ -27,10 +32,6 @@ import com.google.common.css.JobDescription.OptimizeStrategy;
 import com.google.common.css.JobDescription.OutputFormat;
 import com.google.common.css.JobDescription.OutputOrientation;
 import com.google.common.css.JobDescription.SourceMapDetailLevel;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * Aids in the creation of inputs for the compiler. A builder can be used for
@@ -75,6 +76,7 @@ public class JobDescriptionBuilder {
   boolean preserveImportantComments;
   boolean skipHtmlEscaping;
   boolean sourceMapIncludeContent;
+  String rootSelector;
 
   JobDescription job = null;
   boolean createSourceMap;
@@ -120,6 +122,7 @@ public class JobDescriptionBuilder {
     this.preserveImportantComments = false;
     this.skipHtmlEscaping = false;
     this.sourceMapIncludeContent = false;
+    this.rootSelector = null;
   }
 
   public JobDescriptionBuilder copyFrom(JobDescription jobToCopy) {
@@ -140,6 +143,7 @@ public class JobDescriptionBuilder {
     this.allowDuplicateDeclarations = jobToCopy.allowDuplicateDeclarations;
     this.skipHtmlEscaping = jobToCopy.skipHtmlEscaping;
     this.sourceMapIncludeContent = jobToCopy.sourceMapIncludeContent;
+    this.rootSelector = jobToCopy.rootSelector;
     this.expandBrowserPrefix = jobToCopy.expandBrowserPrefix;
     this.allowedNonStandardFunctions =
         ImmutableSet.copyOf(jobToCopy.allowedNonStandardFunctions);
@@ -520,6 +524,9 @@ public class JobDescriptionBuilder {
       allowedAtRules.add("-moz-document");
     }
 
+    if (rootSelector != null && rootSelector.startsWith(".")) {
+      excludedClassesFromRenaming.add(rootSelector.substring(1));
+    }
 
     job = new JobDescription(inputs,
         copyrightNotice, outputFormat, inputOrientation, outputOrientation,
@@ -536,7 +543,7 @@ public class JobDescriptionBuilder {
         outputRenamingMapFormat, inputRenamingMap, preserveComments,
         suppressDependencyCheck, compileConstants,
         createSourceMap, sourceMapLevel, preserveImportantComments,
-        skipHtmlEscaping, sourceMapIncludeContent);
+        skipHtmlEscaping, sourceMapIncludeContent, rootSelector);
     return job;
   }
 
@@ -552,6 +559,11 @@ public class JobDescriptionBuilder {
 
   public JobDescriptionBuilder setSourceMapIncludeContent(boolean sourceMapIncludeContent) {
     this.sourceMapIncludeContent = sourceMapIncludeContent;
+    return this;
+  }
+
+  public JobDescriptionBuilder setRootSelector(String rootSelector) {
+    this.rootSelector = rootSelector;
     return this;
   }
 

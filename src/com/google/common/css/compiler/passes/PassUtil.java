@@ -65,7 +65,7 @@ public class PassUtil {
    * without a block behind with the compact printer.
    */
   public static String printSelectorList(CssSelectorListNode selectorList) {
-    CssTree t = createTreeWithSelectorList(selectorList);
+    CssTree t = createTreeWithSelectorList(selectorList.deepCopy());
     // Print the whole tree.
     String selectorListString = compactPrintTree(t);
     // As the whole tree is printed, the output is the selector with an empty

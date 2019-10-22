@@ -16,16 +16,16 @@
 
 package com.google.common.css.compiler.ast;
 
-import com.google.common.base.Preconditions;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
-
-import com.google.common.css.SourceCodeLocation;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
 import javax.annotation.Nullable;
+
+import com.google.common.base.Preconditions;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
+import com.google.common.css.SourceCodeLocation;
 
 /**
  * Represents a list of nodes. This is meant to represent a succession of

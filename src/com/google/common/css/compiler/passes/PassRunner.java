@@ -16,6 +16,10 @@
 
 package com.google.common.css.compiler.passes;
 
+import java.util.Map;
+
+import javax.annotation.Nullable;
+
 import com.google.common.base.Predicates;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
@@ -27,8 +31,6 @@ import com.google.common.css.compiler.ast.CssCompilerPass;
 import com.google.common.css.compiler.ast.CssTree;
 import com.google.common.css.compiler.ast.ErrorManager;
 import com.google.common.css.compiler.ast.GssFunction;
-import java.util.Map;
-import javax.annotation.Nullable;
 
 /**
  * {@link PassRunner} runs applies a sequence of {@link CssCompilerPass}es to a
@@ -44,16 +46,18 @@ public class PassRunner {
   private final JobDescription job;
   private final ErrorManager errorManager;
   private final RecordingSubstitutionMap recordingSubstitutionMap;
+  private final String rootSelector;
 
   public PassRunner(JobDescription job, ErrorManager errorManager) {
-    this(job, errorManager, createSubstitutionMap(job));
+    this(job, errorManager, createSubstitutionMap(job), job.rootSelector);
   }
 
   public PassRunner(JobDescription job, ErrorManager errorManager,
-      RecordingSubstitutionMap recordingSubstitutionMap) {
+      RecordingSubstitutionMap recordingSubstitutionMap, String rootSelector) {
     this.job = job;
     this.errorManager = errorManager;
     this.recordingSubstitutionMap = recordingSubstitutionMap;
+    this.rootSelector = rootSelector;
   }
 
   /**
@@ -187,6 +191,11 @@ public class PassRunner {
           cssTree.getMutatingVisitController(),
           recordingSubstitutionMap, null).runPass();
     }
+    // prefix
+    if (rootSelector != null) {
+      new CssPrefixing(cssTree.getMutatingVisitController(),
+        rootSelector).runPass();
+    }
   }
 
   @Nullable public RecordingSubstitutionMap getRecordingSubstitutionMap() {
@@ -196,7 +205,7 @@ public class PassRunner {
   /**
    * Creates the CSS class substitution map from the provider, if any.
    * Wraps it in a substitution map that optionally prefixes all of the renamed
-   * classes. Additionaly wraps in a recording substituion map which excludes a
+   * classes. Additionally wraps in a recording substitution map which excludes a
    * blacklist of classnames and allows the map to produced as an output.
    */
   private static RecordingSubstitutionMap createSubstitutionMap(

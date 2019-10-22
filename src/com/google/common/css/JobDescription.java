@@ -16,14 +16,14 @@
 
 package com.google.common.css;
 
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
-
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 
 /**
@@ -74,6 +74,7 @@ public class JobDescription {
   public final boolean preserveImportantComments;
   public final boolean skipHtmlEscaping;
   public final boolean sourceMapIncludeContent;
+  public final String rootSelector;
 
   static final String CONDITION_FOR_LTR = "GSS_LTR";
   static final String CONDITION_FOR_RTL = "GSS_RTL";
@@ -148,7 +149,9 @@ public class JobDescription {
       boolean suppressDependencyCheck, Map<String, Integer> compileConstants,
       boolean createSourceMap,
       SourceMapDetailLevel sourceMapLevel,
-      boolean preserveImportantComments, boolean skipHtmlEscaping,       boolean sourceMapIncludeContent) {
+      boolean preserveImportantComments, boolean skipHtmlEscaping,
+      boolean sourceMapIncludeContent,
+      String rootSelector) {
     this.allowUndefinedConstants = allowUndefinedConstants;
     Preconditions.checkArgument(!inputs.contains(null));
     Preconditions.checkNotNull(outputFormat);
@@ -201,6 +204,7 @@ public class JobDescription {
     this.preserveImportantComments = preserveImportantComments;
     this.skipHtmlEscaping = skipHtmlEscaping;
     this.sourceMapIncludeContent = sourceMapIncludeContent;
+    this.rootSelector = rootSelector;
   }
 
   /**

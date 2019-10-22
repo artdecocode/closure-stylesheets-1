@@ -76,7 +76,7 @@ public class RecordingSubstitutionMapTest extends UtilityTestCase {
     }
     JobDescription job = new JobDescriptionBuilder().getJobDescription();
     ErrorManager errorManager = new DummyErrorManager();
-    PassRunner passRunner = new PassRunner(job, errorManager, map);
+    PassRunner passRunner = new PassRunner(job, errorManager, map, null);
     passRunner.runPasses(cssTree);
   }
 

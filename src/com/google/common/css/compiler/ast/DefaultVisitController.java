@@ -16,13 +16,13 @@
 
 package com.google.common.css.compiler.ast;
 
+import java.util.Deque;
+import java.util.List;
+
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Queues;
 import com.google.common.css.compiler.ast.CssCompositeValueNode.Operator;
-
-import java.util.Deque;
-import java.util.List;
 
 /**
  * Default implementation of the MutatingVisitController. The controller is
@@ -881,6 +881,16 @@ class DefaultVisitController implements MutatingVisitController {
         visitedChildren = true;
       } else {
         stateStack.pop();
+      }
+    }
+
+    @Override
+    public void replaceCurrentBlockChildWith(
+        List<CssNode> replacementNodes,
+        boolean visitTheReplacementNodes) {
+      CssNode n = replacementNodes.get(0);
+      if (n instanceof CssSelectorListNode) {
+        node.setSelectors((CssSelectorListNode) n);
       }
     }
   }

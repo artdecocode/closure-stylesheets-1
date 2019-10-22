@@ -16,6 +16,8 @@
 
 package com.google.common.css.compiler.passes;
 
+import java.util.Iterator;
+
 import com.google.common.base.Preconditions;
 import com.google.common.css.compiler.ast.CssBlockNode;
 import com.google.common.css.compiler.ast.CssCompilerPass;
@@ -26,8 +28,6 @@ import com.google.common.css.compiler.ast.CssSelectorListNode;
 import com.google.common.css.compiler.ast.CssTree;
 import com.google.common.css.compiler.ast.MutatingVisitController;
 import com.google.common.css.compiler.ast.SkippingTreeVisitor;
-
-import java.util.Iterator;
 
 /**
  * Compiler pass that merges adjacent ruleset nodes that have the same selector.
@@ -133,7 +133,7 @@ public class MergeAdjacentRulesetNodesWithSameSelector
     }
     return true;
   }
-  
+
   private CssNode skipNonRulesetNode(CssNode node, Iterator<CssNode> iterator) {
     while (!(node instanceof CssRulesetNode)) {
       if (iterator.hasNext()) {

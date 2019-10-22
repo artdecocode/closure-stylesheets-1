@@ -21,6 +21,8 @@
         "--allow-duplicate-declarations",
         "--preserve-important-comments", "styles/important.css",
         "--output-source-map", "styles/important.css.map",
+        "--rename", "CLOSURE",
+        "--root-selector", ".TEST",
         "--source_map_include_content"
       ]
     },

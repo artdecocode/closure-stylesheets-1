@@ -2,7 +2,8 @@
 "version":3,
 "file":"important.css.map",
 "lineCount":1,
-"mappings":"AAAA,MAAM,MACW,CAAA,QAAS,IAAI,OACU,QAAS,IAAI,KAAK;",
+"mappings":"AAAA,MAAA,MAAM,MACW,CAAA,QAAS,IAAI,OACU,QAAS,IAAI,KAAK,yBAE4B,MAAC,EAAK,CAAE,EAAK,CAAE,EAAK,CAAE,EACM,CAAA,WAAY,MAES,MAAA,KAAK,CAAC,OAAN,MAAe,EACS,CAAA,QAAS,IAAI,OAEW,KAAK,EACQ,CAAA,WAAY,KAEQ,MAAA,KAAK,CAAE,EACQ,CAAA,WAAY;",
 "sources":["styles/important.css"],
+"sourcesContent":["button:focus {\n  outline: 1px dotted;\n  outline: 5px auto -webkit-focus-ring-color;\n}\n.Hello .abc > .def > .a {\n  text-align: right;\n}\ntable button, .Test {\n  outline: 2px dotted;\n}\n.TEST.def {\n  text-align: left;\n}\n#Test .def {\n  text-align: center;\n}"],
 "names":[]
 }
