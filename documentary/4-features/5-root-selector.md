@@ -4,7 +4,7 @@ When generating CSS that must work only inside of specific element, the `--root-
 
 %EXAMPLE: example/root-selector.css%
 
-In case when the root selector is already part of the selector, it will just be skipped.
+In case when the root selector is already part of the selector, it will just be skipped. Only ID and Class root selectors are supported right now.
 
 <java jar="closure-stylesheets.jar" lang="css" console="closure-stylesheets">
   --root-selector .EXAMPLE --rename CLOSURE --pretty-print example/root-selector.css

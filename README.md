@@ -379,7 +379,8 @@ There is an auto-expansion pass that adds vendor-specific directives, however it
 This fork allows to switch it on with the `--expand-browser-prefix` flag:
 
 ```console
-closure-stylesheets:~$ java -jar closure-stylesheets.jar --expand-browser-prefix --pretty-print example/prefix.css
+closure-stylesheets:~$ java -jar closure-stylesheets.jar --expand-browser-prefix \
+> --pretty-print example/prefix.css
 ```
 
 ```css
@@ -908,10 +909,11 @@ span {
 }
 ```
 
-In case when the root selector is already part of the selector, it will just be skipped.
+In case when the root selector is already part of the selector, it will just be skipped. Only ID and Class root selectors are supported right now.
 
 ```console
-closure-stylesheets:~$ java -jar closure-stylesheets.jar --root-selector .EXAMPLE --rename CLOSURE --pretty-print example/root-selector.css
+closure-stylesheets:~$ java -jar closure-stylesheets.jar --root-selector .EXAMPLE --rename \
+> CLOSURE --pretty-print example/root-selector.css
 ```
 
 ```css
