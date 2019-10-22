@@ -1,6 +1,6 @@
 {
   "name": "closure-stylesheets-java",
-  "version": "1.8.0",
+  "version": "1.9.0",
   "description": "Published JAR of an improved version of Closure Stylesheets to minify CSS, rename classes and expand browser prefixes.",
   "main": "index.js",
   "scripts": {

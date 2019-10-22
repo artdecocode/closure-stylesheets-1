@@ -1,3 +1,9 @@
+## 22 October 2019
+
+### [1.9.0](https://github.com/artdecocode/closure-stylesheets-java/compare/v1.8.0...v1.9.0)
+
+- [feature] Implement the `--root-selector` option for global prefixing.
+
 ## 13 October 2019
 
 ### [1.8.0](https://github.com/artdecocode/closure-stylesheets-java/compare/v1.7.1...v1.8.0)
