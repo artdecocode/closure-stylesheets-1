@@ -1,3 +1,9 @@
+## 13 November 2019
+
+### [1.10.0](https://github.com/artdecocode/closure-stylesheets-java/compare/v1.9.0...v1.10.0)
+
+- [feature] Enable `SIMPLE` substitution map (for `--rename` option) that works without splitting class names by `-`.
+
 ## 22 October 2019
 
 ### [1.9.0](https://github.com/artdecocode/closure-stylesheets-java/compare/v1.8.0...v1.9.0)

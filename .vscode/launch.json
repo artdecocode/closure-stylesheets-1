@@ -21,7 +21,7 @@
         "--allow-duplicate-declarations",
         "--preserve-important-comments", "styles/important.css",
         "--output-source-map", "styles/important.css.map",
-        "--rename", "CLOSURE",
+        "--rename", "SIMPLE",
         "--root-selector", ".TEST",
         "--source_map_include_content"
       ]

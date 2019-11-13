@@ -49,6 +49,7 @@ These are the fixes and improvements to the [original version](https://github.co
 - Remove unused dependencies, vendor `com.google.debugging` only with relevant code, and cut the JAR filesize in half (9MB -> 4MB).
 - Support `--source_map_include_content` option.
 - Implement [root selector](https://github.com/google/closure-stylesheets/commit/ef3f026d5fb09e7ec36835df096543deeb083da6) for global prefixing.
+- Add the [_SIMPLE_ substitution map](https://github.com/google/closure-stylesheets/commit/73816e12afc63b84d27ab08c1b116d52aa5e8234) that doesn't split class names by `-`.
 
 <p align="center"><a href="#table-of-contents">
   <img src="/.documentary/section-breaks/1.svg?sanitize=true">

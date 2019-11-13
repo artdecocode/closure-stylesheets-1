@@ -27,7 +27,7 @@
     "prefix"
   ],
   "files": [
-    "target/closure-stylesheets-1.9.0-SNAPSHOT-jar-with-dependencies.jar"
+    "target/closure-stylesheets-1.10.0-SNAPSHOT-jar-with-dependencies.jar"
   ],
   "author": "Anton <anton@adc.sh>",
   "license": "Apache-2.0",
