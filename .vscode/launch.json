@@ -23,7 +23,8 @@
         "--output-source-map", "styles/important.css.map",
         "--rename", "SIMPLE",
         "--root-selector", ".TEST",
-        "--source_map_include_content"
+        "--source_map_include_content",
+        "--expand-browser-prefix"
       ]
     },
     {

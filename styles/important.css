@@ -1,6 +1,4 @@
-.abc-def {
-  text-align: right;
-}
-.abc-1 {
-  text-align: left;
+.test {
+  display: -ms-flexbox;
+  display: flex;
 }

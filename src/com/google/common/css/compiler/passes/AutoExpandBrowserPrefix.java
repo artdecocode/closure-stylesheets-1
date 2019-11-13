@@ -94,7 +94,7 @@ public class AutoExpandBrowserPrefix extends DefaultTreeVisitor implements CssCo
       if (rule.getMatchPropertyValue() == null) {
         for (CssDeclarationNode ruleExpansionNode : rule.getExpansionNodes()) {
           CssPropertyNode propName = ruleExpansionNode.getPropertyName();
-          if (AutoExpandBrowserPrefix.BlockContainsPropName(parent, propName, declaration)) {
+          if (BlockContainsPropName(parent, propName, declaration)) {
             continue;
           }
           CssDeclarationNode expansionNode = ruleExpansionNode.deepCopy();
@@ -151,6 +151,13 @@ public class AutoExpandBrowserPrefix extends DefaultTreeVisitor implements CssCo
       replacements.add(expansionNode);
     }
     for (CssDeclarationNode ruleExpansionNode : rule.getExpansionNodes()) {
+      Boolean includes = BlockContainsPropWithValue(
+        (CssDeclarationBlockNode) declaration.getParent(),
+        ruleExpansionNode.getPropertyName(), ruleExpansionNode.getPropertyValue(), declaration);
+      if (includes) {
+        continue;
+      }
+
       CssDeclarationNode expansionNode = ruleExpansionNode.deepCopy();
       expansionNode.setSourceCodeLocation(declaration.getSourceCodeLocation());
       expansionNode.autoExpanded = true;
@@ -246,6 +253,22 @@ public class AutoExpandBrowserPrefix extends DefaultTreeVisitor implements CssCo
   @Override
   public void runPass() {
     visitController.startVisit(this);
+  }
+
+  // parent:CssDeclarationBlockNode
+  private static boolean BlockContainsPropWithValue(CssDeclarationBlockNode node, CssPropertyNode propName,
+  CssPropertyValueNode propertyValue, CssDeclarationNode declaration) {
+    for (CssNode decl : node.getChildren()) {
+      CssDeclarationNode d = (CssDeclarationNode) decl;
+      if (d.equals(declaration)) {
+        continue;
+      }
+      Boolean nameEquals = d.getPropertyName().getValue().equals(propName.getValue());
+      if (!nameEquals) continue;
+      Boolean valueEquals = d.getPropertyValue().toString().equals(propertyValue.toString());
+      if (valueEquals) return true;
+    }
+    return false;
   }
 
   private static boolean BlockContainsPropName(CssDeclarationBlockNode node, CssPropertyNode propName,

@@ -2,8 +2,8 @@
 "version":3,
 "file":"important.css.map",
 "lineCount":1,
-"mappings":"AAAA,MAAC,EACY,CAAA,WAAY,MAES,MAAC,EACU,CAAA,WAAY;",
+"mappings":"AAAA,MAAC,EACS,CAAA,QAAS,YACe,oBAAA,iBAAA,qBAAA;",
 "sources":["styles/important.css"],
-"sourcesContent":[".abc-def {\n  text-align: right;\n}\n.abc-1 {\n  text-align: left;\n}"],
+"sourcesContent":[".test {\n  display: -ms-flexbox;\n  display: flex;\n}"],
 "names":[]
 }
