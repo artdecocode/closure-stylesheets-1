@@ -61,6 +61,16 @@ enum RenamingType {
       return new SplittingSubstitutionMap(new MinimalSubstitutionMap());
     }
   }),
+
+  /**
+   * Use the shortest available name without splitting by '-'.'
+   */
+  SIMPLE(new SubstitutionMapProvider() {
+    @Override
+    public SubstitutionMap get() {
+      return new MinimalSubstitutionMap();
+    }
+  }),
   ;
 
   private final SubstitutionMapProvider provider;

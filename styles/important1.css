@@ -1,0 +1,16 @@
+button:focus {
+  outline: 1px dotted;
+  outline: 5px auto -webkit-focus-ring-color;
+}
+.Hello .abc > .def > .a {
+  text-align: right;
+}
+table button, .Test {
+  outline: 2px dotted;
+}
+.TEST.def {
+  text-align: left;
+}
+#Test .def {
+  text-align: center;
+}
