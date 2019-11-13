@@ -50,6 +50,7 @@ These are the fixes and improvements to the [original version](https://github.co
 - Support `--source_map_include_content` option.
 - Implement [root selector](https://github.com/google/closure-stylesheets/commit/ef3f026d5fb09e7ec36835df096543deeb083da6) for global prefixing.
 - Add the [_SIMPLE_ substitution map](https://github.com/google/closure-stylesheets/commit/73816e12afc63b84d27ab08c1b116d52aa5e8234) that doesn't split class names by `-`.
+- Merge [input-renaming-map](https://github.com/artdecocode/closure-stylesheets-java/pull/1) fix.
 
 <p align="center"><a href="#table-of-contents">
   <img src="/.documentary/section-breaks/1.svg?sanitize=true">
