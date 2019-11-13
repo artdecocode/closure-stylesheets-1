@@ -1,5 +1,13 @@
 ## 13 November 2019
 
+### [1.10.2](https://github.com/artdecocode/closure-stylesheets-java/compare/v1.10.1...v1.10.2)
+
+- [fix] Don't auto-expand existing properties with values.
+
+### [1.10.1](https://github.com/artdecocode/closure-stylesheets-java/compare/v1.10.0...v1.10.1)
+
+- [fix] Fix input rename maps.
+
 ### [1.10.0](https://github.com/artdecocode/closure-stylesheets-java/compare/v1.9.0...v1.10.0)
 
 - [feature] Enable `SIMPLE` substitution map (for `--rename` option) that works without splitting class names by `-`.
