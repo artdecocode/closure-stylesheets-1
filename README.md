@@ -391,23 +391,23 @@ closure-stylesheets:~$ java -jar closure-stylesheets.jar --expand-browser-prefix
 .row {
   margin-right: -15px;
   margin-left: -15px;
+  display: flex;
   display: -webkit-box;
   display: -moz-box;
   display: -webkit-flex;
   display: -ms-flexbox;
-  display: flex;
+  flex-wrap: wrap;
   -moz-flex-wrap: wrap;
   -ms-flex-wrap: wrap;
   -webkit-flex-wrap: wrap;
-  flex-wrap: wrap;
+  flex-basis: 0;
   -webkit-flex-basis: 0;
   -ms-flex-preferred-size: 0;
-  flex-basis: 0;
+  flex-grow: 1;
   -webkit-box-flex: 1;
   box-flex: 1;
   -ms-flex-positive: 1;
   -webkit-flex-grow: 1;
-  flex-grow: 1;
 }
 ```
 

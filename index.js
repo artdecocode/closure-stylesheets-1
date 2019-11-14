@@ -1,1 +1,1 @@
-module.exports = require.resolve('./target/closure-stylesheets-1.10.2-SNAPSHOT-jar-with-dependencies.jar');
+module.exports = require.resolve('./target/closure-stylesheets-1.11.0-SNAPSHOT-jar-with-dependencies.jar');
