@@ -1,3 +1,9 @@
+## 14 November 2019
+
+### [1.11.0](https://github.com/artdecocode/closure-stylesheets-java/compare/v1.10.2...v1.11.0)
+
+- [feature] Implement `--output-browser-prefix` flag to write expanded prefixes to a separate file with a JSON map.
+
 ## 13 November 2019
 
 ### [1.10.2](https://github.com/artdecocode/closure-stylesheets-java/compare/v1.10.1...v1.10.2)
