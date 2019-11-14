@@ -31,9 +31,11 @@ public class AutoExpandBrowserPrefixTest extends PassesTestBase {
         "p {",
         "  display: flex;",
         "}"),
-        "[[p]{[[/* @alternate */]display:[[-webkit-box]];[/* @alternate */]display:[[-moz-box]];"
+        "[[p]{["
+        + "display:[[flex]];"
+        + "[/* @alternate */]display:[[-webkit-box]];[/* @alternate */]display:[[-moz-box]];"
         + "[/* @alternate */]display:[[-webkit-flex]];[/* @alternate */]display:[[-ms-flexbox]];"
-        + "[/* @alternate */]display:[[flex]];]}]");
+        + "]}]");
   }
 
   @Test
@@ -42,9 +44,11 @@ public class AutoExpandBrowserPrefixTest extends PassesTestBase {
         "p {",
         "  flex-grow: 1;",
         "}"),
-        "[[p]{[[/* @alternate */]-webkit-box-flex:[[1]];[/* @alternate */]box-flex:[[1]];"
+        "[[p]{["
+        + "flex-grow:[[1]];"
+        + "[/* @alternate */]-webkit-box-flex:[[1]];[/* @alternate */]box-flex:[[1]];"
         + "[/* @alternate */]-ms-flex-positive:[[1]];[/* @alternate */]-webkit-flex-grow:[[1]];"
-        + "[/* @alternate */]flex-grow:[[1]];]}]");
+        + "]}]");
   }
 
   @Test
@@ -54,9 +58,11 @@ public class AutoExpandBrowserPrefixTest extends PassesTestBase {
         "  flex-grow: 1;",
         "  box-flex: 1;",
         "}"),
-        "[[p]{[[/* @alternate */]-webkit-box-flex:[[1]];"
+        "[[p]{["
+        + "flex-grow:[[1]];"
+        + "[/* @alternate */]-webkit-box-flex:[[1]];"
         + "[/* @alternate */]-ms-flex-positive:[[1]];[/* @alternate */]-webkit-flex-grow:[[1]];"
-        + "[/* @alternate */]flex-grow:[[1]];box-flex:[[1]];]}]");
+        + "box-flex:[[1]];]}]");
   }
 
   @Test
@@ -66,12 +72,13 @@ public class AutoExpandBrowserPrefixTest extends PassesTestBase {
         "p {",
         "  background-image: linear-gradient(GRADIENT);",
         "}"),
-        "[[p]{[[/* @alternate */]"
-        + "background-image:[-webkit-linear-gradient([[top],[#f8f8f8],[#f1f1f1]])];"
+        "[[p]{["
+        + "background-image:[linear-gradient([[top],[#f8f8f8],[#f1f1f1]])];"
+        + "[/* @alternate */]background-image:[-webkit-linear-gradient([[top],[#f8f8f8],[#f1f1f1]])];"
         + "[/* @alternate */]background-image:[-moz-linear-gradient([[top],[#f8f8f8],[#f1f1f1]])];"
         + "[/* @alternate */]background-image:[-ms-linear-gradient([[top],[#f8f8f8],[#f1f1f1]])];"
         + "[/* @alternate */]background-image:[-o-linear-gradient([[top],[#f8f8f8],[#f1f1f1]])];"
-        + "[/* @alternate */]background-image:[linear-gradient([[top],[#f8f8f8],[#f1f1f1]])];]}]");
+        + "]}]");
   }
 
   @Test
@@ -79,9 +86,11 @@ public class AutoExpandBrowserPrefixTest extends PassesTestBase {
     testTreeConstruction(
         "p { margin: calc(100% - 24px) auto; }",
         ""
-            + "[[p]{[[/* @alternate */]margin:[-webkit-calc([[100%] - [24px]]) [auto]];"
+            + "[[p]{["
+            + "margin:[calc([[100%] - [24px]]) [auto]];"
+            + "[/* @alternate */]margin:[-webkit-calc([[100%] - [24px]]) [auto]];"
             + "[/* @alternate */]margin:[-moz-calc([[100%] - [24px]]) [auto]];"
-            + "[/* @alternate */]margin:[calc([[100%] - [24px]]) [auto]];]}]");
+            + "]}]");
   }
 
   @Test
@@ -89,9 +98,9 @@ public class AutoExpandBrowserPrefixTest extends PassesTestBase {
     testTreeConstruction(
         "p { margin: 10px calc(100% - 24px); }",
         ""
-            + "[[p]{[[/* @alternate */]margin:[[10px]-webkit-calc([[100%] - [24px]])];"
-            + "[/* @alternate */]margin:[[10px]-moz-calc([[100%] - [24px]])];"
-            + "[/* @alternate */]margin:[[10px]calc([[100%] - [24px]])];]}]");
+            + "[[p]{[margin:[[10px]calc([[100%] - [24px]])];"
+            + "[/* @alternate */]margin:[[10px]-webkit-calc([[100%] - [24px]])];"
+            + "[/* @alternate */]margin:[[10px]-moz-calc([[100%] - [24px]])];]}]");
   }
 
   @Test
@@ -99,10 +108,12 @@ public class AutoExpandBrowserPrefixTest extends PassesTestBase {
     testTreeConstruction(
         "p { margin: calc(100% - 24px) calc(50% + 16px); }",
         ""
-            + "[[p]{[[/* @alternate */]margin:[-webkit-calc([[100%] - [24px]]) "
+            + "[[p]{["
+            + "margin:[calc([[100%] - [24px]]) calc([[50%] + [16px]])];"
+            + "[/* @alternate */]margin:[-webkit-calc([[100%] - [24px]]) "
             + "-webkit-calc([[50%] + [16px]])];"
             + "[/* @alternate */]margin:[-moz-calc([[100%] - [24px]]) -moz-calc([[50%] + [16px]])];"
-            + "[/* @alternate */]margin:[calc([[100%] - [24px]]) calc([[50%] + [16px]])];]}]");
+            + "]}]");
   }
 
   @Test
@@ -117,9 +128,11 @@ public class AutoExpandBrowserPrefixTest extends PassesTestBase {
         "q {",
         "  display: flex;",
         "}"),
-        "[[p]{[display:[[flex]];]}[q]{[[/* @alternate */]display:[[-webkit-box]];[/* @alternate */]"
-        + "display:[[-moz-box]];[/* @alternate */]display:[[-webkit-flex]];[/* @alternate */]"
-        + "display:[[-ms-flexbox]];[/* @alternate */]display:[[flex]];]}]");
+        "[[p]{[display:[[flex]];]}[q]{[display:[[flex]];"
+        + "[/* @alternate */]display:[[-webkit-box]];"
+        + "[/* @alternate */]display:[[-moz-box]];"
+        + "[/* @alternate */]display:[[-webkit-flex]];[/* @alternate */]"
+        + "display:[[-ms-flexbox]];]}]");
   }
 
   @Test
@@ -127,9 +140,10 @@ public class AutoExpandBrowserPrefixTest extends PassesTestBase {
     testTreeConstruction(
         "p { /* @noflip */ left: calc(100% - 24px); }",
         ""
-            + "[[p]{[[/* @noflip */][/* @alternate */]left:[-webkit-calc([[100%] - [24px]])];"
+            + "[[p]{[[/* @noflip */]left:[calc([[100%] - [24px]])];"
+            + "[/* @noflip */][/* @alternate */]left:[-webkit-calc([[100%] - [24px]])];"
             + "[/* @noflip */][/* @alternate */]left:[-moz-calc([[100%] - [24px]])];"
-            + "[/* @noflip */][/* @alternate */]left:[calc([[100%] - [24px]])];]}]");
+            + "]}]");
   }
 
   @Test
@@ -137,10 +151,11 @@ public class AutoExpandBrowserPrefixTest extends PassesTestBase {
     testTreeConstruction(
         "p { /* @noflip */ transform-origin: left top; }",
         ""
-            + "[[p]{[[/* @noflip */][/* @alternate */]-webkit-transform-origin:[[left][top]];"
+            + "[[p]{[[/* @noflip */]transform-origin:[[left][top]];"
+            + "[/* @noflip */][/* @alternate */]-webkit-transform-origin:[[left][top]];"
             + "[/* @noflip */][/* @alternate */]-ms-transform-origin:[[left][top]];"
             + "[/* @noflip */][/* @alternate */]-o-transform-origin:[[left][top]];"
-            + "[/* @noflip */][/* @alternate */]transform-origin:[[left][top]];]}]");
+            + "]}]");
   }
 
   @Override

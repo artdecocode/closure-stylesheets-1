@@ -64,6 +64,7 @@ public final class BrowserPrefixRule {
         CssPropertyValueNode valueNode = new CssPropertyValueNode();
         CssDeclarationNode node = new CssDeclarationNode(propertyNode, valueNode);
         node.appendComment(new CssCommentNode("/* @alternate */", null));
+        node.autoExpanded = true;
         expansionNodes.add(node);
       }
     }
@@ -89,10 +90,11 @@ public final class BrowserPrefixRule {
           CssDeclarationNode node = new CssDeclarationNode(propertyNode, valueNode);
           node.appendComment(new CssCommentNode("/* @alternate */", null));
           expansionNodes.add(node);
+          node.autoExpanded = true;
         } else {
           // Since the property name is not present there is a value-only expansion added.
           // The property name will be taken from the original declaration.
-          valueOnlyExpansionNodes.add(valueNode);
+          valueOnlyExpansionNodes.add(valueNode); // just the calc
         }
       }
     }

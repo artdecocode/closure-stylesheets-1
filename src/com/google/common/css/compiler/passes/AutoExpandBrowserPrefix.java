@@ -83,8 +83,10 @@ public class AutoExpandBrowserPrefix extends DefaultTreeVisitor implements CssCo
     }
     CssDeclarationBlockNode parent = (CssDeclarationBlockNode) declaration.getParent();
 
-    ImmutableList.Builder<CssDeclarationNode> expansionNodes = ImmutableList.builder();
     for (BrowserPrefixRule rule : expansionRules) {
+      ImmutableList.Builder<CssDeclarationNode> expansionNodes = ImmutableList.builder();
+      expansionNodes.add(declaration);
+
       // If the name is present in the rule then it must match the declaration.
       if (rule.getMatchPropertyName() != null
           && !rule.getMatchPropertyName().equals(declaration.getPropertyName().getPropertyName())) {
@@ -103,7 +105,6 @@ public class AutoExpandBrowserPrefix extends DefaultTreeVisitor implements CssCo
           expansionNode.setComments(declaration.getComments());
           expansionNode.appendComment(new CssCommentNode("/* @alternate */", null));
           expansionNode.getPropertyName().setSourceCodeLocation(declaration.getSourceCodeLocation());
-          expansionNode.autoExpanded = true;
           expansionNodes.add(expansionNode);
         }
       } else if (!rule.isFunction()) {
@@ -120,7 +121,7 @@ public class AutoExpandBrowserPrefix extends DefaultTreeVisitor implements CssCo
 
       ImmutableList<CssDeclarationNode> replacements = expansionNodes.build();
 
-      if (!replacements.isEmpty()) {
+      if (replacements.size() > 1) {
         visitController.replaceCurrentBlockChildWith(
             replacements, false /* visitTheReplacementNodes */);
         break; // found a match, don't need to look for more
@@ -139,6 +140,7 @@ public class AutoExpandBrowserPrefix extends DefaultTreeVisitor implements CssCo
     }
     ImmutableList.Builder<CssDeclarationNode> replacements = ImmutableList.builder();
     // TODO(user): Maybe support multiple values for non-function value-only expansions.
+    // this is not applicable since there are no non-function value-only expansions.
     for (CssPropertyValueNode ruleValueNode : rule.getValueOnlyExpansionNodes()) {
       // For valueOnlyExpansionNodes the property name comes from the declaration.
       CssDeclarationNode expansionNode =
@@ -150,17 +152,23 @@ public class AutoExpandBrowserPrefix extends DefaultTreeVisitor implements CssCo
       expansionNode.autoExpanded = true;
       replacements.add(expansionNode);
     }
-    for (CssDeclarationNode ruleExpansionNode : rule.getExpansionNodes()) {
-      Boolean includes = BlockContainsPropWithValue(
-        (CssDeclarationBlockNode) declaration.getParent(),
-        ruleExpansionNode.getPropertyName(), ruleExpansionNode.getPropertyValue(), declaration);
-      if (includes) {
-        continue;
-      }
 
+    // check if the block has a node with the same name, e.g., display: -ms-flex; display: flex
+    Boolean includesName = BlockContainsProp((CssDeclarationBlockNode) declaration.getParent(),
+        rule.getMatchPropertyName(),
+      declaration);
+
+    for (CssDeclarationNode ruleExpansionNode : rule.getExpansionNodes()) {
+      if (includesName) {
+        Boolean includes = BlockContainsPropWithValue(
+          (CssDeclarationBlockNode) declaration.getParent(),
+          ruleExpansionNode.getPropertyName(), ruleExpansionNode.getPropertyValue(), declaration);
+        if (includes) {
+          continue;
+        }
+      }
       CssDeclarationNode expansionNode = ruleExpansionNode.deepCopy();
       expansionNode.setSourceCodeLocation(declaration.getSourceCodeLocation());
-      expansionNode.autoExpanded = true;
       replacements.add(expansionNode);
     }
     return replacements.build();
@@ -243,6 +251,7 @@ public class AutoExpandBrowserPrefix extends DefaultTreeVisitor implements CssCo
           new CssDeclarationNode(
               declaration.getPropertyName(), expansionValues, declaration.getComments(),
           declaration.getSourceCodeLocation());
+      expansionNode.autoExpanded = true;
 
       expansionNode.appendComment(new CssCommentNode("/* @alternate */", null));
       expansionNodes.add(expansionNode);
@@ -255,6 +264,18 @@ public class AutoExpandBrowserPrefix extends DefaultTreeVisitor implements CssCo
     visitController.startVisit(this);
   }
 
+  private static boolean BlockContainsProp(CssDeclarationBlockNode node, String matchName,
+    CssDeclarationNode declaration) {
+    for (CssNode decl : node.getChildren()) {
+      CssDeclarationNode d = (CssDeclarationNode) decl;
+      if (d.equals(declaration)) {
+        continue;
+      }
+      Boolean nameEquals = d.getPropertyName().getValue().equals(matchName);
+      if (nameEquals) return true;
+    }
+    return false;
+  }
   // parent:CssDeclarationBlockNode
   private static boolean BlockContainsPropWithValue(CssDeclarationBlockNode node, CssPropertyNode propName,
   CssPropertyValueNode propertyValue, CssDeclarationNode declaration) {

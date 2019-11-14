@@ -24,6 +24,7 @@
         "--rename", "SIMPLE",
         "--root-selector", ".TEST",
         "--source_map_include_content",
+        "--pretty-print",
         "--expand-browser-prefix"
       ]
     },

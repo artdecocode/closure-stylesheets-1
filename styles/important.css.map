@@ -1,9 +1,9 @@
 {
 "version":3,
 "file":"important.css.map",
-"lineCount":1,
-"mappings":"AAAA,MAAC,EACS,CAAA,QAAS,YACe,oBAAA,iBAAA,qBAAA;",
+"lineCount":21,
+"mappings":"AAAA,MAAC,EACQ;AAAA,WAAS,YAAT,CAAA;AACwB,WAAS,KAAT,CADxB;AACwB,wBADxB;AACwB,qBADxB;AACwB,yBADxB;AAEyC,iBAAe,KAAf,CAFzC;AAGgE,aAAW,KAAX,CAHhE;AAGgE,kBAAW,KAAX,CAHhE;AAGgE,qBAAW,KAAX,CAHhE;AAImF,gBAAe,MAAf,CAJnF;AAK0G,eAAc,MAAd,CAL1G;AAMgI,WAAS,KAAK,IAAL,EAAT,CANhI;AAMgI,wBAAc,IAAd,GANhI;AAMgI,qBAAc,IAAd,GANhI;AAOuJ,oBAAkB,gBAAgB,KAAA,CAAO,KAAA,CAAO,KAA9B,EAAlB,CAPvJ;AAOuJ,4CAAkC,KAAA,CAAO,KAAA,CAAO,KAAhD,GAPvJ;AAOuJ,yCAAkC,KAAA,CAAO,KAAA,CAAO,KAAhD,GAPvJ;AAOuJ,wCAAkC,KAAA,CAAO,KAAA,CAAO,KAAhD,GAPvJ;AAOuJ,uCAAkC,KAAA,CAAO,KAAA,CAAO,KAAhD,GAPvJ;;",
 "sources":["styles/important.css"],
-"sourcesContent":[".test {\n  display: -ms-flexbox;\n  display: flex;\n}"],
+"sourcesContent":[".row {\n  display: -ms-flexbox;\n  display: flex;\n  -ms-flex-wrap: wrap;\n  flex-wrap: wrap;\n  margin-right: -15px;\n  margin-left: -15px;\n  padding: calc(10px);\n  background-image: linear-gradient(45deg, white, green);\n}"],
 "names":[]
 }

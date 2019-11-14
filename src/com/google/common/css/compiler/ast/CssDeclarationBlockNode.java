@@ -16,6 +16,8 @@
 
 package com.google.common.css.compiler.ast;
 
+import java.util.List;
+
 import com.google.common.collect.ImmutableList;
 
 /**
@@ -42,4 +44,15 @@ public class CssDeclarationBlockNode extends CssAbstractBlockNode {
   public CssDeclarationBlockNode deepCopy() {
     return new CssDeclarationBlockNode(this);
   }
+  public void removeChildren() {
+    this.removeAsParentOfNodes(this.children);
+  }
+  // void removeAsParentOfNodes() {
+  //   if (children == null) {
+  //     return;
+  //   }
+  //   for (CssNode child : this.children) {
+  //     removeAsParentOfNode(child);
+  //   }
+  // }
 }
