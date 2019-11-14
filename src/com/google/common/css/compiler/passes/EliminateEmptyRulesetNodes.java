@@ -17,7 +17,10 @@
 package com.google.common.css.compiler.passes;
 
 import com.google.common.css.compiler.ast.CssCompilerPass;
+import com.google.common.css.compiler.ast.CssKeyframeRulesetNode;
+import com.google.common.css.compiler.ast.CssKeyframesNode;
 import com.google.common.css.compiler.ast.CssMediaRuleNode;
+import com.google.common.css.compiler.ast.CssPageRuleNode;
 import com.google.common.css.compiler.ast.CssRulesetNode;
 import com.google.common.css.compiler.ast.DefaultTreeVisitor;
 import com.google.common.css.compiler.ast.MutatingVisitController;
@@ -47,6 +50,25 @@ public class EliminateEmptyRulesetNodes extends DefaultTreeVisitor
 
   @Override
   public void leaveMediaRule(CssMediaRuleNode node) {
+    if (node.getBlock().numChildren() == 0) {
+      visitController.removeCurrentNode();
+    }
+  }
+  @Override
+  public void leavePageRule(CssPageRuleNode node) {
+    if (node.getBlock().numChildren() == 0) {
+      visitController.removeCurrentNode();
+    }
+  }
+
+  @Override
+  public void leaveKeyframeRuleset(CssKeyframeRulesetNode node) {
+    if (node.getDeclarations().numChildren() == 0) {
+      visitController.removeCurrentNode();
+    }
+  }
+  @Override
+  public void leaveKeyframesRule(CssKeyframesNode node) {
     if (node.getBlock().numChildren() == 0) {
       visitController.removeCurrentNode();
     }

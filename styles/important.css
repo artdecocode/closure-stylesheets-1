@@ -3,8 +3,16 @@
   display: flex !important;
   flex-basis: 0 !important;
 }
+@page  {
+  display: block;
+}
 @media (min-width: 500px) {
   .row {
     display: block;
+  }
+}
+@keyframes abc {
+  0% {
+    opacity: 0;
   }
 }
