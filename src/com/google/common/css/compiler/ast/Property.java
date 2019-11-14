@@ -367,6 +367,7 @@ public final class Property {
         builder("-moz-window-shadow"),
         builder("-ms-accelerator"),
         builder("-ms-align-items"),
+        builder("-ms-flex-item-align"),
         builder("-ms-animation"),
         builder("-ms-animation-delay"),
         builder("-ms-animation-direction"),
@@ -479,6 +480,7 @@ public final class Property {
         builder("opacity"),
         builder("order"),
         builder("orphans"),
+        builder("widows"),
         builder("outline-color"),
         builder("outline-offset"),
         builder("outline-style"),
@@ -789,7 +791,19 @@ public final class Property {
         builder("word-wrap"),
         builder("writing-mode"),
         builder("z-index"),
-        builder("zoom").setVendor(Vendor.MICROSOFT)
+        builder("zoom").setVendor(Vendor.MICROSOFT),
+
+        builder("-webkit-text-decoration"),
+        builder("-webkit-text-decoration-skip-ink"),
+        builder("text-decoration-skip-ink"),
+        builder("user-select"),
+        builder("appearance"),
+        builder("-webkit-backdrop-filter"),
+        builder("backdrop-filter"),
+        builder("line-break"),
+        builder("-ms-touch-action"),
+        builder("touch-action"),
+        builder("-ms-flex-line-pack")
     );
     ImmutableBiMap.Builder<String, Property> allProperies =
         ImmutableBiMap.builder();
