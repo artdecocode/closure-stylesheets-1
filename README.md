@@ -556,6 +556,10 @@ And a noscript version should be added to the head of the document:
 
 Additionally, keyframe rules can be generated for webkit, by using the <a name="gen-webkit-keyframes">`@gen-webkit-keyframes`</a> comment before the rule. This was part of the compiler however not documented.
 
+<table>
+<tr><th>Source</th><th>Output</th></tr>
+<tr><td>
+
 ```css
 /* @gen-webkit-keyframes */
 @keyframes fadeIn {
@@ -572,6 +576,8 @@ Additionally, keyframe rules can be generated for webkit, by using the <a name="
   animation-fill-mode: forwards;
 }
 ```
+</td>
+<td>
 
 ```css
 @keyframes fadeIn {
@@ -596,6 +602,8 @@ Additionally, keyframe rules can be generated for webkit, by using the <a name="
   animation-fill-mode: forwards;
 }
 ```
+</td></tr>
+</table>
 
 <p align="center"><a href="#table-of-contents">
   <img src="/.documentary/section-breaks/4.svg?sanitize=true">
