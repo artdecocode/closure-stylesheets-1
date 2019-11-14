@@ -1,8 +1,8 @@
-### Linting
+## Linting
 
 _Closure Stylesheets_ performs some static checks on your CSS. For example, its most basic function is to ensure that your CSS parses: if there are any parse errors, _Closure Stylesheets_ will print the errors to standard error and return with an exit code of 1.
 
-#### `--allowed-non-standard-function`, `--allow-unrecognized-functions`
+### `--allowed-non-standard-function`, `--allow-unrecognized-functions`
 
 It will also error out when there are unrecognized function names or duplicate
 style declarations. For example, if you ran Closure Stylesheets on
@@ -70,7 +70,7 @@ button:focus {
 }
 ```
 
-#### `--allow-unrecognized-properties`, `--allowed-unrecognized-property`
+### `--allow-unrecognized-properties`, `--allowed-unrecognized-property`
 
 By default, Closure Stylesheets validates the names of CSS properties used in a
 stylesheet. We have attempted to capture all legal properties in the
@@ -102,3 +102,5 @@ everything, including simple spelling mistakes.
 
 Note that some recognized properties will emit warnings. These warnings will not
 be silenced with the `--allowed-unrecognized-property` flag.
+
+%~%

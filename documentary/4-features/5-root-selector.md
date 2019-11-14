@@ -1,4 +1,4 @@
-### Root Selector
+## Root Selector
 
 When generating CSS that must work only inside of specific element, the `--root-selector` option may be passed to prepend all selectors with a global selector.
 

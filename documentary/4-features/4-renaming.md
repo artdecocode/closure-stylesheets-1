@@ -1,4 +1,4 @@
-### Renaming
+## Renaming
 
 Closure Stylesheets makes it possible to rename CSS class names in the generated
 stylesheet, which helps reduce the size of the CSS that is sent down to your
@@ -225,3 +225,5 @@ with the **`--excluded_classes_from_renaming`** flag when generating the CSS.
 References to CSS class names that are excluded from renaming should _never_ be
 wrapped in `goog.getCssName()`, or else they run the risk of being partially
 renamed.
+
+%~%

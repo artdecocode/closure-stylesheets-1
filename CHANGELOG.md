@@ -1,8 +1,16 @@
 ## 14 November 2019
 
+### [1.11.1](https://github.com/artdecocode/closure-stylesheets-java/compare/v1.11.0...v1.11.1)
+
+- [fix] Fix bugs in output browser prefix functionality:
+  * handle `!important` declaration when dealing with values;
+  * write the map properly;
+  * remove empty media/page/keyframes blocks.
+
 ### [1.11.0](https://github.com/artdecocode/closure-stylesheets-java/compare/v1.10.2...v1.11.0)
 
 - [feature] Implement `--output-browser-prefix` flag to write expanded prefixes to a separate file with a JSON map.
+- [feature] Add some property names to the list of recognised properties.
 
 ## 13 November 2019
 

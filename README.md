@@ -17,19 +17,18 @@ CSS. The tool also supports **[minification](#minification)**,
   * [Functions](#functions)
   * [Mixins](#mixins)
   * [Conditionals](#conditionals)
-- [Additional Features](#additional-features)
-  * [Auto Expansion](#auto-expansion)
-    * [Output Prefixes](#output-prefixes)
-    * [Keyframes](#keyframes)
-      * [`@gen-webkit-keyframes`](#gen-webkit-keyframes)
-  * [Minification](#minification)
-  * [Linting](#linting)
-    * [`--allowed-non-standard-function`, `--allow-unrecognized-functions`](#--allowed-non-standard-function---allow-unrecognized-functions)
+- [Auto Expansion](#auto-expansion)
+  * [Output Prefixes](#output-prefixes)
+  * [Keyframes](#keyframes)
+    * [`@gen-webkit-keyframes`](#gen-webkit-keyframes)
+- [Minification](#minification)
+- [Linting](#linting)
+  * [`--allowed-non-standard-function`, `--allow-unrecognized-functions`](#--allowed-non-standard-function---allow-unrecognized-functions)
     * [`--allow-duplicate-declarations`](#--allow-duplicate-declarations)
-    * [`--allow-unrecognized-properties`, `--allowed-unrecognized-property`](#--allow-unrecognized-properties---allowed-unrecognized-property)
-  * [RTL Flipping](#rtl-flipping)
-  * [Renaming](#renaming)
-  * [Root Selector](#root-selector)
+  * [`--allow-unrecognized-properties`, `--allowed-unrecognized-property`](#--allow-unrecognized-properties---allowed-unrecognized-property)
+- [RTL Flipping](#rtl-flipping)
+- [Renaming](#renaming)
+- [Root Selector](#root-selector)
 
 <p align="center"><a href="#table-of-contents">
   <img src="/.documentary/section-breaks/0.svg?sanitize=true">
@@ -361,12 +360,9 @@ serve it appropriately.
   <img src="/.documentary/section-breaks/3.svg?sanitize=true">
 </a></p>
 
-## Additional Features
 
-The Closure Stylesheets tool also offers some features that are not extensions
-to CSS.
 
-### Auto Expansion
+## Auto Expansion
 
 There is an auto-expansion pass that adds vendor-specific directives, however it was switched off in the _Google's version_. The reason remains unknown, however it might be because it slow down the compiler.
 
@@ -414,7 +410,7 @@ closure-stylesheets:~$ java -jar closure-stylesheets.jar --expand-browser-prefix
 
 There is no control over which rules to expand by supplied desired browser coverage right now. All known rules will be expanded which can increase the size of the stylesheets by a lot.
 
-#### Output Prefixes
+### Output Prefixes
 
 To generate a separate CSS file with expanded prefixes, the `--output-browser-prefix` arg must be set to the desired location of the file. In this case, an additional JSON file with the map of properties and values that were expanded will be written to the same location but under the `.json` name. It then can be used in conjunction with the `CSS.supports` function to test whether the prefixes file is required.
 
@@ -475,16 +471,24 @@ and **example/prefixes.css.json**
 }
 ```
 
+There are 3 general cases for the map:
+
+1. A property regardless of the value, such as `flex-flow` that will be expanded into `-[webkit|ms]-flex-flow`. The shortest value will be added to the map, because here we expand the property name.
+1. A value of a property, such as `display: flex` or `display: inline-flex`. Each value will be tested against the key.
+1. A value which is a function, like `calc` or `linear-gradient`. The shorted value will be selected (e.g., between `calc(3px)` and `calc(0.1855rem)`, the first one will be selected) and its property name used (e.g., `height`).
+
+The map will only be created for unprefixed properties, because only they are expanded, i.e. `-ms-flex` is not expanded and will not be tested against because it's already in the CSS.
+
 Now the prefixes map can be used on a page to figure out if to download the fallbacks:
 
 ```js
 const entries = Object.entries(prefixes)
 let supportsAll = true
-if (CSS && supports in CSS) {
+if (CSS && 'supports' in CSS) {
   let nonSupported = []
   for (let i=0; i<entries.length; i++) {
     const [key, values] = entries[i]
-    values.forEach(() => {
+    values.forEach((value) => {
       const s = CSS.supports(key, value)
       if (!s) {
         supportsAll = false
@@ -494,7 +498,7 @@ if (CSS && supports in CSS) {
   }
   if (nonSupported.length) {
     console.log('Browser does not support CSS properties: %s',
-      nonSupported.join(', '))
+      nonSupported.join('\n '))
   }
 } else {
   supportsAll = false
@@ -520,7 +524,7 @@ And a noscript version should be added to the head of the document:
 </html>
 ```
 
-#### Keyframes
+### Keyframes
 
 Additionally, keyframe rules can be generated for webkit, by using the <a name="gen-webkit-keyframes">`@gen-webkit-keyframes`</a> comment before the rule. This was part of the compiler however not documented.
 
@@ -569,7 +573,7 @@ Additionally, keyframe rules can be generated for webkit, by using the <a name="
   <img src="/.documentary/section-breaks/4.svg?sanitize=true">
 </a></p>
 
-### Minification
+## Minification
 
 You can concatenate and minify a list of stylesheets with the following command:
 
@@ -595,11 +599,15 @@ If you would like to create a vendor-specific stylesheet, you can use the
 **`MOZILLA`**, **`OPERA`**, **`MICROSOFT`**, and **`KONQUEROR`**. When this flag
 is present, all vendor-specific properties for other vendors will be removed.
 
-### Linting
+<p align="center"><a href="#table-of-contents">
+  <img src="/.documentary/section-breaks/5.svg?sanitize=true">
+</a></p>
+
+## Linting
 
 _Closure Stylesheets_ performs some static checks on your CSS. For example, its most basic function is to ensure that your CSS parses: if there are any parse errors, _Closure Stylesheets_ will print the errors to standard error and return with an exit code of 1.
 
-#### `--allowed-non-standard-function`, `--allow-unrecognized-functions`
+### `--allowed-non-standard-function`, `--allow-unrecognized-functions`
 
 It will also error out when there are unrecognized function names or duplicate
 style declarations. For example, if you ran Closure Stylesheets on
@@ -683,7 +691,7 @@ button:focus {
 }
 ```
 
-#### `--allow-unrecognized-properties`, `--allowed-unrecognized-property`
+### `--allow-unrecognized-properties`, `--allowed-unrecognized-property`
 
 By default, Closure Stylesheets validates the names of CSS properties used in a
 stylesheet. We have attempted to capture all legal properties in the
@@ -725,7 +733,11 @@ everything, including simple spelling mistakes.
 Note that some recognized properties will emit warnings. These warnings will not
 be silenced with the `--allowed-unrecognized-property` flag.
 
-### RTL Flipping
+<p align="center"><a href="#table-of-contents">
+  <img src="/.documentary/section-breaks/6.svg?sanitize=true">
+</a></p>
+
+## RTL Flipping
 
 Closure Stylesheets has support for generating left-to-right (LTR) as well as
 right-to-left (RTL) stylesheets. By default, LTR is the assumed directionality
@@ -777,7 +789,11 @@ property instead of alongside it:
   direction: ltr;
 ```
 
-### Renaming
+<p align="center"><a href="#table-of-contents">
+  <img src="/.documentary/section-breaks/7.svg?sanitize=true">
+</a></p>
+
+## Renaming
 
 Closure Stylesheets makes it possible to rename CSS class names in the generated
 stylesheet, which helps reduce the size of the CSS that is sent down to your
@@ -1005,8 +1021,11 @@ References to CSS class names that are excluded from renaming should _never_ be
 wrapped in `goog.getCssName()`, or else they run the risk of being partially
 renamed.
 
+<p align="center"><a href="#table-of-contents">
+  <img src="/.documentary/section-breaks/8.svg?sanitize=true">
+</a></p>
 
-### Root Selector
+## Root Selector
 
 When generating CSS that must work only inside of specific element, the `--root-selector` option may be passed to prepend all selectors with a global selector.
 
