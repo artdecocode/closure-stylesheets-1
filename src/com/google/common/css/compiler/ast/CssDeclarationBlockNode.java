@@ -16,8 +16,6 @@
 
 package com.google.common.css.compiler.ast;
 
-import java.util.List;
-
 import com.google.common.collect.ImmutableList;
 
 /**

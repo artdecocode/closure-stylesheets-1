@@ -24,6 +24,8 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.Reader;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -179,6 +181,10 @@ public class ClosureCommandLineCompiler extends DefaultCommandLineCompiler {
         "Expand CSS rules to include vendor-prefixed declarations.")
     private boolean expandBrowserPrefix = false;
 
+    @Option(name = "--output-browser-prefix", usage =
+        "Where to save a separate tree with browser prefixes.")
+    private String outputBrowserPrefix = null;
+
     @Option(name = "--allowed-non-standard-function", usage =
         "Specify a non-standard function to whitelist, like alpha()")
     private List<String> allowedNonStandardFunctions = Lists.newArrayList();
@@ -265,6 +271,7 @@ public class ClosureCommandLineCompiler extends DefaultCommandLineCompiler {
       builder.setAllowUnrecognizedFunctions(allowUnrecognizedFunctions);
       builder.setAllowDuplicateDeclarations(allowDuplicateDeclarations);
       builder.setExpandBrowserPrefix(expandBrowserPrefix);
+      builder.setOutputBrowserPrefix(outputBrowserPrefix);
       builder.setAllowedNonStandardFunctions(allowedNonStandardFunctions);
       builder.setAllowedUnrecognizedProperties(allowedUnrecognizedProperties);
       builder.setAllowUnrecognizedProperties(allowUnrecognizedProperties);
@@ -331,7 +338,10 @@ public class ClosureCommandLineCompiler extends DefaultCommandLineCompiler {
       return new OutputInfo(
           (outputFile == null) ? null : new File(outputFile),
           (renameFile == null) ? null : new File(renameFile),
-          (sourceMapFile == null) ? null : new File(sourceMapFile));
+          (sourceMapFile == null) ? null : new File(sourceMapFile),
+          (outputBrowserPrefix == null) ? null : new File(outputBrowserPrefix),
+          (outputBrowserPrefix == null) ? null : new File(outputBrowserPrefix + ".json")
+      );
     }
 
     /**
@@ -387,11 +397,16 @@ public class ClosureCommandLineCompiler extends DefaultCommandLineCompiler {
     @Nullable public final File outputFile;
     @Nullable public final File renameFile;
     @Nullable public final File sourceMapFile;
+    @Nullable public final File prefixesFile;
+    @Nullable public final File prefixesMap;
 
-    private OutputInfo(File outputFile, File renameFile, File sourceMapFile) {
+    private OutputInfo(File outputFile, File renameFile, File sourceMapFile,
+      File prefixesFile, File prefixesMap) {
       this.outputFile = outputFile;
       this.renameFile = renameFile;
       this.sourceMapFile = sourceMapFile;
+      this.prefixesFile = prefixesFile;
+      this.prefixesMap = prefixesMap;
     }
   }
 
@@ -402,7 +417,8 @@ public class ClosureCommandLineCompiler extends DefaultCommandLineCompiler {
     ClosureCommandLineCompiler compiler =
         new ClosureCommandLineCompiler(job, exitCodeHandler, errorManager);
 
-    String compilerOutput = compiler.execute(outputInfo.renameFile, outputInfo.sourceMapFile);
+    String compilerOutput = compiler.execute(outputInfo.renameFile, outputInfo.sourceMapFile,
+      outputInfo.prefixesFile, outputInfo.prefixesMap);
 
     if (outputInfo.outputFile == null) {
       System.out.print(compilerOutput);

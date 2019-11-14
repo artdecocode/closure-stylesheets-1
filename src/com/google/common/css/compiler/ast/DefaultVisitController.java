@@ -1602,7 +1602,6 @@ class DefaultVisitController implements MutatingVisitController {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public void removeCurrentNodeCalled() {
       // If the function is a singleton, remove the nearest declaration that
       // contains it.

@@ -30,7 +30,6 @@ import com.google.common.css.compiler.ast.CssValueNode;
 import com.google.common.css.compiler.ast.DefaultTreeVisitor;
 import com.google.common.css.compiler.ast.MutatingVisitController;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -52,17 +51,15 @@ import java.util.List;
  *    Eg. background-image: linear-gradient(ARGS);
  *
  */
-public class AutoExpandBrowserPrefix extends DefaultTreeVisitor implements CssCompilerPass {
+public class AutoExpandBrowserPrefix2 extends DefaultTreeVisitor implements CssCompilerPass {
 
   private final MutatingVisitController visitController;
-  private final ImmutableList<BrowserPrefixRule> expansionRules;
   private boolean inDefMixinBlock;
-  public HashMap<String, ArrayList<String>> tests;
+  private boolean remove;
 
-  public AutoExpandBrowserPrefix(MutatingVisitController visitController) {
+  public AutoExpandBrowserPrefix2(MutatingVisitController visitController, Boolean remove) {
     this.visitController = visitController;
-    this.expansionRules = BrowserPrefixGenerator.getExpansionRules();
-    this.tests = new HashMap<>();
+    this.remove = remove;
   }
 
   @Override
@@ -84,64 +81,23 @@ public class AutoExpandBrowserPrefix extends DefaultTreeVisitor implements CssCo
     if (inDefMixinBlock) {
       return true;
     }
-    CssDeclarationBlockNode parent = (CssDeclarationBlockNode) declaration.getParent();
-
-    for (BrowserPrefixRule rule : expansionRules) {
-      ImmutableList.Builder<CssDeclarationNode> expansionNodes = ImmutableList.builder();
-      expansionNodes.add(declaration);
-
-      // If the name is present in the rule then it must match the declaration.
-      if (rule.getMatchPropertyName() != null
-          && !rule.getMatchPropertyName().equals(declaration.getPropertyName().getPropertyName())) {
-        continue;
+    if (this.remove) {
+      if (declaration.autoExpanded) {
+        visitController.removeCurrentNode();
       }
-      // Handle case #1 when no property value is available.
-      if (rule.getMatchPropertyValue() == null) {
-        for (CssDeclarationNode ruleExpansionNode : rule.getExpansionNodes()) {
-          CssPropertyNode propName = ruleExpansionNode.getPropertyName();
-          if (BlockContainsPropName(parent, propName, declaration)) {
-            continue;
-          }
-          CssDeclarationNode expansionNode = ruleExpansionNode.deepCopy();
-          expansionNode.setPropertyValue(declaration.getPropertyValue().deepCopy());
-          expansionNode.setSourceCodeLocation(declaration.getSourceCodeLocation());
-          expansionNode.setComments(declaration.getComments());
-          expansionNode.appendComment(new CssCommentNode("/* @alternate */", null));
-          expansionNode.getPropertyName().setSourceCodeLocation(declaration.getSourceCodeLocation());
-          expansionNodes.add(expansionNode);
-        }
-      } else if (!rule.isFunction()) {
-        // Handle case #2 where the property value is not a function.
-        expansionNodes.addAll(getNonFunctionValueMatches(rule, declaration));
-      } else if (hasMatchingValueOnlyFunction(declaration, rule)) {
-        // todo check for existing duplicates here
-        // Handle case #3 where the property value is a function. Eg. linear-gradient().
-        // The rule is value-only and one of the declaration values matches.
-        expansionNodes.addAll(expandMatchingValueOnlyFunctions(declaration, rule));
+    } else {
+      if (!declaration.autoExpanded) {
+        visitController.removeCurrentNode();
       } else {
-        // todo check for existing duplicates here
-        // The rule is not value-only or did not match, check other rules.
-        expansionNodes.addAll(getOtherMatches(declaration, rule));
-      }
-
-      ImmutableList<CssDeclarationNode> replacements = expansionNodes.build();
-
-      if (replacements.size() > 1) {
-        String name = declaration.getPropertyName().getValue();
-        String value = declaration.getPropertyValue().toString();
-        if (!this.tests.containsKey(name)) {
-          this.tests.put(name, new ArrayList<String>());
-        }
-        ArrayList<String> values = this.tests.get(name);
-        if (!values.contains(name)) {
-          values.add(value.subSequence(1, value.length() - 1).toString());
-        }
-
-        visitController.replaceCurrentBlockChildWith(
-            replacements, false /* visitTheReplacementNodes */);
-        break; // found a match, don't need to look for more
+        declaration.setComments(new ArrayList<CssCommentNode>());
       }
     }
+
+    // if (replacements.size() > 1) {
+    //   visitController.replaceCurrentBlockChildWith(
+    //       replacements, false /* visitTheReplacementNodes */);
+    //   break; // found a match, don't need to look for more
+    // }
     return true;
   }
 

@@ -1,9 +1,9 @@
 {
 "version":3,
 "file":"important.css.map",
-"lineCount":21,
-"mappings":"AAAA,MAAC,EACQ;AAAA,WAAS,YAAT,CAAA;AACwB,WAAS,KAAT,CADxB;AACwB,wBADxB;AACwB,qBADxB;AACwB,yBADxB;AAEyC,iBAAe,KAAf,CAFzC;AAGgE,aAAW,KAAX,CAHhE;AAGgE,kBAAW,KAAX,CAHhE;AAGgE,qBAAW,KAAX,CAHhE;AAImF,gBAAe,MAAf,CAJnF;AAK0G,eAAc,MAAd,CAL1G;AAMgI,WAAS,KAAK,IAAL,EAAT,CANhI;AAMgI,wBAAc,IAAd,GANhI;AAMgI,qBAAc,IAAd,GANhI;AAOuJ,oBAAkB,gBAAgB,KAAA,CAAO,KAAA,CAAO,KAA9B,EAAlB,CAPvJ;AAOuJ,4CAAkC,KAAA,CAAO,KAAA,CAAO,KAAhD,GAPvJ;AAOuJ,yCAAkC,KAAA,CAAO,KAAA,CAAO,KAAhD,GAPvJ;AAOuJ,wCAAkC,KAAA,CAAO,KAAA,CAAO,KAAhD,GAPvJ;AAOuJ,uCAAkC,KAAA,CAAO,KAAA,CAAO,KAAhD,GAPvJ;;",
+"lineCount":16,
+"mappings":"AAAA,MAAC,EACQ;AACwB,WADf,YACe,CADxB;AACwB,WAAS,KAAT,KADxB;AACwB,iBACgC,KADhC,GADxB;AAGgE,aAAW,KAAA,KAAX,CAHhE;AAGgE,gBACkC,KADvB,KAAX,CAHhE;AAMgI,eADR,MACQ,GAAc,IAAd,eAAyB,GAAzB,GANhI;AAMgI,WAAS,KAAK,IAAL,CAAK,CAAM,KAAK,GAAL,EAApB,KAAyB,GAAzB,GANhI;AAOiK,oBAAkB,gBAAgB,KAAA,CAAO,EAAP,GAAO,CAAO,CAAd,CAAO,KAAA,CAAO,KAAhD,GAPjK;AAOiK,yCAAkC,KAAA,CAAO,KAAA,CAAO,KAAhD,GAPjK;AAOiK,MAE2D,EACS,gCAHlC,KAAA,CAAO,KAAA,CAAO,KAGoB;AAHpE,WAG6E,KAH7E,uBAAkC,KAAA,CAAO,KAAA,CAAO,KAAhD,GAGoE;AACiB,oBAAkB,0BAA0B,KAAA,CAAO,KAAA,CAAO,KAAxC,EAAlB,CADjB;AADV,MAAC,EACS;AACiB,sDAA4C,KAAA,CAAO,KAAA,CAAO,KAA1D,GADjB;;",
 "sources":["styles/important.css"],
-"sourcesContent":[".row {\n  display: -ms-flexbox;\n  display: flex;\n  -ms-flex-wrap: wrap;\n  flex-wrap: wrap;\n  margin-right: -15px;\n  margin-left: -15px;\n  padding: calc(10px);\n  background-image: linear-gradient(45deg, white, green);\n}"],
+"sourcesContent":[".row {\n  display: -ms-flexbox;\n  display: flex;\n  -ms-flex-wrap: wrap;\n  flex-wrap: wrap;\n  margin-right: -15px;\n  margin-left: -15px;\n  padding: calc(10px) calc(5px);\n  background-image: linear-gradient(45deg, white, green);\n}\n.test {\n  padding: 1rem;\n  background-image: repeating-linear-gradient(45deg, white, green);\n}"],
 "names":[]
 }

@@ -60,7 +60,7 @@ public class ClosureCommandLineCompilerTest {
     ClosureCommandLineCompiler compiler =
         new ClosureCommandLineCompiler(job, EXIT_CODE_HANDLER, errorManager);
 
-    String output = compiler.execute(null /* renameFile */, null /* sourcemapFile */);
+    String output = compiler.execute(null /* renameFile */, null /* sourcemapFile */, null, null);
 
     assertThat(output).isEqualTo(".example{background:url('sprite.png') no-repeat}");
   }
@@ -92,7 +92,7 @@ public class ClosureCommandLineCompilerTest {
 
     String compiledCss = new ClosureCommandLineCompiler(
         job, EXIT_CODE_HANDLER, errorManager)
-        .execute(null /*renameFile*/, sourceMapFile);
+        .execute(null /*renameFile*/, sourceMapFile, null, null);
 
     // The symptom was an IllegalStateException trapped by the compiler that
     // resulted in the exit handler being called which causes fail(...),

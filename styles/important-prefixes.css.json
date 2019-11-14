@@ -1,0 +1,15 @@
+{
+  "padding": [
+    "calc(10px), calc(5px)"
+  ],
+  "display": [
+    "flex"
+  ],
+  "background-image": [
+    "linear-gradient(45deg,white,green)",
+    "repeating-linear-gradient(45deg,white,green)"
+  ],
+  "flex-wrap": [
+    "wrap"
+  ]
+}

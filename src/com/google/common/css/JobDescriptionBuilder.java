@@ -55,6 +55,7 @@ public class JobDescriptionBuilder {
   boolean allowUnrecognizedFunctions;
   boolean allowDuplicateDeclarations;
   boolean expandBrowserPrefix;
+  String outputBrowserPrefix;
   Set<String> allowedNonStandardFunctions;
   boolean allowUnrecognizedProperties;
   Set<String> allowedUnrecognizedProperties;
@@ -99,6 +100,7 @@ public class JobDescriptionBuilder {
     this.allowUnrecognizedFunctions = false;
     this.allowDuplicateDeclarations = false;
     this.expandBrowserPrefix = false;
+    this.outputBrowserPrefix = null;
     this.allowedNonStandardFunctions = Sets.newHashSet();
     this.allowUnrecognizedProperties = false;
     this.allowedUnrecognizedProperties = Sets.newHashSet();
@@ -145,6 +147,7 @@ public class JobDescriptionBuilder {
     this.sourceMapIncludeContent = jobToCopy.sourceMapIncludeContent;
     this.rootSelector = jobToCopy.rootSelector;
     this.expandBrowserPrefix = jobToCopy.expandBrowserPrefix;
+    this.outputBrowserPrefix = jobToCopy.outputBrowserPrefix;
     this.allowedNonStandardFunctions =
         ImmutableSet.copyOf(jobToCopy.allowedNonStandardFunctions);
     this.allowUnrecognizedProperties = jobToCopy.allowUnrecognizedProperties;
@@ -378,9 +381,10 @@ public class JobDescriptionBuilder {
       this.expandBrowserPrefix = expand;
       return this;
   }
-
-  public JobDescriptionBuilder allowExpandBrowserPrefix() {
-    return setExpandBrowserPrefix(true);
+  public JobDescriptionBuilder setOutputBrowserPrefix(String output) {
+      checkJobIsNotAlreadyCreated();
+      this.outputBrowserPrefix = output;
+      return this;
   }
 
   public JobDescriptionBuilder setAllowUnrecognizedProperties(boolean allow) {
@@ -533,7 +537,7 @@ public class JobDescriptionBuilder {
         optimize, trueConditionNames, useInternalBidiFlipper, swapLtrRtlInUrl,
         swapLeftRightInUrl, simplifyCss, eliminateDeadStyles,
         allowDefPropagation, allowUnrecognizedFunctions, allowDuplicateDeclarations,
-        expandBrowserPrefix,
+        expandBrowserPrefix, outputBrowserPrefix,
         allowedNonStandardFunctions, allowUnrecognizedProperties,
         allowedUnrecognizedProperties, allowUndefinedConstants,
         allowMozDocument, vendor,

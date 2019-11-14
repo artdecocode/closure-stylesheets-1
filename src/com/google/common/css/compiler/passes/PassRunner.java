@@ -16,6 +16,8 @@
 
 package com.google.common.css.compiler.passes;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.annotation.Nullable;
@@ -47,6 +49,8 @@ public class PassRunner {
   private final ErrorManager errorManager;
   private final RecordingSubstitutionMap recordingSubstitutionMap;
   private final String rootSelector;
+  private CssTree prefixTree;
+  private HashMap<String, ArrayList<String>> tests;
 
   public PassRunner(JobDescription job, ErrorManager errorManager) {
     this(job, errorManager, createSubstitutionMap(job), job.rootSelector);
@@ -58,6 +62,16 @@ public class PassRunner {
     this.errorManager = errorManager;
     this.recordingSubstitutionMap = recordingSubstitutionMap;
     this.rootSelector = rootSelector;
+    this.prefixTree = null;
+    this.tests = null;
+  }
+
+  public CssTree getPrefixesTree() {
+    return this.prefixTree;
+  }
+
+  public HashMap<String, ArrayList<String>> getTests() {
+    return this.tests;
   }
 
   /**
@@ -111,10 +125,6 @@ public class PassRunner {
     collectMixinDefinitions.runPass();
     new ReplaceMixins(cssTree.getMutatingVisitController(), errorManager,
         collectMixinDefinitions.getDefinitions()).runPass();
-
-    if (job.expandBrowserPrefix) {
-      new AutoExpandBrowserPrefix(cssTree.getMutatingVisitController()).runPass();
-    }
 
     new ProcessComponents<Object>(cssTree.getMutatingVisitController(),
         errorManager).runPass();
@@ -195,6 +205,20 @@ public class PassRunner {
     if (rootSelector != null) {
       new CssPrefixing(cssTree.getMutatingVisitController(),
         rootSelector).runPass();
+    }
+
+    if (job.expandBrowserPrefix) {
+      AutoExpandBrowserPrefix pass = new AutoExpandBrowserPrefix(cssTree.getMutatingVisitController());
+      pass.runPass();
+      if (job.outputBrowserPrefix != null) {
+        this.prefixTree = new CssTree(cssTree);
+        new AutoExpandBrowserPrefix2(cssTree.getMutatingVisitController(), true).runPass();
+        new AutoExpandBrowserPrefix2(this.prefixTree.getMutatingVisitController(), false).runPass();
+        // Eliminate empty rules.
+        new EliminateEmptyRulesetNodes(this.prefixTree.getMutatingVisitController())
+            .runPass();
+        this.tests = pass.tests;
+      }
     }
   }
 

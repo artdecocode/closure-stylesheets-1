@@ -25,7 +25,8 @@
         "--root-selector", ".TEST",
         "--source_map_include_content",
         "--pretty-print",
-        "--expand-browser-prefix"
+        "--expand-browser-prefix",
+        "--output-browser-prefix", "styles/important-prefixes.css"
       ]
     },
     {

@@ -39,14 +39,20 @@ import com.google.common.css.compiler.passes.NullGssSourceMapGenerator;
 import com.google.common.css.compiler.passes.PassRunner;
 import com.google.common.css.compiler.passes.PrettyPrinter;
 import com.google.common.io.Files;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import javax.annotation.Nullable;
 
 /**
- * {@link DefaultCommandLineCompiler} provides the CSS parser from command line interface to users.
+ * {@link DefaultCommandLineCompiler} provides the CSS parser from command line
+ * interface to users.
  *
  * @author oana@google.com (Oana Florescu)
  */
@@ -62,6 +68,9 @@ public class DefaultCommandLineCompiler extends AbstractCommandLineCompiler<JobD
   private final ErrorManager errorManager;
   private final PassRunner passRunner;
   private final GssSourceMapGenerator gssSourceMapGenerator;
+
+  private String prefixesTree;
+  private HashMap<String, ArrayList<String>> tests;
 
   /**
    * Constructs a {@code DefaultCommandLineCompiler}.
@@ -128,13 +137,24 @@ public class DefaultCommandLineCompiler extends AbstractCommandLineCompiler<JobD
       passRunner.runPasses(cssTree);
     }
 
+    runPrinter(result, cssTree);
+
+    if (job.outputBrowserPrefix != null) {
+      StringBuilder prefixesTree = new StringBuilder();
+      runPrinter(prefixesTree, passRunner.getPrefixesTree());
+      this.prefixesTree = prefixesTree.toString();
+      this.tests = passRunner.getTests();
+    }
+  }
+
+  void runPrinter(StringBuilder result, CssTree tree) {
     if (job.outputFormat == OutputFormat.COMPRESSED) {
-      CompactPrinter compactPrinterPass = new CompactPrinter(cssTree, gssSourceMapGenerator, job.skipHtmlEscaping);
+      CompactPrinter compactPrinterPass = new CompactPrinter(tree, gssSourceMapGenerator, job.skipHtmlEscaping);
       compactPrinterPass.setPreserveMarkedComments(job.preserveImportantComments);
       compactPrinterPass.runPass();
       result.append(compactPrinterPass.getCompactPrintedString());
     } else {
-      PrettyPrinter prettyPrinterPass = new PrettyPrinter(cssTree
+      PrettyPrinter prettyPrinterPass = new PrettyPrinter(tree
           .getVisitController(),
           null /* use external buffer */,
           gssSourceMapGenerator);
@@ -151,7 +171,8 @@ public class DefaultCommandLineCompiler extends AbstractCommandLineCompiler<JobD
    * {@link RecordingSubstitutionMap}, then the renaming file will be written,
    * as well.
    */
-  protected String execute(@Nullable File renameFile, @Nullable File sourcemapFile) {
+  protected String execute(@Nullable File renameFile, @Nullable File sourcemapFile,
+  @Nullable File prefixesFile, @Nullable File prefixesMap) {
     try {
       String compilerOutput = compile();
 
@@ -183,6 +204,20 @@ public class DefaultCommandLineCompiler extends AbstractCommandLineCompiler<JobD
             Files.newWriter(sourcemapFile, UTF_8));
         gssSourceMapGenerator.appendOutputTo(sourceMapWriter, sourcemapFile.getName());
         sourceMapWriter.close();
+      }
+
+      if (job.outputBrowserPrefix != null) {
+        PrintWriter prefixesWriter = new PrintWriter(
+            Files.newWriter(prefixesFile, UTF_8));
+        prefixesWriter.write(this.prefixesTree);
+        prefixesWriter.close();
+
+        PrintWriter prefixesMapWriter = new PrintWriter(
+            Files.newWriter(prefixesMap, UTF_8));
+        // Write the JSON wrapped in this output format's formatString.
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        prefixesMapWriter.write(gson.toJson(this.tests));
+        prefixesMapWriter.close();
       }
 
       return compilerOutput;
