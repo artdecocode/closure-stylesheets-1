@@ -1,14 +1,15 @@
 {
+  "background": [
+    "linear-gradient(45deg,white,green)"
+  ],
   "display": [
-    "flex"
+    "flex",
+    "inline-flex"
   ],
-  "flex-basis": [
-    "0"
+  "width": [
+    "calc(10px)"
   ],
-  "flex-wrap": [
-    "wrap"
-  ],
-  "flex-grow": [
-    "1"
+  "flex-flow": [
+    "row wrap"
   ]
 }

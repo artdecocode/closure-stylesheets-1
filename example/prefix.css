@@ -1,8 +1,12 @@
 .row {
-  margin-right: -15px;
-  margin-left: -15px;
+  margin: 15px;
   display: flex;
-  flex-wrap: wrap;
-  flex-basis: 0;
-  flex-grow: 1;
+  flex-flow: row wrap;
+  height: calc(100vh - 10rem);
+  background: linear-gradient(45deg, white, green);
+}
+.col {
+  flex-flow: row-reverse nowrap;
+  display: inline-flex;
+  width: calc(10px);
 }

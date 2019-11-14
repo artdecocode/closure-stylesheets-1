@@ -368,12 +368,16 @@ There is an auto-expansion pass that adds vendor-specific directives, however it
 
 ```css
 .row {
-  margin-right: -15px;
-  margin-left: -15px;
+  margin: 15px;
   display: flex;
-  flex-wrap: wrap;
-  flex-basis: 0;
-  flex-grow: 1;
+  flex-flow: row wrap;
+  height: calc(100vh - 10rem);
+  background: linear-gradient(45deg, white, green);
+}
+.col {
+  flex-flow: row-reverse nowrap;
+  display: inline-flex;
+  width: calc(10px);
 }
 ```
 
@@ -386,25 +390,35 @@ closure-stylesheets:~$ java -jar closure-stylesheets.jar --expand-browser-prefix
 
 ```css
 .row {
-  margin-right: -15px;
-  margin-left: -15px;
+  margin: 15px;
   display: flex;
   display: -webkit-box;
   display: -moz-box;
   display: -webkit-flex;
   display: -ms-flexbox;
-  flex-wrap: wrap;
-  -moz-flex-wrap: wrap;
-  -ms-flex-wrap: wrap;
-  -webkit-flex-wrap: wrap;
-  flex-basis: 0;
-  -webkit-flex-basis: 0;
-  -ms-flex-preferred-size: 0;
-  flex-grow: 1;
-  -webkit-box-flex: 1;
-  box-flex: 1;
-  -ms-flex-positive: 1;
-  -webkit-flex-grow: 1;
+  flex-flow: row wrap;
+  -ms-flex-flow: row wrap;
+  -webkit-flex-flow: row wrap;
+  height: calc(100vh - 10rem);
+  height: -webkit-calc(100vh - 10rem);
+  height: -moz-calc(100vh - 10rem);
+  background: linear-gradient(45deg,white,green);
+  background: -webkit-linear-gradient(45deg,white,green);
+  background: -moz-linear-gradient(45deg,white,green);
+  background: -ms-linear-gradient(45deg,white,green);
+  background: -o-linear-gradient(45deg,white,green);
+}
+.col {
+  flex-flow: row-reverse nowrap;
+  -ms-flex-flow: row-reverse nowrap;
+  -webkit-flex-flow: row-reverse nowrap;
+  display: inline-flex;
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  width: calc(10px);
+  width: -webkit-calc(10px);
+  width: -moz-calc(10px);
 }
 ```
 
@@ -421,12 +435,16 @@ closure-stylesheets:~$ java -jar closure-stylesheets.jar --expand-browser-prefix
 
 ```css
 .row {
-  margin-right: -15px;
-  margin-left: -15px;
+  margin: 15px;
   display: flex;
-  flex-wrap: wrap;
-  flex-basis: 0;
-  flex-grow: 1;
+  flex-flow: row wrap;
+  height: calc(100vh - 10rem);
+  background: linear-gradient(45deg,white,green);
+}
+.col {
+  flex-flow: row-reverse nowrap;
+  display: inline-flex;
+  width: calc(10px);
 }
 ```
 
@@ -440,15 +458,23 @@ As you can see, the input does not contain the expanded properties, however 2 ne
   display: -moz-box;
   display: -webkit-flex;
   display: -ms-flexbox;
-  -moz-flex-wrap: wrap;
-  -ms-flex-wrap: wrap;
-  -webkit-flex-wrap: wrap;
-  -webkit-flex-basis: 0;
-  -ms-flex-preferred-size: 0;
-  -webkit-box-flex: 1;
-  box-flex: 1;
-  -ms-flex-positive: 1;
-  -webkit-flex-grow: 1;
+  -ms-flex-flow: row wrap;
+  -webkit-flex-flow: row wrap;
+  height: -webkit-calc(100vh - 10rem);
+  height: -moz-calc(100vh - 10rem);
+  background: -webkit-linear-gradient(45deg,white,green);
+  background: -moz-linear-gradient(45deg,white,green);
+  background: -ms-linear-gradient(45deg,white,green);
+  background: -o-linear-gradient(45deg,white,green);
+}
+.col {
+  -ms-flex-flow: row-reverse nowrap;
+  -webkit-flex-flow: row-reverse nowrap;
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  width: -webkit-calc(10px);
+  width: -moz-calc(10px);
 }
 ```
 
@@ -456,26 +482,27 @@ and **example/prefixes.css.json**
 
 ```json
 {
+  "background": [
+    "linear-gradient(45deg,white,green)"
+  ],
   "display": [
-    "flex"
+    "flex",
+    "inline-flex"
   ],
-  "flex-basis": [
-    "0"
+  "width": [
+    "calc(10px)"
   ],
-  "flex-wrap": [
-    "wrap"
-  ],
-  "flex-grow": [
-    "1"
+  "flex-flow": [
+    "row wrap"
   ]
 }
 ```
 
 There are 3 general cases for the map:
 
-1. A property regardless of the value, such as `flex-flow` that will be expanded into `-[webkit|ms]-flex-flow`. The shortest value will be added to the map, because here we expand the property name.
-1. A value of a property, such as `display: flex` or `display: inline-flex`. Each value will be tested against the key.
-1. A value which is a function, like `calc` or `linear-gradient`. The shorted value will be selected (e.g., between `calc(3px)` and `calc(0.1855rem)`, the first one will be selected) and its property name used (e.g., `height`).
+1. A property regardless of the value, such as `flex-flow` that will be expanded into `-[]-flex-flow`. The shortest value will be added to the map (_`row wrap`_), because here we expand the property name.
+1. A value of a property, such as `display: flex` or `display: inline-flex`. Each value will be added to the map to be tested against its property name.
+1. A value which is a function, like `calc` or `linear-gradient`. The shorted value will be selected (e.g., between `calc(10px)` and `calc(100vh - 10rem)`, the first one will be selected) and its property name used (such as `width` in the example).
 
 The map will only be created for unprefixed properties, because only they are expanded, i.e. `-ms-flex` is not expanded and will not be tested against because it's already in the CSS.
 
@@ -523,6 +550,7 @@ And a noscript version should be added to the head of the document:
   </head>
 </html>
 ```
+
 
 ### Keyframes
 
