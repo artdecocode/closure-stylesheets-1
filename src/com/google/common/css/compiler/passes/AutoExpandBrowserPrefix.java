@@ -24,8 +24,10 @@ import com.google.common.css.compiler.ast.CssDeclarationNode;
 import com.google.common.css.compiler.ast.CssFunctionNode;
 import com.google.common.css.compiler.ast.CssMixinDefinitionNode;
 import com.google.common.css.compiler.ast.CssNode;
+import com.google.common.css.compiler.ast.CssPriorityNode;
 import com.google.common.css.compiler.ast.CssPropertyNode;
 import com.google.common.css.compiler.ast.CssPropertyValueNode;
+import com.google.common.css.compiler.ast.CssRootNode;
 import com.google.common.css.compiler.ast.CssValueNode;
 import com.google.common.css.compiler.ast.DefaultTreeVisitor;
 import com.google.common.css.compiler.ast.MutatingVisitController;
@@ -58,11 +60,17 @@ public class AutoExpandBrowserPrefix extends DefaultTreeVisitor implements CssCo
   private final ImmutableList<BrowserPrefixRule> expansionRules;
   private boolean inDefMixinBlock;
   public HashMap<String, ArrayList<String>> tests;
+  private HashMap<String, String> handledMatchingValueFunctions;
+  private HashMap<String, String> handledMatchingValueFunctionsProps;
+  private HashMap<String, String> noValues;
 
   public AutoExpandBrowserPrefix(MutatingVisitController visitController) {
     this.visitController = visitController;
     this.expansionRules = BrowserPrefixGenerator.getExpansionRules();
     this.tests = new HashMap<>();
+    this.handledMatchingValueFunctions = new HashMap<>();
+    this.handledMatchingValueFunctionsProps = new HashMap<>();
+    this.noValues = new HashMap<>();
   }
 
   @Override
@@ -77,6 +85,20 @@ public class AutoExpandBrowserPrefix extends DefaultTreeVisitor implements CssCo
   }
 
   @Override
+  public void leaveTree(CssRootNode root) {
+    super.leaveTree(root);
+    for (String key : this.handledMatchingValueFunctions.keySet()) {
+      String name = this.handledMatchingValueFunctionsProps.get(key);
+      String value = this.handledMatchingValueFunctions.get(key);
+      addToTests(name, value, false);
+    }
+    for (String name : this.noValues.keySet()) {
+      String value = this.noValues.get(name);
+      addToTests(name, value, false);
+    }
+  }
+
+  @Override
   public boolean enterDeclaration(CssDeclarationNode declaration) {
     // Do not auto expand properties inside @defmixin blocks.
     // To enable compatibility with existing mixin expansion, don't apply the rules to the
@@ -86,10 +108,13 @@ public class AutoExpandBrowserPrefix extends DefaultTreeVisitor implements CssCo
     }
     CssDeclarationBlockNode parent = (CssDeclarationBlockNode) declaration.getParent();
 
-    for (BrowserPrefixRule rule : expansionRules) {
-      ImmutableList.Builder<CssDeclarationNode> expansionNodes = ImmutableList.builder();
-      expansionNodes.add(declaration);
+    ImmutableList.Builder<CssDeclarationNode> expansionNodes = ImmutableList.builder();
+    ImmutableList<CssDeclarationNode> replacements = null;
+    expansionNodes.add(declaration);
+    boolean noValue = false;
+    String matchingValueFunction = null;
 
+    for (BrowserPrefixRule rule : expansionRules) {
       // If the name is present in the rule then it must match the declaration.
       if (rule.getMatchPropertyName() != null
           && !rule.getMatchPropertyName().equals(declaration.getPropertyName().getPropertyName())) {
@@ -98,6 +123,7 @@ public class AutoExpandBrowserPrefix extends DefaultTreeVisitor implements CssCo
       // Handle case #1 when no property value is available.
       if (rule.getMatchPropertyValue() == null) {
         for (CssDeclarationNode ruleExpansionNode : rule.getExpansionNodes()) {
+          // todo handle important here
           CssPropertyNode propName = ruleExpansionNode.getPropertyName();
           if (BlockContainsPropName(parent, propName, declaration)) {
             continue;
@@ -109,46 +135,90 @@ public class AutoExpandBrowserPrefix extends DefaultTreeVisitor implements CssCo
           expansionNode.appendComment(new CssCommentNode("/* @alternate */", null));
           expansionNode.getPropertyName().setSourceCodeLocation(declaration.getSourceCodeLocation());
           expansionNodes.add(expansionNode);
+          noValue = true;
         }
       } else if (!rule.isFunction()) {
         // Handle case #2 where the property value is not a function.
         expansionNodes.addAll(getNonFunctionValueMatches(rule, declaration));
       } else if (hasMatchingValueOnlyFunction(declaration, rule)) {
         // todo check for existing duplicates here
-        // Handle case #3 where the property value is a function. Eg. linear-gradient().
+        // todo handle important here
+        matchingValueFunction = rule.getMatchPropertyValue();
+        // Handle case #3 where the property value is a function. Eg. ~linear-gradient~calc().
         // The rule is value-only and one of the declaration values matches.
         expansionNodes.addAll(expandMatchingValueOnlyFunctions(declaration, rule));
-      } else {
+      } else { // this were functions like linear-gradient to
+        // specific property (background-image), but are disabled now to become case #3.
         // todo check for existing duplicates here
+        // todo handle important here
+
         // The rule is not value-only or did not match, check other rules.
         expansionNodes.addAll(getOtherMatches(declaration, rule));
       }
 
-      ImmutableList<CssDeclarationNode> replacements = expansionNodes.build();
+      replacements = expansionNodes.build();
 
       if (replacements.size() > 1) {
-        String name = declaration.getPropertyName().getValue();
-        String value = declaration.getPropertyValue().toString();
-        if (!this.tests.containsKey(name)) {
-          this.tests.put(name, new ArrayList<String>());
-        }
-        ArrayList<String> values = this.tests.get(name);
-        if (!values.contains(name)) {
-          values.add(value.subSequence(1, value.length() - 1).toString());
-        }
-
         visitController.replaceCurrentBlockChildWith(
             replacements, false /* visitTheReplacementNodes */);
         break; // found a match, don't need to look for more
       }
     }
+    if (replacements != null && replacements.size() > 1) {
+      String value = PassUtil.printPropertyValue(declaration.getPropertyValue()).trim();
+      String name = declaration.getPropertyName().getValue();
+
+      // handle at tree exit
+      if (matchingValueFunction != null) {
+        String current = this.handledMatchingValueFunctions.get(matchingValueFunction);
+        if (current == null) {
+          this.handledMatchingValueFunctions.put(matchingValueFunction, value);
+          this.handledMatchingValueFunctionsProps.put(matchingValueFunction, name);
+          current = value;
+        }
+        if (current.length() > value.length()) {
+          this.handledMatchingValueFunctions.put(matchingValueFunction, value);
+          this.handledMatchingValueFunctionsProps.put(matchingValueFunction, name);
+        }
+        return true;
+      } else if (noValue) {
+        String current = this.noValues.get(name);
+        if (current == null) {
+          this.noValues.put(name, value);
+          current = value;
+        }
+        if (current.length() > value.length()) {
+          this.noValues.put(name, value);
+        }
+      } else {
+        addToTests(name, value, noValue);
+      }
+    }
     return true;
+  }
+
+  void addToTests(String name, String value, boolean noValue) {
+    if (!this.tests.containsKey(name)) {
+      this.tests.put(name, new ArrayList<String>());
+    }
+    ArrayList<String> values = this.tests.get(name);
+    if (!values.contains(value)) values.add(value);
+    // if (noValue && values.size() == 0) {
+    //   values.add(value);
+    // } else if (!noValue && !values.contains(value)) {
+    //   values.add(value);
+    // }
   }
 
   protected ImmutableList<CssDeclarationNode> getNonFunctionValueMatches(
       BrowserPrefixRule rule, CssDeclarationNode declaration) {
-    // Ensure that the property value matches exactly.
-    if (!(declaration.getPropertyValue().getChildren().size() == 1
+    // Ensure that the property value matches exactly. fix important
+    List<CssValueNode> children = declaration.getPropertyValue().getChildren();
+    CssPriorityNode priority = null;
+    if (children.size() == 2 && children.get(1) instanceof CssPriorityNode) {
+      priority = (CssPriorityNode) children.get(1);
+    }
+    if (!((children.size() == 1 || priority != null)
         && rule.getMatchPropertyValue()
             .equals(declaration.getPropertyValue().getChildAt(0).getValue()))) {
       return ImmutableList.of();
@@ -184,6 +254,9 @@ public class AutoExpandBrowserPrefix extends DefaultTreeVisitor implements CssCo
       }
       CssDeclarationNode expansionNode = ruleExpansionNode.deepCopy();
       expansionNode.setSourceCodeLocation(declaration.getSourceCodeLocation());
+      if (priority != null) {
+        expansionNode.getPropertyValue().addChildToBack(new CssPriorityNode(priority));
+      }
       replacements.add(expansionNode);
     }
     return replacements.build();

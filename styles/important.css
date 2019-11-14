@@ -1,14 +1,10 @@
 .row {
-  display: -ms-flexbox;
-  display: flex;
-  -ms-flex-wrap: wrap;
-  flex-wrap: wrap;
-  margin-right: -15px;
-  margin-left: -15px;
-  padding: calc(10px) calc(5px);
-  background-image: linear-gradient(45deg, white, green);
+  border-radius: 2px 2px solid;
+  display: flex !important;
+  flex-basis: 0 !important;
 }
-.test {
-  padding: 1rem;
-  background-image: repeating-linear-gradient(45deg, white, green);
+@media (min-width: 500px) {
+  .row {
+    display: block;
+  }
 }

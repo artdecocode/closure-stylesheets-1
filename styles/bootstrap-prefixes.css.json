@@ -1,0 +1,78 @@
+{
+  "align-self": [
+    "auto"
+  ],
+  "background-size": [
+    "100% 100%"
+  ],
+  "flex-flow": [
+    "row wrap"
+  ],
+  "transition-property": [
+    "opacity"
+  ],
+  "box-sizing": [
+    "border-box"
+  ],
+  "flex-wrap": [
+    "wrap"
+  ],
+  "border-radius": [
+    "0"
+  ],
+  "box-shadow": [
+    "none"
+  ],
+  "flex-shrink": [
+    "0"
+  ],
+  "transform": [
+    "none"
+  ],
+  "flex-direction": [
+    "row"
+  ],
+  "align-content": [
+    "center"
+  ],
+  "flex": [
+    "1"
+  ],
+  "background-image": [
+    "linear-gradient(45deg,rgba(255,255,255,.15) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.15) 50%,rgba(255,255,255,.15) 75%,transparent 75%,transparent)"
+  ],
+  "order": [
+    "0"
+  ],
+  "display": [
+    "flex",
+    "inline-flex"
+  ],
+  "flex-basis": [
+    "0"
+  ],
+  "transition": [
+    "none"
+  ],
+  "flex-grow": [
+    "1"
+  ],
+  "animation": [
+    "none"
+  ],
+  "backface-visibility": [
+    "hidden"
+  ],
+  "width": [
+    "calc(1rem - 4px)"
+  ],
+  "justify-content": [
+    "center"
+  ],
+  "position": [
+    "sticky"
+  ],
+  "align-items": [
+    "center"
+  ]
+}

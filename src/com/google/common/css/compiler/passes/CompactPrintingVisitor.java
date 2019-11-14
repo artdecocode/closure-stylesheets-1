@@ -75,6 +75,7 @@ public class CompactPrintingVisitor extends DefaultTreeVisitor {
 
   private String compactedPrintedString = null;
   private boolean skipHtmlEscaping = false;
+  private boolean noImportant = false;
 
   public CompactPrintingVisitor(VisitController visitController, CodeBuffer buffer) {
     this.visitController = checkNotNull(visitController);
@@ -82,9 +83,13 @@ public class CompactPrintingVisitor extends DefaultTreeVisitor {
   }
 
   public CompactPrintingVisitor(VisitController visitController, CodeBuffer buffer, boolean skipHtmlEscaping) {
-    this.visitController = checkNotNull(visitController);
-    this.buffer = checkNotNull(buffer);
+    this(visitController, buffer);
     this.skipHtmlEscaping = skipHtmlEscaping;
+  }
+  public CompactPrintingVisitor(VisitController visitController, CodeBuffer buffer, boolean skipHtmlEscaping,
+    boolean noImportant) {
+    this(visitController, buffer, skipHtmlEscaping);
+    this.noImportant = noImportant;
   }
 
   @Override
@@ -323,6 +328,7 @@ public class CompactPrintingVisitor extends DefaultTreeVisitor {
   @Override
   public boolean enterValueNode(CssValueNode node) {
     if (node instanceof CssPriorityNode) {
+      if (this.noImportant) return true;
       buffer.deleteLastCharIfCharIs(' ');
     }
     appendValueNode(node);

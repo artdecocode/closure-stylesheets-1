@@ -28,6 +28,11 @@ public class CompactPrinter extends CodePrinter {
 
   private String compactedPrintedString = null;
 
+  /**
+   * Disable important priority printing.
+   */
+  private boolean noImportant = false;
+
   public CompactPrinter(
       CssNode subtree, @Nullable CodeBuffer buffer, @Nullable GssSourceMapGenerator generator) {
     super(subtree.getVisitController(), buffer, generator);
@@ -39,6 +44,11 @@ public class CompactPrinter extends CodePrinter {
 
   public CompactPrinter(CssNode subtree) {
     this(subtree, null /* buffer */);
+  }
+
+  public CompactPrinter(CssNode subtree, boolean skipImportant) {
+    this(subtree, null /* buffer */);
+    this.noImportant = skipImportant;
   }
 
   public CompactPrinter(
@@ -65,7 +75,7 @@ public class CompactPrinter extends CodePrinter {
 
   @Override
   protected CssTreeVisitor createVisitor(VisitController visitController, CodeBuffer buffer) {
-    return new CompactPrintingVisitor(visitController, buffer, this.skipHtmlEscaping);
+    return new CompactPrintingVisitor(visitController, buffer, this.skipHtmlEscaping, this.noImportant);
   }
 
   /** Returns the CSS compacted printed output. */

@@ -22,6 +22,7 @@ import com.google.common.css.compiler.ast.CssBlockNode;
 import com.google.common.css.compiler.ast.CssCommentNode;
 import com.google.common.css.compiler.ast.CssDeclarationBlockNode;
 import com.google.common.css.compiler.ast.CssNode;
+import com.google.common.css.compiler.ast.CssPropertyValueNode;
 import com.google.common.css.compiler.ast.CssRootNode;
 import com.google.common.css.compiler.ast.CssRulesetNode;
 import com.google.common.css.compiler.ast.CssSelectorListNode;
@@ -72,6 +73,17 @@ public class PassUtil {
     // declaration block (e.g. 'foo{}'). The two curly brackets are removed so
     // that only the selector remains.
     return selectorListString.substring(0, selectorListString.length() - 2);
+  }
+
+  /**
+   * Prints a list of selector including the combinators and refiners but
+   * without a block behind with the compact printer.
+   */
+  public static String printPropertyValue(CssPropertyValueNode value) {
+    CompactPrinter compactPrinter = new CompactPrinter(value, true);
+    compactPrinter.runPass();
+    String s = compactPrinter.getCompactPrintedString();
+    return s;
   }
 
   /**

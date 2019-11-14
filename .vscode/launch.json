@@ -19,14 +19,14 @@
       // "args": ["styles/supports.css"]
       "args": [
         "--allow-duplicate-declarations",
-        "--preserve-important-comments", "styles/important.css",
-        "--output-source-map", "styles/important.css.map",
+        "--preserve-important-comments", "styles/bootstrap.css",
+        // "--output-source-map", "styles/important.css.map",
         "--rename", "SIMPLE",
         "--root-selector", ".TEST",
         "--source_map_include_content",
         "--pretty-print",
         "--expand-browser-prefix",
-        "--output-browser-prefix", "styles/important-prefixes.css"
+        "--output-browser-prefix", "styles/bootstrap-prefixes.css"
       ]
     },
     {

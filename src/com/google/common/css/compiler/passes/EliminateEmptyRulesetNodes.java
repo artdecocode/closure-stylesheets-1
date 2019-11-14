@@ -17,6 +17,7 @@
 package com.google.common.css.compiler.passes;
 
 import com.google.common.css.compiler.ast.CssCompilerPass;
+import com.google.common.css.compiler.ast.CssMediaRuleNode;
 import com.google.common.css.compiler.ast.CssRulesetNode;
 import com.google.common.css.compiler.ast.DefaultTreeVisitor;
 import com.google.common.css.compiler.ast.MutatingVisitController;
@@ -42,6 +43,13 @@ public class EliminateEmptyRulesetNodes extends DefaultTreeVisitor
       return false;
     }
     return true;
+  }
+
+  @Override
+  public void leaveMediaRule(CssMediaRuleNode node) {
+    if (node.getBlock().numChildren() == 0) {
+      visitController.removeCurrentNode();
+    }
   }
 
   @Override

@@ -1,16 +1,12 @@
 .TEST .a {
-  display: -webkit-box;
-  display: -moz-box;
-  display: -webkit-flex;
-  -moz-flex-wrap: wrap;
-  -webkit-flex-wrap: wrap;
-  padding: -webkit-calc(10px) -webkit-calc(5px);
-  padding: -moz-calc(10px) -moz-calc(5px);
-  background-image: -webkit-linear-gradient(45deg,white,green);
-  background-image: -moz-linear-gradient(45deg,white,green);
-  background-image: -ms-linear-gradient(45deg,white,green);
-  background-image: -o-linear-gradient(45deg,white,green);
+  -webkit-border-radius: 2px 2px solid;
+  -moz-border-radius: 2px 2px solid;
+  display: -webkit-box !important;
+  display: -moz-box !important;
+  display: -webkit-flex !important;
+  display: -ms-flexbox !important;
+  -webkit-flex-basis: 0 !important;
+  -ms-flex-preferred-size: 0 !important;
 }
-.TEST .b {
-  background-image: -webkit-repeating-linear-gradient(45deg,white,green);
+@media (min-width:500px) {
 }
