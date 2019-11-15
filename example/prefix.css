@@ -3,7 +3,7 @@
   display: flex;
   flex-flow: row wrap;
   height: calc(100vh - 10rem);
-  background: linear-gradient(45deg, white, green);
+  background: linear-gradient(5deg, red, tan);
 }
 .col {
   flex-flow: row-reverse nowrap;

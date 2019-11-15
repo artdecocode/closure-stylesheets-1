@@ -12,7 +12,8 @@ const rr = (file, version, next) => {
 }
 
 ;(async () => {
-  const next = await askSingle(`What is the next version after ${version}?`)
+  let next = await askSingle(`What is the next version after ${version}?`)
+  if (!next) next = version
 
   rr('package.json', version, next)
   rr('index.js', version, next)

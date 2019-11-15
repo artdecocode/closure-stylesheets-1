@@ -7,10 +7,10 @@
   -webkit-flex-flow: row wrap;
   height: -webkit-calc(100vh - 10rem);
   height: -moz-calc(100vh - 10rem);
-  background: -webkit-linear-gradient(45deg,white,green);
-  background: -moz-linear-gradient(45deg,white,green);
-  background: -ms-linear-gradient(45deg,white,green);
-  background: -o-linear-gradient(45deg,white,green);
+  background: -webkit-linear-gradient(5deg,red,tan);
+  background: -moz-linear-gradient(5deg,red,tan);
+  background: -ms-linear-gradient(5deg,red,tan);
+  background: -o-linear-gradient(5deg,red,tan);
 }
 .col {
   -ms-flex-flow: row-reverse nowrap;

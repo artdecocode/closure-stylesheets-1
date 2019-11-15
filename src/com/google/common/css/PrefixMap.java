@@ -44,12 +44,28 @@ public final class PrefixMap {
   private HashMap<String, HashMap<String, ArrayList<String>>> map;
   // e.g., expanding display: flex, but display: -ms-flex is already there
   private HashMap<String, ArrayList<String>> alternativeProps;
+  private HashMap<String, ArrayList<String>> globalPrefixesWithProps; // e.g., display:flex
+  private HashMap<String, Boolean> globalPrefixes; // e.g., hyphens
 
   public PrefixMap() {
     this.map = new HashMap<>();
     this.alternativeProps = new HashMap<>();
     this.handledMatchingValueFunctions = new HashMap<>();
     this.handledMatchingValueFunctionsProps = new HashMap<>();
+    this.globalPrefixes = new HashMap<>();
+    this.globalPrefixesWithProps = new HashMap<>();
+  }
+  public void addGlobalProp(String propName) { // e.g., hyphens
+    this.globalPrefixes.put(propName, true);
+  }
+  public void addGlobalPropValue(String propName, String propValue) { // e.g., display: flex
+    // this.globalPrefixes.put(propName, true);
+    ArrayList<String> current = this.globalPrefixesWithProps.get(propName);
+    if (current == null) {
+      current = Lists.newArrayList();
+      this.globalPrefixesWithProps.put(propName, current);
+    }
+    if (!current.contains(propValue)) current.add(propValue);
   }
   public void addAlternativePropertyName(String name, String alt) {
     if (name.equals(alt)) return;
@@ -96,11 +112,18 @@ public final class PrefixMap {
   public HashMap<String, ArrayList<String>> getHashMap() {
     HashMap<String, ArrayList<String>> hm = new HashMap<>();
     for (String propName : map.keySet()) {
+      if (globalPrefixes.containsKey(propName)) continue;
       ArrayList<String> alt = alternativeProps.get(propName);
       String k = alt == null ? propName : (propName + "|" + String.join("|", alt));
+
+      ArrayList<String> globalGenericValues = this.globalPrefixesWithProps.get(propName);
+
       HashMap<String, ArrayList<String>> vals = map.get(propName);
       ArrayList<String> joinedValues = Lists.newArrayList();
       for (String genericValueName : vals.keySet()) {
+        if (globalGenericValues != null && globalGenericValues.contains(genericValueName)) {
+          continue;
+        }
         ArrayList<String> values = vals.get(genericValueName);
         if (genericValueName.equals("/")) {
           joinedValues.add(values.get(0));
@@ -108,7 +131,9 @@ public final class PrefixMap {
           joinedValues.add(String.join("|", values));
         }
       }
-      hm.put(k, joinedValues);
+      if (joinedValues.size() > 0) {
+        hm.put(k, joinedValues);
+      }
     }
     for (String key : this.handledMatchingValueFunctions.keySet()) {
       String name = this.handledMatchingValueFunctionsProps.get(key);

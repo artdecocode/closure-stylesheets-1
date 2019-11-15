@@ -5,6 +5,7 @@
   display: inline-flex;
   flex: auto;
   hyphens: auto;
+  position: sticky;
 }
 .col {
   height: calc(1rem - 10px);

@@ -79,10 +79,20 @@ public class AutoExpandBrowserPrefix2 extends DefaultTreeVisitor implements CssC
     String propName = declaration.getPropertyName().getValue();
     String propValue = PassUtil.printPropertyValue(declaration.getPropertyValue());
 
-    // 1. check if the prototype rule matches any specified prefixes
-    boolean a = valueInPrefixes(declaration.autoExpandedFromProp, declaration.autoExpandedFromValue);
+    String fromProp = declaration.autoExpandedFromProp;
+    String fromValue = declaration.autoExpandedFromValue;
+    boolean a = valueInPrefixes(fromProp, fromValue);
     if (a) {
-      addToPrefixMap(declaration, propName, propValue);
+      if (prefixMap != null) {
+        if (fromProp != null && fromValue == null) {
+          prefixMap.addGlobalProp(fromProp);
+        } else if (fromProp != null) {
+          prefixMap.addGlobalPropValue(fromProp, fromValue);
+        } else {
+          System.out.print("s");
+        }
+      }
+      // addToPrefixMap(declaration, propName, propValue);
       return true;
     }
     // 2. check the expanded match itself
