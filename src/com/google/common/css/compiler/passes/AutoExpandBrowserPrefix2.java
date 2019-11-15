@@ -16,6 +16,7 @@
 
 package com.google.common.css.compiler.passes;
 
+import com.google.common.css.PrefixMap;
 import com.google.common.css.compiler.ast.CssCommentNode;
 import com.google.common.css.compiler.ast.CssCompilerPass;
 import com.google.common.css.compiler.ast.CssDeclarationNode;
@@ -36,6 +37,7 @@ public class AutoExpandBrowserPrefix2 extends DefaultTreeVisitor implements CssC
   private boolean removingAutoExpanded;
   private boolean removingOriginal;
   HashMap<String, ArrayList<String>> prefixes;
+  private PrefixMap prefixMap;
 
   public AutoExpandBrowserPrefix2(MutatingVisitController visitController, Boolean remove,
     HashMap<String, ArrayList<String>> prefixes) {
@@ -45,17 +47,15 @@ public class AutoExpandBrowserPrefix2 extends DefaultTreeVisitor implements CssC
     this.prefixes = prefixes;
   }
 
-  /**
+  public AutoExpandBrowserPrefix2(MutatingVisitController mutatingVisitController, boolean b,
+		HashMap<String, ArrayList<String>> prefixes2, PrefixMap prefixMap) {
+      this(mutatingVisitController, b, prefixes2);
+    this.prefixMap = prefixMap;
+}
+
+/**
    * Returns false if the property didn't match by value;
-   *
-   * @return
    */
-  private static Boolean valueAllowed(ArrayList<String> allowedValues, String value) {
-    if (allowedValues == null) return null; // don't know
-    if (allowedValues.size() == 0) return true; // keep because of property name
-    if (allowedValues.contains(value)) return true; // keep this specific value
-    return false;
-  }
   private boolean valueInPrefixes(String propName, String value) {
     ArrayList<String> values = this.prefixes.get(propName);
     if (values == null) return false;
@@ -63,15 +63,34 @@ public class AutoExpandBrowserPrefix2 extends DefaultTreeVisitor implements CssC
     if (values.contains(value)) return true;
     return false;
   }
+
+  private void addToPrefixMap(CssDeclarationNode declaration, String propName, String propValue) {
+    if (prefixMap != null) {
+      // e.g., hyphens
+      if (declaration.autoExpandedFromValue == null) {
+        prefixMap.addAlternativePropertyName(declaration.autoExpandedFromProp, propName);
+      } else { // e.g., display: flex
+        prefixMap.addProperty(propName, propValue, declaration.autoExpandedFromValue);
+      }
+    }
+  }
+
   private boolean shouldPreserve(CssDeclarationNode declaration) {
+    String propName = declaration.getPropertyName().getValue();
+    String propValue = PassUtil.printPropertyValue(declaration.getPropertyValue());
+
     // 1. check if the prototype rule matches any specified prefixes
-      boolean a = valueInPrefixes(declaration.autoExpandedFromProp, declaration.autoExpandedFromValue);
-    if (a) return true;
-    boolean b = valueInPrefixes(declaration.getPropertyName().getValue(), "");
-    if (b) return true;
-    boolean c = valueInPrefixes(declaration.getPropertyName().getValue(),
-      PassUtil.printPropertyValue(declaration.getPropertyValue()));
-    if (c) return true;
+    boolean a = valueInPrefixes(declaration.autoExpandedFromProp, declaration.autoExpandedFromValue);
+    if (a) {
+      addToPrefixMap(declaration, propName, propValue);
+      return true;
+    }
+    // 2. check the expanded match itself
+    boolean b = valueInPrefixes(propName, propValue);
+    if (b) {
+      addToPrefixMap(declaration, propName, propValue);
+      return true;
+    }
     return false;
   }
 
@@ -105,6 +124,9 @@ public class AutoExpandBrowserPrefix2 extends DefaultTreeVisitor implements CssC
       } else if (declaration.autoExpandedFromValue != null) {
         boolean has = this.prefixes.containsKey(declaration.autoExpandedFromValue);
         if (has) visitController.removeCurrentNode();
+        else {
+          // add to the map
+        }
       }
     }
     return true;

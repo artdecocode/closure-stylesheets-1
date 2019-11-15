@@ -31,8 +31,8 @@
         "--output-browser-prefix",
         "styles/important-prefixes.css",
         "--prefixes", "-webkit-border-radius",
-        "--prefixes", "-ms-hyphens",
-        "--prefixes", "-webkit-hyphens",
+        "--prefixes", "hyphens",
+        "--prefixes", "display:flex",
         "--prefixes", "display:-ms-flexbox",
         "--prefixes", "display:-ms-inline-flexbox",
         // "styles/bootstrap-prefixes.css"

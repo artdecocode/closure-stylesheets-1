@@ -17,6 +17,7 @@
 package com.google.common.css.compiler.passes;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.css.PrefixMap;
 import com.google.common.css.compiler.ast.CssCommentNode;
 import com.google.common.css.compiler.ast.CssCompilerPass;
 import com.google.common.css.compiler.ast.CssDeclarationBlockNode;
@@ -59,17 +60,13 @@ public class AutoExpandBrowserPrefix extends DefaultTreeVisitor implements CssCo
   private final MutatingVisitController visitController;
   private final ImmutableList<BrowserPrefixRule> expansionRules;
   private boolean inDefMixinBlock;
-  public HashMap<String, ArrayList<String>> tests;
-  private HashMap<String, String> handledMatchingValueFunctions;
-  private HashMap<String, String> handledMatchingValueFunctionsProps;
   private HashMap<String, String> noValues;
+  PrefixMap prefixMap;
 
   public AutoExpandBrowserPrefix(MutatingVisitController visitController) {
     this.visitController = visitController;
     this.expansionRules = BrowserPrefixGenerator.getExpansionRules();
-    this.tests = new HashMap<>();
-    this.handledMatchingValueFunctions = new HashMap<>();
-    this.handledMatchingValueFunctionsProps = new HashMap<>();
+    this.prefixMap = new PrefixMap();
     this.noValues = new HashMap<>();
   }
 
@@ -87,15 +84,11 @@ public class AutoExpandBrowserPrefix extends DefaultTreeVisitor implements CssCo
   @Override
   public void leaveTree(CssRootNode root) {
     super.leaveTree(root);
-    for (String key : this.handledMatchingValueFunctions.keySet()) {
-      String name = this.handledMatchingValueFunctionsProps.get(key);
-      String value = this.handledMatchingValueFunctions.get(key);
-      addToTests(name, value, false);
-    }
     for (String name : this.noValues.keySet()) {
       String value = this.noValues.get(name);
-      addToTests(name, value, false);
+      this.prefixMap.addProperty(name, value, null);
     }
+    // System.out.print("debugger");
   }
 
   @Override
@@ -126,6 +119,8 @@ public class AutoExpandBrowserPrefix extends DefaultTreeVisitor implements CssCo
           // todo handle important here
           CssPropertyNode propName = ruleExpansionNode.getPropertyName();
           if (BlockContainsPropName(parent, propName, declaration)) {
+            this.prefixMap.addAlternativePropertyName(rule.getMatchPropertyName(),
+              propName.getPropertyName());
             continue;
           }
           CssDeclarationNode expansionNode = ruleExpansionNode.deepCopy();
@@ -174,17 +169,8 @@ public class AutoExpandBrowserPrefix extends DefaultTreeVisitor implements CssCo
 
       // handle at tree exit
       if (matchingValueFunction != null) {
-        String current = this.handledMatchingValueFunctions.get(matchingValueFunction);
-        if (current == null) {
-          this.handledMatchingValueFunctions.put(matchingValueFunction, value);
-          this.handledMatchingValueFunctionsProps.put(matchingValueFunction, name);
-          current = value;
-        }
-        if (current.length() > value.length()) {
-          this.handledMatchingValueFunctions.put(matchingValueFunction, value);
-          this.handledMatchingValueFunctionsProps.put(matchingValueFunction, name);
-        }
-        return true;
+        this.prefixMap.addValueFunction(matchingValueFunction, name, value);
+        // return true;
       } else if (noValue) {
         String current = this.noValues.get(name);
         if (current == null) {
@@ -195,23 +181,18 @@ public class AutoExpandBrowserPrefix extends DefaultTreeVisitor implements CssCo
           this.noValues.put(name, value);
         }
       } else {
-        addToTests(name, value, noValue);
+        this.prefixMap.addProperty(name, value, value);
       }
     }
     return true;
   }
 
-  void addToTests(String name, String value, boolean noValue) {
-    if (!this.tests.containsKey(name)) {
-      this.tests.put(name, new ArrayList<String>());
-    }
-    ArrayList<String> values = this.tests.get(name);
-    if (!values.contains(value)) values.add(value);
-    // if (noValue && values.size() == 0) {
-    //   values.add(value);
-    // } else if (!noValue && !values.contains(value)) {
-    //   values.add(value);
+  void addToTests(String name, String value, String mergeWith) {
+    // if (!this.tests.containsKey(name)) {
+    //   this.tests.put(name, new ArrayList<String>());
     // }
+    // ArrayList<String> values = this.tests.get(name);
+    // if (!values.contains(value)) values.add(value);
   }
 
   protected ImmutableList<CssDeclarationNode> getNonFunctionValueMatches(
@@ -249,10 +230,13 @@ public class AutoExpandBrowserPrefix extends DefaultTreeVisitor implements CssCo
 
     for (CssDeclarationNode ruleExpansionNode : rule.getExpansionNodes()) {
       if (includesName) {
-        Boolean includes = BlockContainsPropWithValue(
+        CssPropertyNode propName = ruleExpansionNode.getPropertyName();
+        String propValue = BlockContainsPropWithValue(
           (CssDeclarationBlockNode) declaration.getParent(),
-          ruleExpansionNode.getPropertyName(), ruleExpansionNode.getPropertyValue(), declaration);
-        if (includes) {
+          propName, ruleExpansionNode.getPropertyValue(), declaration);
+        if (propValue != null) {
+          this.prefixMap.addProperty(propName.getPropertyName(), propValue,
+          rule.getMatchPropertyValue());
           continue;
         }
       }
@@ -370,7 +354,7 @@ public class AutoExpandBrowserPrefix extends DefaultTreeVisitor implements CssCo
     return false;
   }
   // parent:CssDeclarationBlockNode
-  private static boolean BlockContainsPropWithValue(CssDeclarationBlockNode node, CssPropertyNode propName,
+  private static String BlockContainsPropWithValue(CssDeclarationBlockNode node, CssPropertyNode propName,
   CssPropertyValueNode propertyValue, CssDeclarationNode declaration) {
     for (CssNode decl : node.getChildren()) {
       CssDeclarationNode d = (CssDeclarationNode) decl;
@@ -379,10 +363,12 @@ public class AutoExpandBrowserPrefix extends DefaultTreeVisitor implements CssCo
       }
       Boolean nameEquals = d.getPropertyName().getValue().equals(propName.getValue());
       if (!nameEquals) continue;
-      Boolean valueEquals = d.getPropertyValue().toString().equals(propertyValue.toString());
-      if (valueEquals) return true;
+      String propValue = PassUtil.printPropertyValue(propertyValue);
+      Boolean valueEquals = PassUtil.printPropertyValue(d.getPropertyValue())
+        .equals(propValue);
+      if (valueEquals) return propValue;
     }
-    return false;
+    return null;
   }
 
   private static boolean BlockContainsPropName(CssDeclarationBlockNode node, CssPropertyNode propName,

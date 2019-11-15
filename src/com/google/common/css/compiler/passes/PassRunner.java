@@ -215,11 +215,11 @@ public class PassRunner {
         new AutoExpandBrowserPrefix2(cssTree.getMutatingVisitController(),
           true, job.prefixes).runPass();
         new AutoExpandBrowserPrefix2(this.prefixTree.getMutatingVisitController(),
-          false, job.prefixes).runPass();
+          false, job.prefixes, pass.prefixMap).runPass();
         // Eliminate empty rules.
         new EliminateEmptyRulesetNodes(this.prefixTree.getMutatingVisitController())
             .runPass();
-        this.tests = pass.tests;
+        this.tests = pass.prefixMap.getHashMap(); //   pass.tests;
       }
     }
   }

@@ -6,3 +6,6 @@ node_modules
 closure-stylesheets.jar
 yarn-error.log
 .documentary/cache
+styles/important.css
+styles/important-prefixes.css.json
+styles/important-prefixes.css
