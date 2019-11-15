@@ -1,3 +1,10 @@
+## 15 November 2019
+
+### [1.12.0](https://github.com/artdecocode/closure-stylesheets-java/compare/v1.11.1...v1.12.0)
+
+- [feature] Support `--prefixes` option to specify which prefixes to keep when outputting an expansion tree into a separate file.
+- [fix] Fix the `!important` expansion of no-value nodes.
+
 ## 14 November 2019
 
 ### [1.11.1](https://github.com/artdecocode/closure-stylesheets-java/compare/v1.11.0...v1.11.1)
