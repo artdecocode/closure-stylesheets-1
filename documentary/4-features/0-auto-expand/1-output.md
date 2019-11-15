@@ -31,35 +31,7 @@ The map will only be created for unprefixed properties, because only they are ex
 
 Now the prefixes map can be used on a page to figure out if to download the fallbacks:
 
-```js
-const entries = Object.entries(prefixes)
-let supportsAll = true
-if (CSS && 'supports' in CSS) {
-  let nonSupported = []
-  for (let i=0; i<entries.length; i++) {
-    const [key, values] = entries[i]
-    values.forEach((value) => {
-      const s = CSS.supports(key, value)
-      if (!s) {
-        supportsAll = false
-        nonSupported.push(`${key}: ${value}`)
-      }
-    })
-  }
-  if (nonSupported.length) {
-    console.log('Browser does not support CSS properties: %s',
-      nonSupported.join('\n '))
-  }
-} else {
-  supportsAll = false
-}
-if (!supportsAll) {
-  const link = document.createElement('link')
-  link.rel = 'stylesheet'
-  link.href = 'prefixes.css'
-  document.head.appendChild(link)
-}
-```
+%EXAMPLE: example/script%
 
 And a noscript version should be added to the head of the document:
 
