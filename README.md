@@ -19,6 +19,7 @@ CSS. The tool also supports **[minification](#minification)**,
   * [Conditionals](#conditionals)
 - [Auto Expansion](#auto-expansion)
   * [Output Prefixes](#output-prefixes)
+  * [Specific Prefixes](#specific-prefixes)
   * [Keyframes](#keyframes)
     * [`@gen-webkit-keyframes`](#gen-webkit-keyframes)
 - [Minification](#minification)
@@ -450,7 +451,9 @@ closure-stylesheets:~$ java -jar closure-stylesheets.jar --expand-browser-prefix
 
 As you can see, the input does not contain the expanded properties, however 2 new files were generated:
 
-**example/prefixes.css**
+<table>
+<tr><th>example/prefixes.css</th><th>example/prefixes.css.json</th></tr>
+<tr><td>
 
 ```css
 .row {
@@ -477,8 +480,8 @@ As you can see, the input does not contain the expanded properties, however 2 ne
   width: -moz-calc(10px);
 }
 ```
-
-and **example/prefixes.css.json**
+</td>
+<td>
 
 ```json
 {
@@ -497,6 +500,8 @@ and **example/prefixes.css.json**
   ]
 }
 ```
+</td></tr>
+</table>
 
 There are 3 general cases for the map:
 
@@ -552,6 +557,112 @@ And a noscript version should be added to the head of the document:
 ```
 
 
+<p align="center"><a href="#table-of-contents">
+  <img src="/.documentary/section-breaks/4.svg?sanitize=true">
+</a></p>
+
+### Specific Prefixes
+
+When creating a separate output for prefixes, it is possible to have control over which rules are actually kept in the output CSS, and which are put into the external prefixes CSS. This is done with the `--prefix` flag. It can be of three kinds:
+
+1. A generic property name, such as `hyphens`, which will keep all expanded prefixes for the `hyphens` property name in the output CSS.
+2. A prefixed property name, e.g., `-ms-flex` that will keep that expand that rule in the output.
+3. A property name with a value to specify the exact expansions that should be preserved, e.g., `display:-ms-flexbox`.
+
+The map will be generated accordingly with the account of rules already present in the output CSS. Consider the following style:
+
+```css
+.row {
+  margin: 15px;
+  display: flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  flex: auto;
+  hyphens: auto;
+}
+.col {
+  height: calc(1rem - 10px);
+}
+```
+
+```console
+closure-stylesheets:~$ java -jar closure-stylesheets.jar --expand-browser-prefix \
+> --output-browser-prefix example/prefix/output.css --prefixes hyphens --prefixes -ms-flex \
+> --prefixes display:-ms-flexbox --pretty-print example/prefix/style.css
+```
+
+```css
+.row {
+  margin: 15px;
+  display: flex;
+  display: -ms-flexbox;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  flex: auto;
+  -ms-flex: auto;
+  hyphens: auto;
+  -webkit-hyphens: auto;
+  -moz-hyphens: auto;
+  -ms-hyphens: auto;
+}
+.col {
+  height: calc(1rem - 10px);
+}
+```
+
+This produced the following prefixes file and output map:
+
+<table>
+<tr><th>output.css</th><th>output.css.json</th></tr>
+<tr><td>
+
+```css
+.row {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -webkit-flex;
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  -webkit-box-flex: auto;
+  -moz-box-flex: auto;
+  -webkit-flex: auto;
+}
+.col {
+  height: -webkit-calc(1rem - 10px);
+  height: -moz-calc(1rem - 10px);
+}
+```
+</td>
+<td>
+
+```json
+{
+  "flex|-ms-flex": [
+    "auto"
+  ],
+  "display": [
+    "flex|-ms-flexbox",
+    "-ms-inline-flexbox|inline-flex"
+  ],
+  "hyphens|-webkit-hyphens|-moz-hyphens|-ms-hyphens": [
+    "auto"
+  ],
+  "height": [
+    "calc(1rem - 10px)"
+  ]
+}
+```
+</td></tr>
+</table>
+
+The `hyphens` rule was not added to the map because all of its expansions are present in the source CSS. The `flex|-ms-flex` were combined into a single key, so that we can check that either of those is supported (property name combination), and each of the expanded _display_ props such as _flex_ and _inline-flex_ were also combined to form `flex|-ms-flexbox` and `-ms-inline-flexbox|inline-flex` (property value combination). Using the script we've given above, it's possible to optimise the prefixes CSS tree loading process.
+
+For example, neither _Safari_ nor _Edge_ does not support `hyphens` without the `-webkit-` prefix, however _Firefox_ has supported it for a number of years already. So we can pass `--prefixes -webkit-hyphens:auto -ms-hyphens:auto` to include those in the main stylesheet, while placing the rest of the rules in the separate prefixes CSS tree that will be downloaded on demand.
+
+<p align="center"><a href="#table-of-contents">
+  <img src="/.documentary/section-breaks/5.svg?sanitize=true">
+</a></p>
+
 ### Keyframes
 
 Additionally, keyframe rules can be generated for webkit, by using the <a name="gen-webkit-keyframes">`@gen-webkit-keyframes`</a> comment before the rule. This was part of the compiler however not documented.
@@ -606,7 +717,7 @@ Additionally, keyframe rules can be generated for webkit, by using the <a name="
 </table>
 
 <p align="center"><a href="#table-of-contents">
-  <img src="/.documentary/section-breaks/4.svg?sanitize=true">
+  <img src="/.documentary/section-breaks/6.svg?sanitize=true">
 </a></p>
 
 ## Minification
@@ -636,7 +747,7 @@ If you would like to create a vendor-specific stylesheet, you can use the
 is present, all vendor-specific properties for other vendors will be removed.
 
 <p align="center"><a href="#table-of-contents">
-  <img src="/.documentary/section-breaks/5.svg?sanitize=true">
+  <img src="/.documentary/section-breaks/7.svg?sanitize=true">
 </a></p>
 
 ## Linting
@@ -770,7 +881,7 @@ Note that some recognized properties will emit warnings. These warnings will not
 be silenced with the `--allowed-unrecognized-property` flag.
 
 <p align="center"><a href="#table-of-contents">
-  <img src="/.documentary/section-breaks/6.svg?sanitize=true">
+  <img src="/.documentary/section-breaks/8.svg?sanitize=true">
 </a></p>
 
 ## RTL Flipping
@@ -826,7 +937,7 @@ property instead of alongside it:
 ```
 
 <p align="center"><a href="#table-of-contents">
-  <img src="/.documentary/section-breaks/7.svg?sanitize=true">
+  <img src="/.documentary/section-breaks/9.svg?sanitize=true">
 </a></p>
 
 ## Renaming
@@ -1058,7 +1169,7 @@ wrapped in `goog.getCssName()`, or else they run the risk of being partially
 renamed.
 
 <p align="center"><a href="#table-of-contents">
-  <img src="/.documentary/section-breaks/8.svg?sanitize=true">
+  <img src="/.documentary/section-breaks/10.svg?sanitize=true">
 </a></p>
 
 ## Root Selector

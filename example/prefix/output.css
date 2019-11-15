@@ -1,0 +1,14 @@
+.row {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -webkit-flex;
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  -webkit-box-flex: auto;
+  -moz-box-flex: auto;
+  -webkit-flex: auto;
+}
+.col {
+  height: -webkit-calc(1rem - 10px);
+  height: -moz-calc(1rem - 10px);
+}

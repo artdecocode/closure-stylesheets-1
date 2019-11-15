@@ -1,0 +1,11 @@
+.row {
+  margin: 15px;
+  display: flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  flex: auto;
+  hyphens: auto;
+}
+.col {
+  height: calc(1rem - 10px);
+}

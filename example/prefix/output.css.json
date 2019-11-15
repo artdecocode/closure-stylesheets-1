@@ -1,0 +1,15 @@
+{
+  "flex|-ms-flex": [
+    "auto"
+  ],
+  "display": [
+    "flex|-ms-flexbox",
+    "-ms-inline-flexbox|inline-flex"
+  ],
+  "hyphens|-webkit-hyphens|-moz-hyphens|-ms-hyphens": [
+    "auto"
+  ],
+  "height": [
+    "calc(1rem - 10px)"
+  ]
+}

@@ -8,13 +8,18 @@ To generate a separate CSS file with expanded prefixes, the `--output-browser-pr
 
 As you can see, the input does not contain the expanded properties, however 2 new files were generated:
 
-**example/prefixes.css**
+<table>
+<tr><th>example/prefixes.css</th><th>example/prefixes.css.json</th></tr>
+<!-- block-start -->
+<tr><td>
 
 %EXAMPLE: example/prefixes.css%
-
-and **example/prefixes.css.json**
+</td>
+<td>
 
 %EXAMPLE: example/prefixes.css.json%
+</td></tr>
+</table>
 
 There are 3 general cases for the map:
 
@@ -68,3 +73,6 @@ And a noscript version should be added to the head of the document:
   </head>
 </html>
 ```
+
+
+%~%
