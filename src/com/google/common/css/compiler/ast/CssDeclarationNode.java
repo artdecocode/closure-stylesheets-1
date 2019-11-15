@@ -41,6 +41,10 @@ public class CssDeclarationNode extends CssNode {
   private boolean hasStarHack;
   /** Whether this property was generated with AutoExpandBrowserPrefix pass. */
   public boolean autoExpanded;
+  /** The name of the property it was expanded from. */
+  public String autoExpandedFromProp;
+  /** The value of the property it was expanded from. */
+  public String autoExpandedFromValue;
 
   /** Constructor of a node representing a CSS declaration. */
   public CssDeclarationNode(CssPropertyNode propertyName) {
@@ -107,6 +111,8 @@ public class CssDeclarationNode extends CssNode {
         node.getSourceCodeLocation(),
         node.hasStarHack());
     this.autoExpanded = node.autoExpanded;
+    this.autoExpandedFromProp = node.autoExpandedFromProp;
+    this.autoExpandedFromValue = node.autoExpandedFromValue;
   }
 
   public CssDeclarationNode(CssPropertyNode propertyNode,

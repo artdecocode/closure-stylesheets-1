@@ -1,10 +1,14 @@
 .TEST .a {
-  -webkit-border-radius: 2px 2px solid;
+  -moz-hyphens: auto;
+}
+.TEST .b {
   -moz-border-radius: 2px 2px solid;
   display: -webkit-box !important;
   display: -moz-box !important;
   display: -webkit-flex !important;
-  display: -ms-flexbox !important;
   -webkit-flex-basis: 0 !important;
   -ms-flex-preferred-size: 0 !important;
+  -moz-hyphens: auto;
+  height: -webkit-calc(2px);
+  height: -moz-calc(2px);
 }

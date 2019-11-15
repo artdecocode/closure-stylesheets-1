@@ -29,8 +29,13 @@
         "--pretty-print",
         "--expand-browser-prefix",
         "--output-browser-prefix",
+        "styles/important-prefixes.css",
+        "--prefixes", "-webkit-border-radius",
+        "--prefixes", "-ms-hyphens",
+        "--prefixes", "-webkit-hyphens",
+        "--prefixes", "display:-ms-flexbox",
+        "--prefixes", "display:-ms-inline-flexbox",
         // "styles/bootstrap-prefixes.css"
-        "styles/important-prefixes.css"
       ]
     },
     {

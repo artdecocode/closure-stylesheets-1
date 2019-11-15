@@ -212,8 +212,10 @@ public class PassRunner {
       pass.runPass();
       if (job.outputBrowserPrefix != null) {
         this.prefixTree = new CssTree(cssTree);
-        new AutoExpandBrowserPrefix2(cssTree.getMutatingVisitController(), true).runPass();
-        new AutoExpandBrowserPrefix2(this.prefixTree.getMutatingVisitController(), false).runPass();
+        new AutoExpandBrowserPrefix2(cssTree.getMutatingVisitController(),
+          true, job.prefixes).runPass();
+        new AutoExpandBrowserPrefix2(this.prefixTree.getMutatingVisitController(),
+          false, job.prefixes).runPass();
         // Eliminate empty rules.
         new EliminateEmptyRulesetNodes(this.prefixTree.getMutatingVisitController())
             .runPass();

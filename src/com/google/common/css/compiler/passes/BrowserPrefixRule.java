@@ -47,6 +47,15 @@ public final class BrowserPrefixRule {
   private final List<CssDeclarationNode> expansionNodes = Lists.newArrayList();
   private final List<CssPropertyValueNode> valueOnlyExpansionNodes = Lists.newArrayList();
 
+  /**
+   * Marks the node as expanded.
+   */
+  public static void setAutoExpanded(CssDeclarationNode node, String propName, String value) {
+    node.autoExpanded = true;
+    node.autoExpandedFromProp = propName;
+    node.autoExpandedFromValue = value;
+  }
+
   private BrowserPrefixRule(Builder builder) {
     checkState(builder.matchPropertyName != null || builder.matchPropertyValue != null);
     this.matchPropertyName = Optional.fromNullable(builder.matchPropertyName);
@@ -64,7 +73,7 @@ public final class BrowserPrefixRule {
         CssPropertyValueNode valueNode = new CssPropertyValueNode();
         CssDeclarationNode node = new CssDeclarationNode(propertyNode, valueNode);
         node.appendComment(new CssCommentNode("/* @alternate */", null));
-        node.autoExpanded = true;
+        // setAutoExpanded(node, propertyName, PassUtil.printPropertyValue(valueNode));
         expansionNodes.add(node);
       }
     }

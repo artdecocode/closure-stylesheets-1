@@ -16,6 +16,8 @@
 
 package com.google.common.css;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -51,6 +53,7 @@ public class JobDescription {
   public final boolean allowDuplicateDeclarations;
   public final boolean expandBrowserPrefix;
   public final String outputBrowserPrefix;
+  public final HashMap<String, ArrayList<String>> prefixes;
   public final Set<String> allowedNonStandardFunctions;
   public final boolean allowUnrecognizedProperties;
   public final Set<String> allowedUnrecognizedProperties;
@@ -153,7 +156,7 @@ public class JobDescription {
       SourceMapDetailLevel sourceMapLevel,
       boolean preserveImportantComments, boolean skipHtmlEscaping,
       boolean sourceMapIncludeContent,
-      String rootSelector) {
+      String rootSelector, HashMap<String, ArrayList<String>> prefixes) {
     this.allowUndefinedConstants = allowUndefinedConstants;
     Preconditions.checkArgument(!inputs.contains(null));
     Preconditions.checkNotNull(outputFormat);
@@ -199,6 +202,7 @@ public class JobDescription {
     this.cssSubstitutionMapProvider = cssSubstitutionMapProvider;
     this.outputRenamingMapFormat = outputRenamingMapFormat;
     this.inputRenamingMap = inputRenamingMap;
+    this.prefixes = prefixes;
     this.preserveComments = preserveComments;
     this.suppressDependencyCheck = suppressDependencyCheck;
     this.compileConstants = ImmutableMap.copyOf(compileConstants);

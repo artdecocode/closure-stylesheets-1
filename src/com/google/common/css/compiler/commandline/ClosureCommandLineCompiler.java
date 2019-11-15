@@ -120,7 +120,7 @@ public class ClosureCommandLineCompiler extends DefaultCommandLineCompiler {
 
     @Option(name = "--output-renaming-map", usage = "The output from"
         + " the CSS class renaming. Provides a map of class names to what they"
-        + " were renammed to.")
+        + " were renamed to.")
     private String renameFile = null;
 
     @Option(name = "--output-renaming-map-format", usage = "How to format the"
@@ -182,8 +182,12 @@ public class ClosureCommandLineCompiler extends DefaultCommandLineCompiler {
     private boolean expandBrowserPrefix = false;
 
     @Option(name = "--output-browser-prefix", usage =
-        "Where to save a separate tree with browser prefixes.")
+        "Where to save a separate tree with browser prefixes with a map.")
     private String outputBrowserPrefix = null;
+
+    @Option(name = "--prefixes", usage =
+        "The prefixes to be expanded into the output file directly.")
+    private List<String> prefixes = Lists.newArrayList();
 
     @Option(name = "--allowed-non-standard-function", usage =
         "Specify a non-standard function to whitelist, like alpha()")
@@ -292,6 +296,7 @@ public class ClosureCommandLineCompiler extends DefaultCommandLineCompiler {
       builder.setPreserveImportantComments(preserveImportantComments);
       builder.setSourceMapIncludeContent(sourceMapIncludeContent);
       builder.setRootSelector(rootSelector);
+      builder.setPrefixes(prefixes);
 
       GssFunctionMapProvider gssFunctionMapProvider =
           getGssFunctionMapProviderForName(gssFunctionMapProviderClassName);

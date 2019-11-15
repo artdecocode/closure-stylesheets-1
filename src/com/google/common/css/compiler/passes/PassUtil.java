@@ -76,13 +76,12 @@ public class PassUtil {
   }
 
   /**
-   * Prints a list of selector including the combinators and refiners but
-   * without a block behind with the compact printer.
+   * Prints the value of a property without !important.
    */
   public static String printPropertyValue(CssPropertyValueNode value) {
     CompactPrinter compactPrinter = new CompactPrinter(value, true);
     compactPrinter.runPass();
-    String s = compactPrinter.getCompactPrintedString();
+    String s = compactPrinter.getCompactPrintedString().trim();
     return s;
   }
 

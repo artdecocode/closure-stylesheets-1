@@ -16,6 +16,7 @@
 
 package com.google.common.css;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -82,6 +83,7 @@ public class JobDescriptionBuilder {
   JobDescription job = null;
   boolean createSourceMap;
   SourceMapDetailLevel sourceMapLevel;
+  HashMap<String, ArrayList<String>> prefixes;
 
   public JobDescriptionBuilder() {
     this.inputs = Lists.newArrayList();
@@ -101,6 +103,7 @@ public class JobDescriptionBuilder {
     this.allowDuplicateDeclarations = false;
     this.expandBrowserPrefix = false;
     this.outputBrowserPrefix = null;
+    this.prefixes = new HashMap<>();
     this.allowedNonStandardFunctions = Sets.newHashSet();
     this.allowUnrecognizedProperties = false;
     this.allowedUnrecognizedProperties = Sets.newHashSet();
@@ -171,6 +174,7 @@ public class JobDescriptionBuilder {
     this.createSourceMap = jobToCopy.createSourceMap;
     this.sourceMapLevel = jobToCopy.sourceMapLevel;
     this.preserveImportantComments = jobToCopy.preserveImportantComments;
+    this.prefixes = jobToCopy.prefixes;
     return this;
   }
 
@@ -386,6 +390,22 @@ public class JobDescriptionBuilder {
       this.outputBrowserPrefix = output;
       return this;
   }
+  public JobDescriptionBuilder setPrefixes(List<String> prefixes) {
+    checkJobIsNotAlreadyCreated();
+    for (String key : prefixes) {
+      String[] arr = key.split(":");
+      String k = arr[0];
+      ArrayList<String> current = this.prefixes.get(k);
+      if (current == null) {
+        current = new ArrayList<>();
+        this.prefixes.put(k, current);
+      }
+      if (arr.length > 1) {
+        current.add(arr[1]);
+      }
+    }
+    return this;
+}
 
   public JobDescriptionBuilder setAllowUnrecognizedProperties(boolean allow) {
     checkJobIsNotAlreadyCreated();
@@ -547,7 +567,7 @@ public class JobDescriptionBuilder {
         outputRenamingMapFormat, inputRenamingMap, preserveComments,
         suppressDependencyCheck, compileConstants,
         createSourceMap, sourceMapLevel, preserveImportantComments,
-        skipHtmlEscaping, sourceMapIncludeContent, rootSelector);
+        skipHtmlEscaping, sourceMapIncludeContent, rootSelector, prefixes);
     return job;
   }
 

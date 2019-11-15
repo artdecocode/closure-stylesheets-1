@@ -159,6 +159,10 @@ public class AutoExpandBrowserPrefix extends DefaultTreeVisitor implements CssCo
       replacements = expansionNodes.build();
 
       if (replacements.size() > 1) {
+        for (CssDeclarationNode node : replacements) {
+          if (node.equals(declaration)) continue;
+          BrowserPrefixRule.setAutoExpanded(node, rule.getMatchPropertyName(), rule.getMatchPropertyValue());
+        }
         visitController.replaceCurrentBlockChildWith(
             replacements, false /* visitTheReplacementNodes */);
         break; // found a match, don't need to look for more
@@ -234,7 +238,7 @@ public class AutoExpandBrowserPrefix extends DefaultTreeVisitor implements CssCo
               ruleValueNode.deepCopy(),
               declaration.getSourceCodeLocation());
       expansionNode.appendComment(new CssCommentNode("/* @alternate */", null));
-      expansionNode.autoExpanded = true;
+      // BrowserPrefixRule.setAutoExpanded(expansionNode, null, rule.getMatchPropertyValue());
       replacements.add(expansionNode);
     }
 
@@ -257,6 +261,7 @@ public class AutoExpandBrowserPrefix extends DefaultTreeVisitor implements CssCo
       if (priority != null) {
         expansionNode.getPropertyValue().addChildToBack(new CssPriorityNode(priority));
       }
+      // BrowserPrefixRule.setAutoExpanded(expansionNode, rule.getMatchPropertyName(), rule.getMatchPropertyValue());
       replacements.add(expansionNode);
     }
     return replacements.build();
@@ -339,7 +344,7 @@ public class AutoExpandBrowserPrefix extends DefaultTreeVisitor implements CssCo
           new CssDeclarationNode(
               declaration.getPropertyName(), expansionValues, declaration.getComments(),
           declaration.getSourceCodeLocation());
-      expansionNode.autoExpanded = true;
+      // BrowserPrefixRule.setAutoExpanded(expansionNode, null, rule.getMatchPropertyValue());
 
       expansionNode.appendComment(new CssCommentNode("/* @alternate */", null));
       expansionNodes.add(expansionNode);
