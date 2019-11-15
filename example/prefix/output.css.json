@@ -5,8 +5,5 @@
   "display": [
     "flex|-ms-flexbox",
     "-ms-inline-flexbox|inline-flex"
-  ],
-  "height": [
-    "calc(1rem - 10px)"
   ]
 }

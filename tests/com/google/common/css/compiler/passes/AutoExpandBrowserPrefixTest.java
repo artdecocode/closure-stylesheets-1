@@ -16,6 +16,8 @@
 
 package com.google.common.css.compiler.passes;
 
+import java.util.HashMap;
+
 import com.google.common.css.compiler.passes.testing.PassesTestBase;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -170,7 +172,7 @@ public class AutoExpandBrowserPrefixTest extends PassesTestBase {
         errorManager).runPass();
     new CreateComponentNodes(tree.getMutatingVisitController(),
         errorManager).runPass();
-    new AutoExpandBrowserPrefix(tree.getMutatingVisitController()).runPass();
+    new AutoExpandBrowserPrefix(tree.getMutatingVisitController(), new HashMap<>()).runPass();
 
     // The passes tested here.
     CollectMixinDefinitions collectDefinitions = new CollectMixinDefinitions(

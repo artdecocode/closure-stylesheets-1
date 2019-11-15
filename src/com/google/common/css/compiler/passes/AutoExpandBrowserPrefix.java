@@ -62,12 +62,14 @@ public class AutoExpandBrowserPrefix extends DefaultTreeVisitor implements CssCo
   private boolean inDefMixinBlock;
   private HashMap<String, String> noValues;
   PrefixMap prefixMap;
+  private HashMap<String, ArrayList<String>> prefixes;
 
-  public AutoExpandBrowserPrefix(MutatingVisitController visitController) {
+  public AutoExpandBrowserPrefix(MutatingVisitController visitController, HashMap<String, ArrayList<String>> prefixes) {
     this.visitController = visitController;
     this.expansionRules = BrowserPrefixGenerator.getExpansionRules();
     this.prefixMap = new PrefixMap();
     this.noValues = new HashMap<>();
+    this.prefixes = prefixes;
   }
 
   @Override
@@ -167,10 +169,11 @@ public class AutoExpandBrowserPrefix extends DefaultTreeVisitor implements CssCo
       String value = PassUtil.printPropertyValue(declaration.getPropertyValue()).trim();
       String name = declaration.getPropertyName().getValue();
 
-      // handle at tree exit
       if (matchingValueFunction != null) {
-        this.prefixMap.addValueFunction(matchingValueFunction, name, value);
-        // return true;
+        // && this.prefixes.get(matchingValueFunction) == null
+        if (this.prefixes.get(matchingValueFunction) == null) {
+          this.prefixMap.addValueFunction(matchingValueFunction, name, value);
+        }
       } else if (noValue) {
         String current = this.noValues.get(name);
         if (current == null) {
@@ -185,14 +188,6 @@ public class AutoExpandBrowserPrefix extends DefaultTreeVisitor implements CssCo
       }
     }
     return true;
-  }
-
-  void addToTests(String name, String value, String mergeWith) {
-    // if (!this.tests.containsKey(name)) {
-    //   this.tests.put(name, new ArrayList<String>());
-    // }
-    // ArrayList<String> values = this.tests.get(name);
-    // if (!values.contains(value)) values.add(value);
   }
 
   protected ImmutableList<CssDeclarationNode> getNonFunctionValueMatches(

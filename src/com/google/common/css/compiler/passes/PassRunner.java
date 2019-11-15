@@ -208,7 +208,7 @@ public class PassRunner {
     }
 
     if (job.expandBrowserPrefix) {
-      AutoExpandBrowserPrefix pass = new AutoExpandBrowserPrefix(cssTree.getMutatingVisitController());
+      AutoExpandBrowserPrefix pass = new AutoExpandBrowserPrefix(cssTree.getMutatingVisitController(), job.prefixes);
       pass.runPass();
       if (job.outputBrowserPrefix != null) {
         this.prefixTree = new CssTree(cssTree);
