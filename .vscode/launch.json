@@ -32,9 +32,9 @@
         "styles/important-prefixes.css",
         "--prefixes", "-webkit-border-radius",
         "--prefixes", "hyphens",
-        "--prefixes", "display:flex",
+        // "--prefixes", "display:flex",
         "--prefixes", "calc",
-        "--prefixes", "display:-ms-flexbox",
+        // "--prefixes", "display:-ms-flexbox",
         "--prefixes", "display:-ms-inline-flexbox",
         // "styles/bootstrap-prefixes.css"
       ]

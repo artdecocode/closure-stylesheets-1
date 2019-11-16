@@ -218,12 +218,14 @@ public class AutoExpandBrowserPrefix extends DefaultTreeVisitor implements CssCo
       replacements.add(expansionNode);
     }
 
-    // check if the block has a node with the same name, e.g., display: -ms-flex; display: flex
+    // check if the block has a node with the same name and non-expanded value,
+    // e.g., display: -ms-flex when expanding display: flex
     Boolean includesName = BlockContainsProp((CssDeclarationBlockNode) declaration.getParent(),
         rule.getMatchPropertyName(),
       declaration);
 
     for (CssDeclarationNode ruleExpansionNode : rule.getExpansionNodes()) {
+      // continuation of same property name/value
       if (includesName) {
         CssPropertyNode propName = ruleExpansionNode.getPropertyName();
         String propValue = BlockContainsPropWithValue(

@@ -1,3 +1,9 @@
+## 16 November 2019
+
+### [1.12.1](https://github.com/artdecocode/closure-stylesheets-java/compare/v1.12.0...v1.12.1)
+
+- [fix] Fix the order in which property values appear in the prefix map when combined with a `|`.
+
 ## 15 November 2019
 
 ### [1.12.0](https://github.com/artdecocode/closure-stylesheets-java/compare/v1.11.1...v1.12.0)

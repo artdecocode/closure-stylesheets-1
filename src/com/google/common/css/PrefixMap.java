@@ -116,7 +116,7 @@ public final class PrefixMap {
       ArrayList<String> alt = alternativeProps.get(propName);
       String k = alt == null ? propName : (propName + "|" + String.join("|", alt));
 
-      ArrayList<String> globalGenericValues = this.globalPrefixesWithProps.get(propName);
+      ArrayList<String> globalGenericValues = globalPrefixesWithProps.get(propName);
 
       HashMap<String, ArrayList<String>> vals = map.get(propName);
       ArrayList<String> joinedValues = Lists.newArrayList();
@@ -128,7 +128,13 @@ public final class PrefixMap {
         if (genericValueName.equals("/")) {
           joinedValues.add(values.get(0));
         } else {
-          joinedValues.add(String.join("|", values));
+          ArrayList<String> j = new ArrayList<>();
+          j.add(genericValueName);
+          for (String v : values) {
+            if (v.equals(genericValueName)) continue;
+            j.add(v);
+          }
+          joinedValues.add(String.join("|", j));
         }
       }
       if (joinedValues.size() > 0) {

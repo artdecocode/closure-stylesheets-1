@@ -674,7 +674,7 @@ This produced the following prefixes file and output map:
   ],
   "display": [
     "flex|-ms-flexbox",
-    "-ms-inline-flexbox|inline-flex"
+    "inline-flex|-ms-inline-flexbox"
   ]
 }
 ```

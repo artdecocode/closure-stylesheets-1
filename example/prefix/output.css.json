@@ -4,6 +4,6 @@
   ],
   "display": [
     "flex|-ms-flexbox",
-    "-ms-inline-flexbox|inline-flex"
+    "inline-flex|-ms-inline-flexbox"
   ]
 }
