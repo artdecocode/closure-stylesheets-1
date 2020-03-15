@@ -6,5 +6,8 @@
     "**/.factorypath": true
   },
   "java.configuration.updateBuildConfiguration": "interactive",
-  "java.test.defaultConfig": "default"
+  "java.test.defaultConfig": "default",
+  "cSpell.words": [
+    "Stylesheets"
+  ]
 }

@@ -4,8 +4,9 @@
   "description": "Published JAR of an improved version of Closure Stylesheets to minify CSS, rename classes and expand browser prefixes.",
   "main": "index.js",
   "scripts": {
-    "doc": "NODE_DEBUG=doc doc -o README.md",
-    "d": "NODE_DEBUG=doc doc doc -o README",
+    "doc": "doc -o README.md -d",
+    "wiki": "doc wiki -W wiki.git -d",
+    "d": "doc doc -o README -d",
     "test": "zoroaster test/mask -a",
     "bootstrap-pretty": "java -jar closure-stylesheets.jar --preserve-important-comments --pretty-print styles/bootstrap.css --allow-unrecognized-properties --allow-duplicate-declarations --output-file styles/bootstrap.pretty.css --source_map_include_content --output-source-map styles/bootstrap.pretty.css.map",
     "compile": "mvn compile assembly:single",
@@ -32,9 +33,9 @@
   "author": "Anton <anton@adc.sh>",
   "license": "Apache-2.0",
   "devDependencies": {
-    "documentary": "^1.34.1",
-    "reloquent": "^1.3.2",
+    "documentary": "^1.37.1",
+    "reloquent": "^1.4.1",
     "temp-context": "^2.1.3",
-    "zoroaster": "^4.1.2"
+    "zoroaster": "^4.3.0"
   }
 }

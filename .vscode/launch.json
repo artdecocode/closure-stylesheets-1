@@ -40,6 +40,17 @@
       ]
     },
     {
+      "type": "java",
+      "name": "Launch CalcCalc",
+      "request": "launch",
+      "mainClass": "com.google.common.css.compiler.commandline.ClosureCommandLineCompiler",
+      "projectName": "closure-stylesheets",
+      // "args": ["styles/supports.css"]
+      "args": [
+        "styles/calc-calc.css"
+      ]
+    },
+    {
       "type": "node",
       "request": "launch",
       "name": "Launch Zoroaster",
