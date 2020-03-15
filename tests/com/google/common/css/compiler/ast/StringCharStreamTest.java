@@ -70,12 +70,12 @@ public class StringCharStreamTest {
     readCharCheckLocation(s, '0',  1, 1, 0);
     readCharCheckLocation(s, '1',  1, 2, 1);
     readCharCheckLocation(s, '2',  1, 3, 2);
-    
+
     s.backup(3);
     readCharCheckLocation(s, '0',  1, 1, 0);
     readCharCheckLocation(s, '1',  1, 2, 1);
     readCharCheckLocation(s, '2',  1, 3, 2);
-    
+
     s.backup(2);
     readCharCheckLocation(s, '1',  1, 2, 1);
     readCharCheckLocation(s, '2',  1, 3, 2);
@@ -103,7 +103,7 @@ public class StringCharStreamTest {
     readCharCheckLocation(s, 'b',  3, 1, 11);
     readCharCheckLocation(s, 'c',  3, 2, 12);
     readCharCheckLocation(s, 'd',  3, 3, 13);
-    
+
     s.backup(2);
     readCharCheckLocation(s, 'c',  3, 2, 12);
     readCharCheckLocation(s, 'd',  3, 3, 13);
@@ -132,47 +132,47 @@ public class StringCharStreamTest {
   }
 
   @Test
-  public void testGetImageAndGetSuffix() throws Exception {
+  public void testgetImageAndgetSuffix() throws Exception {
     StringCharStream s = new StringCharStream(
         "01234\n" +
         "6789\n" +
         "bcd");
     readCharCheckLocation(s, '0',  1, 1, 0);
     readCharCheckLocation(s, '1',  1, 2, 1);
-    
+
     beginTokenCheckLocation(s, '2',  1, 3, 2);
     readCharCheckLocation(s, '3',  1, 4, 3);
     readCharCheckLocation(s, '4',  1, 5, 4);
     readCharCheckLocation(s, '\n', 1, 6, 5);
     readCharCheckLocation(s, '6',  2, 1, 6);
 
-    assertThat(s.GetImage()).isEqualTo("234\n6");
-    assertThat(new String(s.GetSuffix(3))).isEqualTo("4\n6");
-    assertThat(new String(s.GetSuffix(4))).isEqualTo("34\n6");
+    assertThat(s.getImage()).isEqualTo("234\n6");
+    assertThat(new String(s.getSuffix(3))).isEqualTo("4\n6");
+    assertThat(new String(s.getSuffix(4))).isEqualTo("34\n6");
 
     s.backup(2);
     readCharCheckLocation(s, '\n', 1, 6, 5);
     readCharCheckLocation(s, '6',  2, 1, 6);
     readCharCheckLocation(s, '7',  2, 2, 7);
 
-    assertThat(s.GetImage()).isEqualTo("234\n67");
+    assertThat(s.getImage()).isEqualTo("234\n67");
 
     beginTokenCheckLocation(s, '8',  2, 3, 8);
     readCharCheckLocation(s, '9',  2, 4, 9);
     readCharCheckLocation(s, '\n', 2, 5, 10);
 
-    assertThat(s.GetImage()).isEqualTo("89\n");
-    assertThat(new String(s.GetSuffix(3))).isEqualTo("89\n");
+    assertThat(s.getImage()).isEqualTo("89\n");
+    assertThat(new String(s.getSuffix(3))).isEqualTo("89\n");
     // Try to reach behind the token start!
-    assertThat(new String(s.GetSuffix(4))).isEqualTo("789\n");
+    assertThat(new String(s.getSuffix(4))).isEqualTo("789\n");
 
     beginTokenCheckLocation(s, 'b',  3, 1, 11);
     readCharCheckLocation(s, 'c',  3, 2, 12);
     readCharCheckLocation(s, 'd',  3, 3, 13);
-    
-    assertThat(s.GetImage()).isEqualTo("bcd");
-    assertThat(new String(s.GetSuffix(2))).isEqualTo("cd");
-    assertThat(new String(s.GetSuffix(4))).isEqualTo("\nbcd");
+
+    assertThat(s.getImage()).isEqualTo("bcd");
+    assertThat(new String(s.getSuffix(2))).isEqualTo("cd");
+    assertThat(new String(s.getSuffix(4))).isEqualTo("\nbcd");
 
     try {
       s.readChar();
@@ -183,9 +183,9 @@ public class StringCharStreamTest {
 
     // Token creation and suffix creation, should be unaffected by trying to
     // read EOF.
-    assertThat(s.GetImage()).isEqualTo("bcd");
-    assertThat(new String(s.GetSuffix(2))).isEqualTo("cd");
-    assertThat(new String(s.GetSuffix(4))).isEqualTo("\nbcd");
+    assertThat(s.getImage()).isEqualTo("bcd");
+    assertThat(new String(s.getSuffix(2))).isEqualTo("cd");
+    assertThat(new String(s.getSuffix(4))).isEqualTo("\nbcd");
   }
 
   private void checkCharacterIndex(StringCharStream s,
@@ -205,7 +205,7 @@ public class StringCharStreamTest {
   private void beginTokenCheckLocation(
       StringCharStream s, char c, int line, int column, int charIndex)
       throws IOException {
-    assertWithMessage("char").that(s.BeginToken()).isEqualTo(c);
+    assertWithMessage("char").that(s.beginToken()).isEqualTo(c);
     checkLocation(s, line, column, charIndex);
     assertWithMessage("begin column").that(s.getBeginColumn()).isEqualTo(column);
     assertWithMessage("begin line").that(s.getBeginLine()).isEqualTo(line);

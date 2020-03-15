@@ -135,14 +135,12 @@ public class StringCharStream implements CharStream {
 
   /** {@inheritDoc} */
   @Deprecated
-  @Override
   public int getColumn() {
     return getEndColumn();
   }
 
   /** {@inheritDoc} */
   @Deprecated
-  @Override
   public int getLine() {
     return getEndLine();
   }
@@ -183,8 +181,7 @@ public class StringCharStream implements CharStream {
   }
 
   /** {@inheritDoc} */
-  @Override
-  public char BeginToken() throws IOException {
+  public char beginToken() throws IOException {
     readChar();
     tokenStart = charPos;
     beginLine = line;
@@ -193,14 +190,12 @@ public class StringCharStream implements CharStream {
   }
 
   /** {@inheritDoc} */
-  @Override
-  public String GetImage() {
+  public String getImage() {
     return input.substring(tokenStart, charPos + 1);
   }
 
   /** {@inheritDoc} */
-  @Override
-  public char[] GetSuffix(int len) {
+  public char[] getSuffix(int len) {
     int end = charPos + 1;
     int start = end - len;
     char[] chars = new char[end - start];
@@ -209,8 +204,7 @@ public class StringCharStream implements CharStream {
   }
 
   /** {@inheritDoc} */
-  @Override
-  public void Done() {
+  public void done() {
     // Does nothing since no resources need to be freed.
   }
 
@@ -224,8 +218,7 @@ public class StringCharStream implements CharStream {
     return tabSize;
   }
 
-  @Override
-  public boolean getTrackLineColumn() {
+  public boolean isTrackLineColumn() {
     return trackLineColumn;
   }
 
