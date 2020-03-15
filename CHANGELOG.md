@@ -1,3 +1,11 @@
+## 15 March 2020
+
+### [1.12.2](https://github.com/artdecocode/closure-stylesheets-java/compare/v1.12.1...v1.12.2)
+
+- [fix] Fix nested calc.
+- [fix] Fix multiple refiners in `:not`.
+- [maven] Update `ph-javacc-maven-plugin` to @4 from @2.
+
 ## 16 November 2019
 
 ### [1.12.1](https://github.com/artdecocode/closure-stylesheets-java/compare/v1.12.0...v1.12.1)
