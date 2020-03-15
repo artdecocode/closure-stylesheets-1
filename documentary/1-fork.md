@@ -19,6 +19,7 @@ These are the fixes and improvements to the [original version](https://github.co
 - Merge [input-renaming-map](https://github.com/artdecocode/closure-stylesheets-java/pull/1) fix.
 - [Update](https://github.com/artdecocode/closure-stylesheets-java/commit/219d1cdc9d509df925583f081d8241d6a66edcca) to [`ph-javacc-maven-plugin@4`](https://github.com/phax/ph-javacc-maven-plugin) from 2.8. This one uses the latest version of parser generator (_ParserGeneratorCC_ instead of _JavaCC_).
 - Fix [recursive calc](https://github.com/artdecocode/closure-stylesheets-java/commit/df8210feb1fdc1a487a79786610fb4365bcaaf59), e.g., `calc(calc(-1 * 3em) + 1px)`.
+- Allow [multiple refiners](https://github.com/artdecocode/closure-stylesheets-java/commit/960ff6fb4bf8107b953a0afe9d2fbaede1966d34), e.g., `a:not(.A.B)`.
 
 Checkout <kbd>📙 [WIKI](../../wiki)</kbd> for some development information.
 
