@@ -54,6 +54,10 @@ These are the fixes and improvements to the [original version](https://github.co
 - Implement [root selector](https://github.com/google/closure-stylesheets/commit/ef3f026d5fb09e7ec36835df096543deeb083da6) for global prefixing.
 - Add the [_SIMPLE_ substitution map](https://github.com/google/closure-stylesheets/commit/73816e12afc63b84d27ab08c1b116d52aa5e8234) that doesn't split class names by `-`.
 - Merge [input-renaming-map](https://github.com/artdecocode/closure-stylesheets-java/pull/1) fix.
+- [Update](https://github.com/artdecocode/closure-stylesheets-java/commit/219d1cdc9d509df925583f081d8241d6a66edcca) to [`ph-javacc-maven-plugin@4`](https://github.com/phax/ph-javacc-maven-plugin) from 2.8. This one uses the latest version of parser generator (_ParserGeneratorCC_ instead of _JavaCC_).
+- Fix [recursive calc](https://github.com/artdecocode/closure-stylesheets-java/commit/df8210feb1fdc1a487a79786610fb4365bcaaf59), e.g., `calc(calc(-1 * 3em) + 1px)`.
+
+Checkout <kbd>📙 [WIKI](../../wiki)</kbd> for some development information.
 
 <p align="center"><a href="#table-of-contents">
   <img src="/.documentary/section-breaks/1.svg?sanitize=true">
