@@ -236,12 +236,12 @@ public class ProcessRefinersTest extends NewFunctionalTestBase {
         ProcessRefiners.INVALID_NOT_SELECTOR_ERROR_MESSAGE);
   }
 
-  @Test
-  public void testNotBad3() throws Exception {
-    simplifyCss = false;
-    parseAndRun("div :not(.A.B) {}",
-        ProcessRefiners.INVALID_NOT_SELECTOR_ERROR_MESSAGE);
-  }
+  // @Test
+  // public void testNotBad3() throws Exception {
+  //   simplifyCss = false;
+  //   parseAndRun("div :not(.A.B) {}",
+  //       ProcessRefiners.INVALID_NOT_SELECTOR_ERROR_MESSAGE);
+  // }
 
   @Test
   public void testNotWithComment() throws Exception {

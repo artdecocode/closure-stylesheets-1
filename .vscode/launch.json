@@ -47,7 +47,7 @@
       "projectName": "closure-stylesheets",
       // "args": ["styles/supports.css"]
       "args": [
-        "styles/calc-calc.css"
+        "styles/not-not.css"
       ]
     },
     {

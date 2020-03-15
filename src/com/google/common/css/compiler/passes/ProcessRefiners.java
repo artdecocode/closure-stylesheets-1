@@ -105,26 +105,30 @@ public class ProcessRefiners extends DefaultTreeVisitor
       return true;
     } else if (refinerList.numChildren() > 1) {
       // should not be possible due to the grammar
-      errorManager.report(new GssError(INVALID_NOT_SELECTOR_ERROR_MESSAGE,
-          refiner.getSourceCodeLocation()));
-      return false;
+      // [2020 - is possible now?]
+      // BULMA > .hero.is-danger a:not(.pagination-link.is-current)
+      // errorManager.report(new GssError(INVALID_NOT_SELECTOR_ERROR_MESSAGE,
+      //     refiner.getSourceCodeLocation()));
+      // return false;
     }
-    CssRefinerNode nestedRefiner = refinerList.getChildAt(0);
-    // a pseudo-element is not allowed inside a :not
-    if (nestedRefiner instanceof CssPseudoElementNode) {
-      errorManager.report(new GssError(INVALID_NOT_SELECTOR_ERROR_MESSAGE,
-          refiner.getSourceCodeLocation()));
-      return false;
-    }
-    // the negation pseudo-class is not allowed inside a :not
-    if (nestedRefiner instanceof CssPseudoClassNode) {
-      CssPseudoClassNode pseudoClass = (CssPseudoClassNode) nestedRefiner;
-      if (pseudoClass.getFunctionType() == FunctionType.NOT) {
+    for (CssRefinerNode nestedRefiner : refinerList.getChildren()) {
+      // a pseudo-element is not allowed inside a :not
+      if (nestedRefiner instanceof CssPseudoElementNode) {
         errorManager.report(new GssError(INVALID_NOT_SELECTOR_ERROR_MESSAGE,
             refiner.getSourceCodeLocation()));
         return false;
       }
+      // the negation pseudo-class is not allowed inside a :not
+      if (nestedRefiner instanceof CssPseudoClassNode) {
+        CssPseudoClassNode pseudoClass = (CssPseudoClassNode) nestedRefiner;
+        if (pseudoClass.getFunctionType() == FunctionType.NOT) {
+          errorManager.report(new GssError(INVALID_NOT_SELECTOR_ERROR_MESSAGE,
+              refiner.getSourceCodeLocation()));
+          return false;
+        }
+      }
     }
+    // CssRefinerNode nestedRefiner = refinerList.getChildAt(0);
     return true;
   }
 
