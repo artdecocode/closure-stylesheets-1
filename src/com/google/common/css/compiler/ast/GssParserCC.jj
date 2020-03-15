@@ -2028,7 +2028,7 @@ CssValueNode product(boolean hasParenthesis) :
 }
 
 // unit
-//  : [ var | IDENTIFIER | NUMBER | DIMENSION | PERCENTAGE | "(" S* sum S* ")" ];
+//  : [ var | calc | IDENTIFIER | NUMBER | DIMENSION | PERCENTAGE | "(" S* sum S* ")" ];
 //  ;
 CssValueNode unit() :
 {
@@ -2041,6 +2041,8 @@ CssValueNode unit() :
   (
     (
     (node = var() { return node; })
+    |
+    (node = calc() { return node; })
     |
     (t = <IDENTIFIER> { return new CssLiteralNode(t.image, this.getLocation(t)); })
     |
