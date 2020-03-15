@@ -1,6 +1,6 @@
 {
   "name": "closure-stylesheets-java",
-  "version": "1.12.1",
+  "version": "1.12.2",
   "description": "Published JAR of an improved version of Closure Stylesheets to minify CSS, rename classes and expand browser prefixes.",
   "main": "index.js",
   "scripts": {
@@ -12,7 +12,8 @@
     "compile": "mvn compile assembly:single",
     "important": "java -jar closure-stylesheets.jar --pretty-print --allow-duplicate-declarations styles/important.css",
     "bootstrap-min": "java -jar closure-stylesheets.jar styles/bootstrap.css --preserve-important-comments --skip-html-escaping --allow-unrecognized-properties --allow-duplicate-declarations --output-file styles/bootstrap.min.css",
-    "build": "mvn install -DskipTests"
+    "build": "mvn install -DskipTests",
+    "up": "alanode up"
   },
   "homepage": "https://www.artd.eco",
   "repository": {
@@ -28,7 +29,7 @@
     "prefix"
   ],
   "files": [
-    "target/closure-stylesheets-1.12.1-SNAPSHOT-jar-with-dependencies.jar"
+    "target/closure-stylesheets-1.12.2-SNAPSHOT-jar-with-dependencies.jar"
   ],
   "author": "Anton <anton@adc.sh>",
   "license": "Apache-2.0",
